@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Http\Controllers;
+use Illuminate\Support\Str;
+use App\Group;
+use Illuminate\Http\Request;
+use App\User;
+use App\Department;
+use App\Resort;
+use App\Role;
+use App\UserData;
+
+
+use App\ldapUsers;
+use App\ldapHelperMethods;
+
+use App\Http\Requests\userDataValidation;
+
+class userController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+	//$ldapHelper = new ldapHelperMethods();
+        //$users_new = $ldapHelper->l_get_all_user();
+        //dd($users);
+	//dd($users_new);
+
+	//$users = User::latest()->get();
+        $users = User::latest()->where('user_name','!=','0')->get();
+
+
+	return view('users.index', compact('users'));
+    }
+
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+        $departments = Department::all();
+        $groups = Group::all();
+        $resorts = Resort::all();
+        $roles = Role::all();
+        return view('users.create', compact(
+            'departments',
+             'resorts',
+             'groups',
+             'roles'
+            ));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+       //store to data base
+    //    $ldap = new ldapUsers();
+    //    $ldapHelper = new ldapHelperMethods();
+
+    //    $request['user_name'] = 'AhmedMO';
+    //    dd($ldap->user_create($request->all()));
+
+       $request['user_id'] = Str::random(6);
+       $request['user_name'] = Str::random(6);
+
+       $user = User::create($request->all());
+       session()->flash('success','User Added Successfully');
+       return redirect(route('user.index'));
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $user = User::where('user_id',$id)->first();
+        if($user == null){
+            session()->flash('warning','User Not Found');
+            return redirect(route('user.index'));
+        }
+        return view('users.show',compact('user'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $departments = Department::all();
+        $resorts = Resort::all();
+        $groups = Group::all();
+        $user = User::where('user_id',$id)->first();
+        $roles = Role::all();
+
+        if($user == null){
+            session()->flash('warning','User Not Found');
+            return redirect()->back();
+        }
+        return view('users.edit', compact(
+            'departments',
+            'groups',
+            'resorts',
+            'user',
+            'roles'
+        ));
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //1-get user DataTable
+        //2-Update
+        //return true
+        $user = User::where('user_id',$id)->first();
+        if($user){
+            $user->update($request->all());
+        }
+        else{
+            session()->flash('warning','User Not Found');
+            return redirect()->back();
+        }
+
+
+        $userData = new UserData();
+        $userData->user_id = $user->id;
+        $userData->group_id = $request->group_id;
+        $userData->resort_id = $request->resort_id;
+        $userData->save();
+        session()->flash('success','User Updated Successfully');
+        return redirect()->back();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+
+        $ldap = new ldapUsers();
+       $ldap->user_delete($id);
+        $user = User::where('user_name',$id)->first();
+        $user->delete();
+        session()->flash('success','User Deleted Successfully');
+        return redirect()->back();
+
+    }
+
+}
