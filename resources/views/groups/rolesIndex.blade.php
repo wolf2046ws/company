@@ -7,6 +7,12 @@
 @endsection
 
 @section('content')
+
+<ul class="breadcrumb">
+  <li><a href="#">{{$resort->name}}</a></li>
+  <li><a href="#">{{$group->name}}</a></li>
+  <li>Roles</li>
+</ul>
 <br>
 <a  href="{{ route('groupRoles.create', $group->id) }}"
     class="btn btn-primary btn-lg active"

@@ -15,56 +15,73 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view users index page',
             'slug' => 'Users',
-            'url' => 'user.index'
+            'url' => 'user.index',
+            'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new user',
             'slug' => 'Users',
-            'url' => 'user.create'
+            'url' => 'user.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can view User data page',
             'slug' => 'Users',
-            'url' => 'user.show'
+            'url' => 'user.show',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update User',
             'slug' => 'Users',
-            'url' => 'user.edit'
+            'url' => 'user.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete other User',
             'slug' => 'Users',
-            'url' => 'user.Destroy'
+            'url' => 'user.Destroy',
+            'status' => 'true'
+
         ]);
 
         //department URL
         DB::table('permissions')->insert([
             'description' => 'user can view departments index page',
             'slug' => 'Department',
-            'url' => 'department.index'
+            'url' => 'department.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new department',
             'slug' => 'Department',
-            'url' => 'department.create'
+            'url' => 'department.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update department',
             'slug' => 'Department',
-            'url' => 'department.edit'
+            'url' => 'department.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete department',
             'slug' => 'Department',
-            'url' => 'department.Destroy'
+            'url' => 'department.Destroy',
+            'status' => 'true'
+
         ]);
 
 
@@ -72,25 +89,33 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view resort index page',
             'slug' => 'Resort',
-            'url' => 'resort.index'
+            'url' => 'resort.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new resort',
             'slug' => 'Resort',
-            'url' => 'resort.create'
+            'url' => 'resort.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update resort',
             'slug' => 'Resort',
-            'url' => 'resort.edit'
+            'url' => 'resort.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete resort',
             'slug' => 'Resort',
-            'url' => 'resort.Destroy'
+            'url' => 'resort.Destroy',
+            'status' => 'true'
+
         ]);
 
 
@@ -98,100 +123,132 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view group index page',
             'slug' => 'Group',
-            'url' => 'group.index'
+            'url' => 'group.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new group',
             'slug' => 'Group',
-            'url' => 'group.create'
+            'url' => 'group.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update group',
             'slug' => 'Group',
-            'url' => 'group.edit'
+            'url' => 'group.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete group',
             'slug' => 'Group',
-            'url' => 'group.Destroy'
+            'url' => 'group.Destroy',
+            'status' => 'true'
+
         ]);
 
         //permission URL
         DB::table('permissions')->insert([
             'description' => 'user can view permission index page',
             'slug' => 'Permission',
-            'url' => 'permission.index'
+            'url' => 'permission.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new permission',
             'slug' => 'Permission',
-            'url' => 'permission.create'
+            'url' => 'permission.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update permission',
             'slug' => 'Permission',
-            'url' => 'permission.edit'
+            'url' => 'permission.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete permission',
             'slug' => 'Permission',
-            'url' => 'permission.Destroy'
+            'url' => 'permission.Destroy',
+            'status' => 'true'
+
         ]);
 
         //role URL
         DB::table('permissions')->insert([
             'description' => 'user can view role index page',
             'slug' => 'Role',
-            'url' => 'role.index'
+            'url' => 'role.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new role',
             'slug' => 'Role',
-            'url' => 'role.create'
+            'url' => 'role.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update role',
             'slug' => 'Role',
-            'url' => 'role.edit'
+            'url' => 'role.edit',
+            'status' => 'true'
+
         ]);
-        
+
         DB::table('permissions')->insert([
             'description' => 'user can delete role',
             'slug' => 'Role',
-            'url' => 'role.Destroy'
+            'url' => 'role.Destroy',
+            'status' => 'true'
+
         ]);
 
         //resort-user URL
         DB::table('permissions')->insert([
             'description' => 'user can view resort user index page',
             'slug' => 'Resort Users',
-            'url' => 'resort-users.index'
+            'url' => 'resort-users.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new user in your resort',
             'slug' => 'Resort Users',
-            'url' => 'resort-users.create'
+            'url' => 'resort-users.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update user data in your resort',
             'slug' => 'Resort Users',
-            'url' => 'resort-users.edit'
+            'url' => 'resort-users.edit',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can delete users in your resort',
             'slug' => 'Resort Users',
-            'url' => 'resort-users.Destroy'
+            'url' => 'resort-users.Destroy',
+            'status' => 'true'
+
         ]);
 
 
@@ -200,33 +257,41 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view department user index page',
             'slug' => 'Department Users',
-            'url' => 'department-users.index'
+            'url' => 'department-users.index',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can create new user in your department',
             'slug' => 'Department Users',
-            'url' => 'department-users.create'
+            'url' => 'department-users.create',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can update user data in your department',
             'slug' => 'Department Users',
-            'url' => 'department-users.edit'
+            'url' => 'department-users.edit',
+            'status' => 'true'
+
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can delete users in your department',
             'slug' => 'Department Users',
-            'url' => 'department-users.Destroy'
+            'url' => 'department-users.Destroy',
+            'status' => 'true'
+
         ]);
 
-        
 
-        
 
-        
-        
+
+
+
+
 
     }
 }

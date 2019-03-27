@@ -20,7 +20,8 @@
     <label for="Select3">Select Role Permissions</label>
     @foreach($permissions as $permission)
             <div class="custom-control custom-checkbox">
-                <input class="form-check-input" name="permissions[]"
+                <input
+                class="form-check-input" name="permissions[]"
                        type="checkbox" id="inlineCheckbox1"
                        value="{{$permission->id}}">
                 <label class="form-check-label" for="inlineCheckbox1">{{$permission->description}}</label>

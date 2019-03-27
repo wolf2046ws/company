@@ -47,10 +47,9 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        Session::pull('user');
 
         $user = Session::get('user');
-        return $user == null ? view('auth.login') : \redirect('/home');
+        return $user == null ? view('auth.login') : \redirect('/user');
 
     }
 
@@ -59,7 +58,7 @@ class LoginController extends Controller
         // dd($request->all());
         $user = Session::get('user');
         if($user){
-            return \redirect('/home');
+            return \redirect('/user');
         }
 
         $ldap = new ldapUsers();
@@ -70,9 +69,9 @@ class LoginController extends Controller
         }
         $ldapHelper->l_get_all_user();
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
-       
+
 	Session::push('user',$user);
-        return \redirect('/');
+        return \redirect('/user');
     }
 
     public function logout(Request $request)

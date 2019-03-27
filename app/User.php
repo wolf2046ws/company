@@ -77,6 +77,10 @@ class User extends Authenticatable
         return $this->belongsTo(Group::class);
     }
 
+    public function role(){
+        return $this->belongsTo(Role::class);
+    }
+
 
     public function permissions(){
         //get usre group

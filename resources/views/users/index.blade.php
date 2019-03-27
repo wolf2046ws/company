@@ -21,9 +21,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>User Name</th>
-                <th>Department</th>
-                <th>Resort </th>
-                <th>Group </th>
+
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,9 +32,6 @@
                     <th> <a href="{{ route('user.show', $user->user_id ) }}">{{ $user->first_name }}</a></th>
                     <th> {{ $user->last_name }} </th>
                     <th> {{ $user->user_name }} </th>
-                    <th> {{ $user->department_id ? $user->department->name : '---' }} </th>
-                    <th> {{ $user->resort_id ? $user->resort->name : '---' }} </th>
-                    <th> {{ $user->group_id ? $user->group->name : '---' }} </th>
                     <th>
                         <ul>
                             <li ><a href="{{ route('user.edit', $user->user_id ) }}">Edit</a></li>

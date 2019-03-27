@@ -19,15 +19,15 @@
 
 
         <li class="nav-item">
-          <a class="nav-link" href="{{route('department.index')}}">
-            <span data-feather="home"></span>
-            Department <span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="{{route('resort.index')}}">
             <span data-feather="home"></span>
             Resort <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{route('permission.index')}}">
+            <span data-feather="home"></span>
+            Permissions <span class="sr-only">(current)</span>
           </a>
         </li>
 

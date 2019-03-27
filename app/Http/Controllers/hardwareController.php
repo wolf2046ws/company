@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Hardware;
+use App\UserData;
 use App\Http\Requests\hardwareDataValidation;
 
 
@@ -95,10 +96,7 @@ class hardwareController extends Controller
     public function destroy($id)
     {
         //
-        $hardware = Hardware::findOrFail($id);
-        $hardware->delete();
 
-        session()->flash('success','Hardware Deleted Successfully');
-        return redirect()->back();
+    
     }
 }

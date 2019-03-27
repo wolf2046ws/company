@@ -7,6 +7,12 @@
 @endsection
 
 @section('content')
+
+<ul class="breadcrumb">
+  <li><a href="#">{{$resort->name}}</a></li>
+
+  <li>Groups</li>
+</ul>
 <br>
 <a  href="{{ route('resortGroup.create',$resort->id) }}"
     class="btn btn-primary btn-lg active"
@@ -32,7 +38,7 @@
                     <th> {{ $group->id }}</th>
                     <th> {{ $group->name }}</th>
                     <th> {{ $group->description }}</th>
-                    <th> <a href="{{ route('groupRoles.index',$group->id)}} "> {{ $group->roles->count() }} </a> </th>
+                    <th> <a href="{{ route('groupRoles.index',$group->id)}} "> Add Role </a> </th>
                     <!-- <th> {{ $group->users->count() }}</th> -->
                 </tr>
             @endforeach

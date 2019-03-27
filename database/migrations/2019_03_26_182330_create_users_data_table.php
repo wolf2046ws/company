@@ -18,6 +18,7 @@ class CreateUsersDataTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('group_id');
             $table->unsignedInteger('resort_id');
+            $table->unsignedInteger('role_id');
             $table->timestamps();
         });
     }

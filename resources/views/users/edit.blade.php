@@ -46,19 +46,10 @@
                         placeholder="Doe">
             </div>
 
-            <div class="form-group col-md-3">
-                <label for="Select1">Select Department</label>
-                <select name ="department_id" class="form-control" id="Select1">
-                    @foreach($departments as $department)
-                        <option @if($user->department_id == $department->id ) selected @endif
-                        value="{{ $department->id }}"> {{ $department->name }} </option>
-                    @endforeach
-                </select>
-            </div>
 
             <div class="form-group col-md-3">
                 <label for="Select3">Select Resort</label>
-                <select name="resort_id" class="form-control" id="Select3">
+                <select  name="resort_id" class="form-control" id="Select3">
                     @foreach($resorts as $resort)
                         <option
                         value="{{ $resort->id }}"> {{ $resort->name }} </option>
@@ -88,13 +79,20 @@
 
 
 
-
-
-
-
             <button type="submit" class="btn btn-primary mb-2 col-md-12">Update User</button>
         </div>
 
     </form>
 
+@endsection
+
+
+@section('js')
+    <script type="text/javascript">
+
+
+
+///$groups = Group::where('resort_id','=',$request->resort_id)->toJson();
+
+    </script>
 @endsection

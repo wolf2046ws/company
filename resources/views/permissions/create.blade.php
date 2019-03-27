@@ -19,12 +19,12 @@
                 <option > Group </option>
                 <option > Role </option>
                 <option > Permission </option>
-                <option > Department </option>
                 <option > Resort </option>
                 <option > Resort Users </option>
-                <option > Department Users </option>
         </select>
     </div>
+
+    <input type="hidden" name="status" value="false">
 
   <button type="submit" class="btn btn-primary mb-12">Add Permission</button>
 

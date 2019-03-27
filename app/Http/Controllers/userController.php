@@ -142,7 +142,16 @@ class userController extends Controller
         //return true
         $user = User::where('user_id',$id)->first();
         if($user){
+            $userData = UserData::where('user_id',$user->id)->get();
+            foreach ($userData as $key) {
+                if($key->resort_id == $request->resort_id && $key->group_id == $request->group_id && $key->role_id == $request->role_id)
+                {
+                    session()->flash('warning','User allready has this data');
+                    return redirect()->back();
+                }
+            }
             $user->update($request->all());
+
         }
         else{
             session()->flash('warning','User Not Found');
@@ -154,6 +163,7 @@ class userController extends Controller
         $userData->user_id = $user->id;
         $userData->group_id = $request->group_id;
         $userData->resort_id = $request->resort_id;
+        $userData->role_id = $request->role_id;
         $userData->save();
         session()->flash('success','User Updated Successfully');
         return redirect()->back();

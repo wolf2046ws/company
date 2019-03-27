@@ -99,7 +99,7 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($role)
     {
         //
         $role = Role::findOrFail($role);

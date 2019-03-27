@@ -42,9 +42,23 @@ class ResortController extends Controller
     public function store(Request $request)
     {
         //
-        Resort::create($request->all());
-        session()->flash('success','Resort Added Successfully');
-        return redirect(route('resort.index'));
+        if(Resort::where('name',$request->name)->first() == null){
+            Resort::create($request->all());
+            session()->flash('success','Resort Added Successfully');
+            return redirect(route('resort.index'));
+        }
+        session()->flash('warning','Resort Exists');
+        return redirect()->back();
+
+    }
+
+
+    public function deleteUser($id){
+        $userData = UserData::findOrFail($id);
+        $userData->delete();
+
+        session()->flash('success','User Deleted Successfully');
+        return redirect()->back();
     }
 
     /**
@@ -55,8 +69,9 @@ class ResortController extends Controller
      */
     public function show($id)
     {
-        //
+        // $user -> resort -> group -> role
         $users = UserData::latest()->where('resort_id',$id)->get();
+
         $resort = Resort::findOrFail($id);
         return view('resort.show',compact('users','resort'));
 

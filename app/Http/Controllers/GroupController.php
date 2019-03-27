@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Role;
 use App\Permission;
+use App\Resort;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -53,8 +54,9 @@ class GroupController extends Controller
 
     public function groupRoles($id){
       $group = Group::findOrFail($id);
+      $resort = Resort::where('id',$group->resort_id)->first();
       $roles = $group->roles;
-      return view('groups.rolesIndex',compact('group','roles'));
+      return view('groups.rolesIndex',compact('group','roles','resort'));
     }
 
     public function groupCreateRoles($id){

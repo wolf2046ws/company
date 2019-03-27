@@ -9,7 +9,7 @@ class UserData extends Model
     //
     protected $table = 'users_data';
 
-    protected $fillable = ['user_id','resort_id','group_id'];
+    protected $fillable = ['user_id','resort_id','group_id','role_id'];
 
     public function user(){
         return $this->belongsTo(User::class);

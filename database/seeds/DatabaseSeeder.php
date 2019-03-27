@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SoftwareDataSeeder::class);
         $this->call(ResortDataSeeder::class);
         $this->call(PermissionTableSeeder::class);
-        $this->call(UserDataSeeder::class);
+//        $this->call(UserDataSeeder::class);
 
 
 

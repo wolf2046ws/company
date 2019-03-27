@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
+    //return view('welcome');
 })->name('master')->middleware('shared_variables');
 
 Route::post('/user-update-components/{id}','userController@updateComponents')->name('user.updateComponents');
@@ -32,7 +33,7 @@ Route::group(['middleware' => ['web','shared_variables','check_auth','route_perm
         Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
         Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
-
+        Route::delete('/users-resort-delete/{id}','ResortController@deleteUser')->name('resortUser.destroy');
 });
 
 

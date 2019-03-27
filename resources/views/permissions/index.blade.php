@@ -33,6 +33,7 @@
                     <th> {{ $permission->description }}</th>
                     <th> {{ $permission->slug }}</th>
                     <th>
+                        @if($permission->status == 'false')
                         <ul>
                             <li ><a href="{{ route('permission.edit', $permission->id ) }}">Edit</a></li>
                             <form method="POST" action="{{ route('permission.destroy', $permission->id) }}">
@@ -42,6 +43,10 @@
                                 Delete</button></li>
                          </form>
                         </ul>
+                        @else
+                        Un Editable
+                        @endif
+
                     </th>
                 </tr>
             @endforeach

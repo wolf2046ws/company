@@ -7,6 +7,10 @@
 @endsection
 
 @section('content')
+<ul class="breadcrumb">
+  <li>{{$resort->name}}</li>
+</ul>
+
 <br>
 <a  href="{{ route('resortGroup.index', $resort->id) }}"
     class="btn btn-primary btn-lg active"
@@ -38,8 +42,7 @@
                     <th> {{ $user->user->group_id ? $user->user->group->name : '---' }} </th>
                     <th>
                         <ul>
-                            <li ><a href="{{ route('user.edit', $user->user_id ) }}">Edit</a></li>
-                            <form method="POST" action="{{ route('user.destroy', $user->user->user_name) }}">
+                            <form method="POST" action="{{ route('resortUser.destroy', $user->id) }}">
                                 @csrf
                                 {{ method_field('DELETE') }}
                             <li ><button type="submit">
