@@ -13,7 +13,7 @@
               <h5> First Name </h5>
             </div>
             <div class="col-sm-4 align-self-center">
-                <input  type="text"
+                <input required  type="text"
                         class="form-control"
                         id="firstName"
                         name="first_name"
@@ -25,7 +25,7 @@
               <h5> Last Name</h5>
             </div>
             <div class="col-sm-4 align-self-center">
-                <input  type="text"
+                <input required type="text"
                         class="form-control"
                         id="lastName"
                         name="last_name"
@@ -34,18 +34,14 @@
             </div>
         </div><!-- end row-->
         <br>
-        <div class="row">
-            <div class="col-sm-12 align-self-center">
-                <button type="submit" class="btn btn-primary mb-2 col-md-12">Create User</button>
-            </div>
-        </div><!--end row-->
+
         <br>
             <div class="row">
                 <div class="col-sm-1 align-self-center">
                   <h5> Resort </h5>
                 </div>
                 <div class="col-sm-2 align-self-center">
-                    <select  name="resort_id" class="form-control" id="resort">
+                    <select required  name="resort_id" class="form-control" id="resort">
                         @foreach($resorts as $resort)
                             <option
                             value="{{ $resort->id }}"> {{ $resort->name }} </option>
@@ -56,78 +52,101 @@
                 <div class="col-sm-1 align-self-center">
                   <h5> Group </h5>
                 </div>
-                <div class="col-sm-2">
-                    <select  name="resort_id" class="form-control" id="resort">
-                        @foreach($resorts as $resort)
-                            <option
-                            value="{{ $resort->id }}"> {{ $resort->name }} </option>
-                        @endforeach
+                <div class="col-sm-3">
+                    <select required name="group_id" class="form-control" id="group">
+                        <option value="">Select Group</option>
+
                     </select>
                 </div>
 
                 <div class="col-sm-1 align-self-center">
                   <h5> Role </h5>
                 </div>
-                <div class="col-sm-2">
-                    <select  name="resort_id" class="form-control" id="resort">
-                        @foreach($resorts as $resort)
-                            <option
-                            value="{{ $resort->id }}"> {{ $resort->name }} </option>
-                        @endforeach
+                <div class="col-sm-3">
+                    <select required name="role_id" class="form-control" id="role">
+                        <option value="">Select Role</option>
+
                     </select>
                 </div>
-                <div class="col-sm-2 align-self-center">
-                    <a  href="{{ route('resort-users.create') }}"
-                        class="btn btn-primary active"
-                        role="button" aria-pressed="true">
-                            Add Role
-                    </a>
-                </div>
+
 
         </div><!-- end row-->
-        </form>
         <br>
         <div class="row">
-            <div class="col-md-12 align-self-center">
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>User Name</th>
-                            <th>Resort </th>
-                            <th>Group </th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+            <div class="col-sm-12 align-self-center">
+                <button type="submit" class="btn btn-primary mb-2 col-md-12">Create User</button>
+            </div>
+        </div><!--end row-->
+        </form>
 
-                    <tbody>
-                        @foreach($groups as $user)
-                            <tr>
-                                <th> <a href="{{ route('resort-users.show', 'sds' ) }}">{{ $user->name }}</a></th>
-                                <th> {{ $user->name }} </th>
-                                <th> {{ $user->name }} </th>
-                                <th>{{ $user->name}}</th>
-                                <th>{{ $user->name}}</th>
-
-                                <th>
-                                    <form method="POST" action="{{ route('user.destroy', 'sds') }}">
-                                        @csrf
-                                        {{ method_field('DELETE') }}
-                                    <button class="btn-danger" type="submit">
-                                        Delete </button>
-                                    </form>
-                                </th>
-                            </tr>
-                        @endforeach
-                    </tbody>
-            </table>
-        </div>
-    </div><!-- end row-->
 
 @endsection
 
 @section('js')
+
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
+    </script>
+    <script type="text/javascript">
+
+        $('#resort').change(function(){
+            var resort_id = $(this).val();
+            if(resort_id){
+                $.ajax({
+                    type:"GET",
+                    //url:"{{url('get-group-list')}}/"+resort_id,
+                    url:"{{ url('get-group-list')}}/"+resort_id,
+                    success:function(res){
+                        if(res){
+                            $("#group").empty();
+                            $("#role").empty();
+                            $("#group").append('<option>Select</option>');
+
+                            $.each(res,function(key,value){
+                                $("#group").append('<option value="'+key+'">'+value+'</option>');
+                            });
+
+                        }else{
+                            $("#group").empty();
+                        }
+                    }
+                });
+            }else{
+                $("#resort").empty();
+                $("#group").empty();
+            }
+        });
+
+        $('#group').change(function(){
+            var group_id = $(this).val();
+            if(group_id){
+                $.ajax({
+                    type:"GET",
+                    url:"{{url('get-role-list')}}/"+group_id,
+                    success:function(res){
+                        if(res){
+                            $("#role").empty();
+                            $("#role").append('<option>Select</option>');
+
+                            $.each(res,function(key,value){
+                                $("#role").append('<option value="'+key+'">'+value+'</option>');
+                            });
+
+                        }else{
+                            $("#group").empty();
+                        }
+                    }
+                });
+            }else{
+                $("#group").empty();
+                $("#role").empty();
+            }
+        });
+
+    </script>
+
+
 <script>
     $(document).ready(function() {
         $('#example').DataTable();

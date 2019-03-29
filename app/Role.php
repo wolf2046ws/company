@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     //
-    protected $fillable = ['name','description','group_id'];
+    protected $fillable = ['name','description','group_id' , 'resort_id'];
 
 
     public function permissions(){
@@ -17,6 +17,11 @@ class Role extends Model
     public function group(){
       return $this->belongsTo(Group::class);
     }
+
+    public function resort(){
+        return $this->belongsTo(Resort::class);
+    }
+
 
     // public function groups(){
     //     return $this->belongsToMany(group::class);

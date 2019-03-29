@@ -63,49 +63,52 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
        //store to data base
-        $ldap = new ldapUsers();
+//        $ldap = new ldapUsers();
+//        $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
+//        mb_substr($request['last_name'], 0, 2, "UTF-8"));
+//        $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
+//        mb_substr($request['last_name'], 0, 3, "UTF-8"));
+//        $request['user_name'] = $second_username;
+//        $userCreated = false;
+//        for($i=0 ; $i < 2; $i ++){
+//            $new_user = $ldap->user_create(
+//                array(
+//                    "user_name"     => $request['user_name'],
+//                    "first_name"    => $request['first_name'],
+//                    "last_name"     => $request['last_name'],
+//                    "email"         => $request['user_name']."@regenbogen-ag.de",
+//                    "container"     => array("CN=Users")
+//            ));
+//            dump($new_user,$request['user_name']);
+//            if($new_user != false){
+//                dd('sda');
+//                $userCreated = true;
+//                break;
+//            }
+//
+//        $request['user_name'] = $second_username;
+//        }
+//        if(!$userCreated){
+//            session()->flash('warning','Failed to create user');
+//            return redirect(route('user.index'));
+//
+//        }
 
-        //$request['user_id'] = Str::random(6);
 
-        $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
-        mb_substr($request['last_name'], 0, 2, "UTF-8"));
-
-        $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
-        mb_substr($request['last_name'], 0, 3, "UTF-8"));
-
-        $request['user_name'] = $second_username;
-        //dd($second_username,$first_username);
-        $userCreated = false;
-        for($i=0 ; $i < 2; $i ++){
-            $new_user = $ldap->user_create(
-                array(
-                    "user_name"     => $request['user_name'],
-                    "first_name"    => $request['first_name'],
-                    "last_name"     => $request['last_name'],
-                    "email"         => $request['user_name']."@regenbogen-ag.de",
-                    "container"     => array("CN=Users")
-            ));
-            dump($new_user,$request['user_name']);
-            if($new_user != false){
-                dd('sda');
-                $userCreated = true;
-                break;
-            }
-
-        $request['user_name'] = $second_username;
-        //dd($request['user_name']);
-        }
-        if(!$userCreated){
-            session()->flash('warning','Failed to create user');
-            return redirect(route('user.index'));
-
-        }
-        $request['user_id'] = 'ahmeed';
+        $request['user_id'] = Str::random(6);
         $user = User::create($request->all());
+        $userData = UserData::create([
+            'user_id' => $user->id,
+            'group_id' => $request['group_id'],
+            'role_id' => $request['role_id'],
+            'resort_id' => $request['resort_id'],
+
+        ]);
 
         session()->flash('success','User Added Successfully');
-        return redirect(route('user.index'));
+        return redirect(route('user.edit',$user->id));
 
     }
 
@@ -134,22 +137,16 @@ class userController extends Controller
      */
     public function edit($id)
     {
-
-        $departments = Department::all();
-        $resorts = Resort::all();
+        $user = User::findOrFail($id);
+        $user_data = UserData::where('user_id',$id)->get();
         $groups = Group::all();
-        $user = User::where('user_id',$id)->first();
         $roles = Role::all();
 
-        if($user == null){
-            session()->flash('warning','User Not Found');
-            return redirect()->back();
-        }
+
         return view('users.edit', compact(
-            'departments',
             'groups',
-            'resorts',
             'user',
+            'user_data',
             'roles'
         ));
 
@@ -216,6 +213,13 @@ class userController extends Controller
         session()->flash('success','User Deleted Successfully');
         return redirect()->back();
 
+    }
+
+    public function deleteUserData($id){
+        $userData = UserData::findOrFail($id);
+        $userData->delete();
+        session()->flash('success','User Data Deleted Successfully');
+        return redirect()->back();
     }
 
 }

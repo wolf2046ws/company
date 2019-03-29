@@ -22,7 +22,7 @@ class ResortUserController extends Controller
     public function index()
     {
 
-        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
 
         /*$users = \DB::table('users_data')
         ->where('user_id',$authUserID[0]->id)

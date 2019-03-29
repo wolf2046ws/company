@@ -16,7 +16,7 @@
             <div class="form-group col-md-6">
 
                 <label for="firstName"> First Name </label>
-                <input  type="text"
+                <input required type="text"
                         class="form-control"
                         id="firstName"
                         name="first_name"
@@ -28,7 +28,7 @@
             <div class="form-group col-md-6">
 
                 <label for="lastName">Last Name </label>
-                <input  type="text"
+                <input required  type="text"
                         class="form-control"
                         id="lastName"
                         name="last_name"
@@ -38,7 +38,7 @@
 
             <div class="form-group col-md-12">
                 <label for="manager">User Name </label>
-                <input  type="text"
+                <input required type="text"
                         class="form-control"
                         id="email"
                         disabled
@@ -49,7 +49,7 @@
 
             <div class="form-group col-md-3">
                 <label for="resort">Select Resort</label>
-                <select  name="resort_id" class="form-control" id="resort">
+                <select required name="resort_id" class="form-control" id="resort">
                     @foreach($resorts as $resort)
                         <option
                         value="{{ $resort->id }}"> {{ $resort->name }} </option>
@@ -58,16 +58,16 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="Select1">Select Group</label>
-                <select name ="group_id" class="form-control" id="group">
-                        <option> </option>
+                <label  for="Select1">Select Group</label>
+                <select required name ="group_id" class="form-control" id="group">
+                    <option value="">Select Group</option>
                 </select>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="Select1">Select Role</label>
-                <select name ="role_id" class="form-control" id="role">
-                        <option> </option>
+                <select required name ="role_id" class="form-control" id="role">
+                    <option value="">Select Group</option>
                 </select>
             </div>
 
@@ -77,6 +77,46 @@
         </div>
 
     </form>
+
+    <br>
+    <div class="row">
+         <div class="col-md-12 align-self-center">
+              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>User Name</th>
+                <th>Resort </th>
+                <th>Group </th>
+                <th>Role </th>
+                <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($user_data as $user)
+                    <tr>
+                        <th> {{ $user->user->first_name }} </th>
+                        <th> {{ $user->user->last_name }} </th>
+                        <th> {{ $user->user->user_name }} </th>
+                        <th> {{ $user->resort->name }} </th>
+                        <th> {{ $user->group->name }} </th>
+                        <th> {{ $user->role->name }} </th>
+                        <th>
+                            <form method="POST" action="{{ route('userData.destroy', $user->id) }}">
+                            @csrf
+                                {{ method_field('DELETE') }}
+                                <button class="btn-danger" type="submit">
+                                Delete </button>
+                            </form>
+                        </th>
+                    </tr>
+                    @endforeach
+                </tbody>
+              </table>
+        </div>
+    </div><!-- end row-->
 
 @endsection
 

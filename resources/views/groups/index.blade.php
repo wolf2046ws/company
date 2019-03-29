@@ -7,36 +7,32 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-sm-3">
-      <h4>  <label for="resort">Select Resort </label> </h4>
-    </div>
-    <div class="col-sm-4">
-        <select  name="resort_id" class="form-control" id="resort">
-            @foreach($resorts as $resort)
-                <option
-                value="{{ $resort->id }}"> {{ $resort->name }} </option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-sm-5">
-        <a  href="{{ route('resort-users.create') }}"
-            class="btn btn-primary active"
-            role="button" aria-pressed="true">
-                Search
-        </a>
-    </div>
 
-</div>
 
 <form method="POST" action="{{ route('group.store') }}">
     @csrf
+
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>  <label for="resort">Select Resort </label> </h4>
+        </div>
+        <div class="col-sm-4">
+            <select required name="resort_id" class="form-control" id="resort">
+                @foreach($resorts as $resort)
+                    <option
+                            value="{{ $resort->id }}"> {{ $resort->name }} </option>
+                @endforeach
+            </select>
+        </div>
+
+
+    </div>
 <div class="row">
     <div class="col-sm-3">
         <h4> <label for="exampleInputEmail1">Group Name</label> </h4>
     </div>
     <div class="col-sm-4">
-      <input type="text" name="name" value="{{old('name')}}" class="form-control" id="exampleInputEmail1"  placeholder="Name">
+      <input type="text" required name="name" value="{{old('name')}}" class="form-control" id="exampleInputEmail1"  placeholder="Name">
     </div>
     <div class="col-sm-5">
 
@@ -48,7 +44,7 @@
         <h4> <label for="exampleInputEmail1">Group Description</label></h4>
     </div>
     <div class="col-sm-4">
-      <input type="text" name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
+      <input type="text" required name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
   </div>
 </div>
 
@@ -67,7 +63,8 @@
             <tr>
                 <th>id</th>
                 <th>Resort</th>
-                <th>Group</th>
+                <th>Group Name</th>
+                <th>Group Description</th>
                 <th># Roles</th>
                 <th># Users</th>
                 <th>Actions</th>
@@ -78,12 +75,13 @@
             @foreach($groups as $group)
                 <tr>
                     <th> {{ $group->id }}</th>
+                    <th> {{ $group->resort->name }}</th>
                     <th> {{ $group->name }}</th>
                     <th> {{ $group->description }}</th>
                     <th> {{ $group->roles->count() }}</th>
                     <th> {{ $group->users->count() }}</th>
                     <th>
-                        <form method="POST" action="{{ route('user.destroy', 'Test') }}">
+                        <form method="POST" action="{{ route('group.destroy', $group->id) }}">
                             @csrf
                             {{ method_field('DELETE') }}
                         <button class="btn-danger" type="submit">

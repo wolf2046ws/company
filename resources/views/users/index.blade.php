@@ -32,7 +32,7 @@
                         <ul style="list-style:none;">
 
                                 <li style="margin-right:15px;">
-                                        <a href="{{ route('user.edit', $user->user_id ) }}">
+                                        <a href="{{ route('user.edit', $user->id ) }}">
                                             <button class="btn-primary" type="submit">
                                             Edit</button>
                                         </a>

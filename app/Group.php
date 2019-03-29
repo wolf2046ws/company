@@ -18,4 +18,8 @@ class Group extends Model
         return $this->hasMany(Role::class);
     }
 
+    public function resort(){
+        return $this->belongsTo(Resort::class);
+    }
+
 }

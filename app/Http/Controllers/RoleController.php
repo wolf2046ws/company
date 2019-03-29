@@ -17,11 +17,8 @@ class RoleController extends Controller
     public function index()
     {
         //
-
         $roles = Role::latest()->get();
-	    $groups = Group::latest()->get();
-        //return view('roles.index',compact('roles','permissions'));
-    	return view('roles.index', compact('roles', 'groups'));
+    	return view('roles.index', compact('roles'));
 	}
 
     /**
@@ -33,7 +30,8 @@ class RoleController extends Controller
     {
         //
         $permissions = permission::latest()->get();
-        return view('roles.create',compact('permissions'));
+        $groups = Group::latest()->get();
+        return view('roles.create',compact('permissions','groups'));
     }
 
     /**
@@ -45,10 +43,11 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+//        dd($request->all());
         $role = Role::create($request->all());
         $role->permissions()->sync($request->permissions);
         session()->flash('success','Role Added Successfully');
-        return redirect(route('groupRoles.index',$role->group_id));
+        return redirect(route('role.index'));
     }
 
     /**
@@ -99,12 +98,10 @@ class RoleController extends Controller
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy($role)
+    public function destroy(Role $role)
     {
         //
-        $role = Role::findOrFail($role);
         $role->delete();
-
         session()->flash('success','role Deleted Successfully');
         return redirect()->back();
     }
