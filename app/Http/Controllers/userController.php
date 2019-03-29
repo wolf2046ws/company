@@ -31,8 +31,7 @@ class userController extends Controller
 	//dd($users_new);
 
 	//$users = User::latest()->get();
-        $users = User::latest()->where('user_name','!=','0')->get();
-
+    $users = User::latest()->where('user_name','!=','0')->get();
 
 	return view('users.index', compact('users'));
     }
@@ -69,14 +68,31 @@ class userController extends Controller
     public function store(Request $request)
     {
        //store to data base
-    //    $ldap = new ldapUsers();
+        $ldap = new ldapUsers();
     //    $ldapHelper = new ldapHelperMethods();
 
-    //    $request['user_name'] = 'AhmedMO';
-    //    dd($ldap->user_create($request->all()));
-
        $request['user_id'] = Str::random(6);
-       $request['user_name'] = Str::random(6);
+
+       //$request['password'] = Str::random(6);
+        //Use mb_substr to get the first character.
+        $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
+        mb_substr($request['last_name'], 0, 2, "UTF-8"));
+
+        $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
+        mb_substr($request['last_name'], 0, 3, "UTF-8"));
+
+        $request['user_name'] = $first_username;
+
+
+        $df = $ldap->user_create(
+            array(
+                "user_name"     => $request['user_name'],
+                "first_name"    => $request['first_name'],
+                "last_name"     => $request['last_name'],
+                "email"         => $request['user_name']."@regenbogen-ag.de",
+                "container"     => array("CN=Users")
+                ));
+
 
        $user = User::create($request->all());
        session()->flash('success','User Added Successfully');

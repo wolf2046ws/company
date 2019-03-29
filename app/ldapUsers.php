@@ -1052,10 +1052,7 @@ class ldapUsers {
         if (!array_key_exists("email",$attributes)){ return ("Missing compulsory field [email]"); }
         if (!array_key_exists("container",$attributes)){ return ("Missing compulsory field [container]"); }
         if (!is_array($attributes["container"])){ return ("Container attribute must be an array."); }
-        if (array_key_exists("password",$attributes) && (!$this->_use_ssl && !$this->_use_tls)){
-            throw new adLDAPException('SSL must be configured on your webserver and enabled in the class to set passwords.');
-        }
-        if (!array_key_exists("display_name",$attributes)){ $attributes["display_name"]=$attributes["firstname"]." ".$attributes["surname"]; }
+        if (!array_key_exists("display_name",$attributes)){ $attributes["display_name"]=$attributes["first_name"]." ".$attributes["last_name"]; }
         // Translate the schema
         $add=$this->adldap_schema($attributes);
 
@@ -1065,23 +1062,34 @@ class ldapUsers {
         } else {
         	$add["cn"][0]=$attributes["display_name"];
         }
-        $add["samaccountname"][0]=$attributes["username"];
+		$add["givenname"][0] = $attributes["first_name"];
+		$add["sn"][0] = $attributes["last_name"];
+		$add["userprincipalname"][0] = $attributes["user_name"]."@regenbogen.ag";
+        $add["samaccountname"][0]=$attributes["user_name"];
         $add["objectclass"][0]="top";
         $add["objectclass"][1]="person";
         $add["objectclass"][2]="organizationalPerson";
         $add["objectclass"][3]="user"; //person?
+
+
         //$add["name"][0]=$attributes["firstname"]." ".$attributes["surname"];
         // Set the account control attribute
         $control_options=array("NORMAL_ACCOUNT");
-        if (!$attributes["enabled"]){ $control_options[]="ACCOUNTDISABLE"; }
+        $control_options[]="ACCOUNTDISABLE";
         $add["userAccountControl"][0]=$this->account_control($control_options);
         //echo ("<pre>"); print_r($add);
         // Determine the container
         $attributes["container"]=array_reverse($attributes["container"]);
-        $container="OU=".implode(",OU=",$attributes["container"]);
+        $container=$attributes["container"];
+
         // Add the entry
-        $result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
-        if ($result!=true){ return (false); }
+
+		$sd = "CN=".$add["cn"][0].",".$container[0].",".$this->_base_dn;
+
+        //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
+		$result=@ldap_add($this->_conn,$sd, $add);
+
+		if ($result!=true){ return (false); }
 
         return (true);
     }
