@@ -22,11 +22,6 @@ class ResortUserController extends Controller
     public function index()
     {
 
-    //latest()->where('user_name','!=','0')->get();
-	//dd("ResortUserController");
-
-
-
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
 
         /*$users = \DB::table('users_data')
@@ -40,7 +35,7 @@ class ResortUserController extends Controller
         $users_group = UserData::where('user_id',$authUserID[0]->id)
         ->groupBy('group_id')->get();
 
-        
+
         $userData = User::where('resort_id', $authUserID[0]->resort_id)
         ->where('user_name','!=','0')
         ->get();

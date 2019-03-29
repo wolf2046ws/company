@@ -22,7 +22,7 @@
         <tbody>
 
             @foreach($users as $user)
-            
+
                 <tr>
                     <th> <a href="{{ route('user.show', $user->id ) }}">{{ $user->first_name }}</a></th>
                     <th> {{ $user->last_name }} </th>
@@ -31,12 +31,13 @@
                     <th>
                         <ul style="list-style:none;">
 
-                            <form class="float-left" action="{{ route('user.update', $user->id ) }}" method="post">
-                                @csrf
-                                <li style="margin-right:15px;"><button class="btn-primary" type="submit">
-                                    Edit</button></li>
+                                <li style="margin-right:15px;">
+                                        <a href="{{ route('user.edit', $user->user_id ) }}">
+                                            <button class="btn-primary" type="submit">
+                                            Edit</button>
+                                        </a>
+                                </li>
 
-                            </form>
 
                             <form method="POST" action="{{ route('user.destroy', $user->user_name) }}">
                                 @csrf

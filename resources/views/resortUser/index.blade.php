@@ -51,9 +51,11 @@
                     <th> {{ $user->last_name }} </th>
                     <th> {{ $user->user_name }} </th>
                     <th>
-                    @for($i = 0; $i < count($users_resort); $i++)
-                    {{ $users_resort[$i]->resort->name .= " , " }}
-                    @endfor
+
+                        @for($i = 0; $i < count($users_resort); $i++)
+                        {{ $users_resort[$i]->resort->name .= " , " }}
+                        @endfor
+                    
 
                     </th>
                     <th>
@@ -84,20 +86,6 @@
                 </tr>
             @endforeach
         </tbody>
-
-        <!--<tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Resort</th>
-                <th>Department</th>
-                <th>Manager Name </th>
-                <th>Gender </th>
-                <th>Start date</th>
-                <th>End Date</th>
-            </tr>
-        </tfoot>-->
-
     </table>
 @endsection
 

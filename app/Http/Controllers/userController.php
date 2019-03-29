@@ -74,17 +74,34 @@ class userController extends Controller
         $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
         mb_substr($request['last_name'], 0, 3, "UTF-8"));
 
-        $request['user_name'] = $first_username;
+        $request['user_name'] = $second_username;
+        //dd($second_username,$first_username);
+        $userCreated = false;
+        for($i=0 ; $i < 2; $i ++){
+            $new_user = $ldap->user_create(
+                array(
+                    "user_name"     => $request['user_name'],
+                    "first_name"    => $request['first_name'],
+                    "last_name"     => $request['last_name'],
+                    "email"         => $request['user_name']."@regenbogen-ag.de",
+                    "container"     => array("CN=Users")
+            ));
+            dump($new_user,$request['user_name']);
+            if($new_user != false){
+                dd('sda');
+                $userCreated = true;
+                break;
+            }
 
-        $new_user = $ldap->user_create(
-            array(
-                "user_name"     => $request['user_name'],
-                "first_name"    => $request['first_name'],
-                "last_name"     => $request['last_name'],
-                "email"         => $request['user_name']."@regenbogen-ag.de",
-                "container"     => array("CN=Users")
-                ));
+        $request['user_name'] = $second_username;
+        //dd($request['user_name']);
+        }
+        if(!$userCreated){
+            session()->flash('warning','Failed to create user');
+            return redirect(route('user.index'));
 
+        }
+        $request['user_id'] = 'ahmeed';
         $user = User::create($request->all());
 
         session()->flash('success','User Added Successfully');
@@ -117,6 +134,7 @@ class userController extends Controller
      */
     public function edit($id)
     {
+
         $departments = Department::all();
         $resorts = Resort::all();
         $groups = Group::all();
