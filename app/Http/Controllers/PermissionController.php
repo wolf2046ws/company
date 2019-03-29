@@ -38,7 +38,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         permission::create($request->all());
         session()->flash('success','Permission Added Successfully');
         return redirect(route('permission.index'));
@@ -91,13 +91,13 @@ class PermissionController extends Controller
      * @param  \App\permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(permission $permission)
+    public function destroy($permission)
     {
         //
         $permission = Permission::findOrFail($permission);
         $permission->delete();
 
-        session()->flash('success','permission Deleted Successfully');
+        session()->flash('success','Permission Deleted Successfully');
         return redirect()->back();
     }
 }

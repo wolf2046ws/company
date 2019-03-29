@@ -57,6 +57,7 @@ class LoginController extends Controller
     public function login(AuthRequest $request){
         // dd($request->all());
         $user = Session::get('user');
+
         if($user){
             return \redirect('/user');
         }

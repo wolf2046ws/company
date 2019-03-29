@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\User;
+use App\UserData;
 use App\Department;
 use App\Resort;
 use App\Group;
@@ -20,11 +21,35 @@ class ResortUserController extends Controller
      */
     public function index()
     {
-        //latest()->where('user_name','!=','0')->get();
+
+    //latest()->where('user_name','!=','0')->get();
 	//dd("ResortUserController");
-        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
-        $users = User::where('resort_id', $authUserID->resort_id)->where('user_name','!=','0')->get();
-        return view('resortUser.index',compact('users'));
+
+
+
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
+
+        /*$users = \DB::table('users_data')
+        ->where('user_id',$authUserID[0]->id)
+        ->get();*/
+
+        $users_resort = UserData::where('user_id',$authUserID[0]->id)
+        ->groupBy('resort_id')->get();
+
+
+        $users_group = UserData::where('user_id',$authUserID[0]->id)
+        ->groupBy('group_id')->get();
+
+        
+        $userData = User::where('resort_id', $authUserID[0]->resort_id)
+        ->where('user_name','!=','0')
+        ->get();
+
+        /*$users = User::where('resort_id', $authUserID[0]->resort_id)
+        ->where('user_name','!=','0')
+        ->get();*/
+
+        return view('resortUser.index',compact('users_resort', 'userData', 'users_group'));
     }
 
     /**

@@ -7,64 +7,105 @@
 @endsection
 
 @section('content')
-<br>
-<a  href="{{ route('role.create') }}"
-    class="btn btn-primary btn-lg active"
-    role="button" aria-pressed="true">
-        Create New Role
-</a>
-<br>
-<br>
-<table id="example" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>description</th>
-                <th># Permissions</th>
-                <th># Groups</th>
-                <th>Actions</th>
+<div class="row">
 
-            </tr>
-        </thead>
+    <div class="col-sm-6 align-self-center">
+        <a  href="{{ route('resort-users.create') }}"
+            class="btn btn-primary active col-sm-6"
+            role="button" aria-pressed="true">
+                Show Roles
+        </a>
+    </div>
+</div><!-- end row-->
 
-        <tbody>
-            @foreach($roles as $role)
-                <tr>
-                    <th> {{ $role->id }}</th>
-                    <th> {{ $role->name }}</th>
-                    <th> {{ $role->description }}</th>
-                    <th> {{ $role->permissions->count() }}</th>
-                    <th> {{ $role->groups->count() }}</th>
-                    <th>
-                        <ul>
-                            <li ><a href="{{ route('role.edit', $role->id ) }}">Edit</a></li>
-                            <form method="POST" action="{{ route('role.destroy', $role->id) }}">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                            <li ><button type="submit">
-                                Delete</button></li>
-                         </form>
-                        </ul>
-                    </th>
-                </tr>
+<br>
+
+<div class="row">
+    <div class="col-sm-2 align-self-center">
+      <h5> Select Resort </h5>
+    </div>
+    <div class="col-sm-2 align-self-center">
+        <select  name="resort_id" class="form-control" id="resort">
+            @foreach($resorts as $resort)
+                <option
+                value="{{ $resort->id }}"> {{ $resort->name }} </option>
             @endforeach
-        </tbody>
+        </select>
+    </div>
 
-        <!--<tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Resort</th>
-                <th>Department</th>
-                <th>Manager Name </th>
-                <th>Gender </th>
-                <th>Start date</th>
-                <th>End Date</th>
-            </tr>
-        </tfoot>-->
+    <div class="col-sm-2 align-self-center">
+      <h5> Select Group </h5>
+    </div>
+    <div class="col-sm-2">
+        <select  name="resort_id" class="form-control" id="resort">
+            @foreach($resorts as $resort)
+                <option
+                value="{{ $resort->id }}"> {{ $resort->name }} </option>
+            @endforeach
+        </select>
+    </div>
 
-    </table>
+    <div class="col-sm-2 align-self-center">
+        <a  href="{{ route('resort-users.create') }}"
+            class="btn btn-primary active"
+            role="button" aria-pressed="true">
+                Search
+        </a>
+    </div>
+
+</div> <!-- end row-->
+<br>
+<form method="POST" action="{{ route('group.store') }}">
+    @csrf
+<div class="row">
+    <div class="col-sm-2 align-self-center">
+        <h5> Role Name </h5>
+    </div>
+    <div class="col-sm-4">
+      <input type="text" name="name" value="{{old('name')}}" class="form-control" id="exampleInputEmail1"  placeholder="Name">
+    </div>
+
+</div><!-- end row-->
+<br>
+<div class="row">
+    <div class="col-sm-2 align-self-center">
+        <h5> Role Description </h5>
+    </div>
+    <div class="col-sm-4">
+      <input type="text" name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
+  </div>
+</div><!-- end row-->
+<br>
+<div class="row border">
+    <div class="col-sm-12 align-self-center">
+        <h5>Select Permissions </h5>
+    </div>
+        @foreach($roles as $permission)
+        <div style="width: 20rem;">
+         <div class="custom-control custom-checkbox">
+                    <input class="form-check-input" name="permissions[]"
+                           type="checkbox" id="inlineCheckbox1"
+                           value="{{$permission->id}}">
+                    <label class="form-check-label" for="inlineCheckbox1">{{$permission->description}}</label>
+                </div>
+        </div>
+        @endforeach
+
+</div><!--end row-->
+<br>
+<div class="row">
+    <div class=" col-sm-12 align-self-center">
+        <a  href="{{ route('resort-users.create') }}"
+            class="btn btn-primary active col-sm-12"
+            role="button" aria-pressed="true">
+                Create Role
+        </a>
+    </div>
+</div>
+
+<br>
+<br>
+
 @endsection
 
 @section('js')

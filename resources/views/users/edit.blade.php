@@ -48,8 +48,8 @@
 
 
             <div class="form-group col-md-3">
-                <label for="Select3">Select Resort</label>
-                <select  name="resort_id" class="form-control" id="Select3">
+                <label for="resort">Select Resort</label>
+                <select  name="resort_id" class="form-control" id="resort">
                     @foreach($resorts as $resort)
                         <option
                         value="{{ $resort->id }}"> {{ $resort->name }} </option>
@@ -59,21 +59,15 @@
 
             <div class="form-group col-md-3">
                 <label for="Select1">Select Group</label>
-                <select name ="group_id" class="form-control" id="Select1">
-                    @foreach($groups as $group)
-                        <option
-                        value="{{ $group->id }}"> {{ $group->name }} </option>
-                    @endforeach
+                <select name ="group_id" class="form-control" id="group">
+                        <option> </option>
                 </select>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="Select1">Select Role</label>
-                <select name ="role_id" class="form-control" id="Select1">
-                    @foreach($roles as $role)
-                        <option
-                        value="{{ $role->id }}"> {{ $role->name }} </option>
-                    @endforeach
+                <select name ="role_id" class="form-control" id="role">
+                        <option> </option>
                 </select>
             </div>
 
@@ -86,13 +80,65 @@
 
 @endsection
 
-
+<!--url:"{{url('/resort-groups')}}/"+resort_id,-->
 @section('js')
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js">
+</script>
     <script type="text/javascript">
 
+    $('#resort').change(function(){
+        var resort_id = $(this).val();
+        if(resort_id){
+        $.ajax({
+            type:"GET",
+            //url:"{{url('get-group-list')}}/"+resort_id,
+            url:"{{ url('get-group-list')}}/"+resort_id,
+            success:function(res){
+             if(res){
+                 $("#group").empty();
+                 $("#role").empty();
+                 $("#group").append('<option>Select</option>');
 
+                 $.each(res,function(key,value){
+                     $("#group").append('<option value="'+key+'">'+value+'</option>');
+                 });
 
-///$groups = Group::where('resort_id','=',$request->resort_id)->toJson();
+             }else{
+                $("#group").empty();
+             }
+            }
+         });
+     }else{
+         $("#resort").empty();
+         $("#group").empty();
+     }
+    });
+
+    $('#group').change(function(){
+    var group_id = $(this).val();
+    if(group_id){
+    $.ajax({
+        type:"GET",
+        url:"{{url('get-role-list')}}/"+group_id,
+        success:function(res){
+         if(res){
+             $("#role").empty();
+             $("#role").append('<option>Select</option>');
+
+             $.each(res,function(key,value){
+                 $("#role").append('<option value="'+key+'">'+value+'</option>');
+             });
+
+         }else{
+            $("#group").empty();
+         }
+        }
+     });
+ }else{
+     $("#group").empty();
+     $("#role").empty();
+ }
+});
 
     </script>
 @endsection

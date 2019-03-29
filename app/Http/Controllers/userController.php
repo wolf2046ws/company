@@ -144,7 +144,9 @@ class userController extends Controller
         if($user){
             $userData = UserData::where('user_id',$user->id)->get();
             foreach ($userData as $key) {
-                if($key->resort_id == $request->resort_id && $key->group_id == $request->group_id && $key->role_id == $request->role_id)
+                if($key->resort_id == $request->resort_id &&
+                $key->group_id == $request->group_id &&
+                $key->role_id == $request->role_id)
                 {
                     session()->flash('warning','User allready has this data');
                     return redirect()->back();

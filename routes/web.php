@@ -34,6 +34,10 @@ Route::group(['middleware' => ['web','shared_variables','check_auth','route_perm
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
         Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
         Route::delete('/users-resort-delete/{id}','ResortController@deleteUser')->name('resortUser.destroy');
+
+        Route::get('dropdownlist','DropdownController@index');
+        Route::get('get-group-list/{id}','DropdownController@getGroupList');
+        Route::get('get-role-list/{id}','DropdownController@getRoleList');
 });
 
 

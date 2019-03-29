@@ -19,7 +19,7 @@ class RoleController extends Controller
         //
 
         $roles = Role::latest()->get();
-	$groups = Group::latest()->get();
+	    $groups = Group::latest()->get();
         //return view('roles.index',compact('roles','permissions'));
     	return view('roles.index', compact('roles', 'groups'));
 	}
