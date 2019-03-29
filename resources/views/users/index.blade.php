@@ -22,15 +22,16 @@
         <tbody>
 
             @foreach($users as $user)
+            
                 <tr>
-                    <th> <a href="{{ route('user.show', $user->user_id ) }}">{{ $user->first_name }}</a></th>
+                    <th> <a href="{{ route('user.show', $user->id ) }}">{{ $user->first_name }}</a></th>
                     <th> {{ $user->last_name }} </th>
                     <th> {{ $user->user_name }} </th>
 
                     <th>
                         <ul style="list-style:none;">
 
-                            <form class="float-left" action="{{ route('user.update', $user->user_id ) }}" method="post">
+                            <form class="float-left" action="{{ route('user.update', $user->id ) }}" method="post">
                                 @csrf
                                 <li style="margin-right:15px;"><button class="btn-primary" type="submit">
                                     Edit</button></li>

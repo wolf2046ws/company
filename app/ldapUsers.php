@@ -1071,7 +1071,6 @@ class ldapUsers {
         $add["objectclass"][2]="organizationalPerson";
         $add["objectclass"][3]="user"; //person?
 
-
         //$add["name"][0]=$attributes["firstname"]." ".$attributes["surname"];
         // Set the account control attribute
         $control_options=array("NORMAL_ACCOUNT");
@@ -1088,7 +1087,6 @@ class ldapUsers {
 
         //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
 		$result=@ldap_add($this->_conn,$sd, $add);
-
 		if ($result!=true){ return (false); }
 
         return (true);
@@ -1184,7 +1182,7 @@ class ldapUsers {
         $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
         $entries = ldap_get_entries($this->_conn, $sr);
 		//dd(var_dump($entries[0]['samaccountname'][0]));
-		if (($entries[0]['useraccountcontrol'][0] == "514")) {
+		if ( (isset($entries[0]['useraccountcontrol'][0])) && ($entries[0]['useraccountcontrol'][0] == "514")) {
 			return $entries = array();
 			//dd("Userhas name");
 		}else {
@@ -1258,6 +1256,80 @@ class ldapUsers {
         $entries = ldap_get_entries($this->_conn, $sr);
 		//dd(var_dump($entries[0]['samaccountname'][0]));
 		if (($entries[0]['useraccountcontrol'][0] == "512")) {
+			return $entries = array();
+			//dd("Userhas name");
+		}else {
+			//dd("User Has Username");
+			return $entries;
+		}
+		//if($entries[0]['samaccountname']['count'] > 0){return $entries;}else{return $entries = array();}
+		//dd($entries[0]['useraccountcontrol']);
+		/*if (!(in_array("sn", $entries))) {
+			// code...
+			$entries[0]["sn"] = "";
+
+		}*/
+        if (isset($entries[0])) {
+            if ($entries[0]['count'] >= 1) {
+				if ((in_array("memberof", $entries[0])) ){
+	                if (in_array("memberof", $fields)) {
+	                    // AD does not return the primary group in the ldap query, we may need to fudge it
+	                    if ($this->_real_primarygroup && isset($entries[0]["primarygroupid"][0]) && isset($entries[0]["objectsid"][0])){
+	                        //$entries[0]["memberof"][]=$this->group_cn($entries[0]["primarygroupid"][0]);
+	                        $entries[0]["memberof"][]=$this->get_primary_group($entries[0]["primarygroupid"][0], $entries[0]["objectsid"][0]);
+	                    } else {
+	                        $entries[0]["memberof"][]="CN=Domain Users,CN=Users,".$this->_base_dn;
+	                    }
+	                    $entries[0]["memberof"]["count"]++;
+	                }
+				} // end if memerOf
+
+            } // entries[0]['count'] >= 1
+            return $entries;
+        }
+        return false;
+    }
+
+
+	public function user_info_without_enable($username,$fields=NULL,$isGUID=false){
+        if ($username===NULL){ return (false); }
+        if (!$this->_bind){ return (false); }
+        if ($isGUID === true) {
+            $username = $this->strguid2hex($username);
+            $filter="objectguid=".$username;
+        }
+        else if (strstr($username, "@")) {
+             $filter="userPrincipalName=".$username;
+        }
+        else {
+             $filter="samaccountname=".$username;
+             //$filter="uid=".$username; /* fix for uid */
+        }
+        // $filter = "(&(objectCategory=person)({$filter}))";
+        $filter = "({$filter})"; /* fix for data */
+        if ($fields===NULL){
+				if (isset($fields['description'])) {
+					array_push("description", $fields);
+				}else{
+					$fields['description'] = NULL;
+				}
+
+	$fields=array("givenname","initials",
+	            "sn","displayname",
+	            "description","office","telephonenumber",
+	            "mail","userprincipalname","samaccountname",
+	            "title","memberof",
+	            "department","useraccountcontrol",
+	            "dn","objectsid","primarygroupid","objectsid");
+	}
+
+        if (!in_array("objectsid",$fields)){
+            $fields[] = "objectsid";
+        }
+        $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+        $entries = ldap_get_entries($this->_conn, $sr);
+		//dd(var_dump($entries[0]['samaccountname'][0]));
+		if (($entries[0]['useraccountcontrol'][0] == "514")) {
 			return $entries = array();
 			//dd("Userhas name");
 		}else {

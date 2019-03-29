@@ -25,10 +25,6 @@ class userController extends Controller
      */
     public function index()
     {
-	//$ldapHelper = new ldapHelperMethods();
-        //$users_new = $ldapHelper->l_get_all_user();
-        //dd($users);
-	//dd($users_new);
 
 	//$users = User::latest()->get();
     $users = User::latest()->where('user_name','!=','0')->get();
@@ -69,12 +65,9 @@ class userController extends Controller
     {
        //store to data base
         $ldap = new ldapUsers();
-    //    $ldapHelper = new ldapHelperMethods();
 
-       $request['user_id'] = Str::random(6);
+        //$request['user_id'] = Str::random(6);
 
-       //$request['password'] = Str::random(6);
-        //Use mb_substr to get the first character.
         $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
         mb_substr($request['last_name'], 0, 2, "UTF-8"));
 
@@ -83,8 +76,7 @@ class userController extends Controller
 
         $request['user_name'] = $first_username;
 
-
-        $df = $ldap->user_create(
+        $new_user = $ldap->user_create(
             array(
                 "user_name"     => $request['user_name'],
                 "first_name"    => $request['first_name'],
@@ -93,10 +85,10 @@ class userController extends Controller
                 "container"     => array("CN=Users")
                 ));
 
+        $user = User::create($request->all());
 
-       $user = User::create($request->all());
-       session()->flash('success','User Added Successfully');
-       return redirect(route('user.index'));
+        session()->flash('success','User Added Successfully');
+        return redirect(route('user.index'));
 
     }
 
@@ -106,6 +98,7 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
         $user = User::where('user_id',$id)->first();
@@ -197,9 +190,11 @@ class userController extends Controller
     {
 
         $ldap = new ldapUsers();
-       $ldap->user_delete($id);
+        $ldap->user_disable($id);
+
         $user = User::where('user_name',$id)->first();
         $user->delete();
+
         session()->flash('success','User Deleted Successfully');
         return redirect()->back();
 
