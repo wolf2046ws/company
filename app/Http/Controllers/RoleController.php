@@ -41,9 +41,14 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RoleValidation $request)
+    public function store(Request $request)
     {
         //
+	$role = Role::where('group_id', $request->group_id)->where('name',$request->name)->first();
+	if($role){
+	    session()->flash('warning','This Role already in this group');
+            return redirect()->back();
+	}
         $role = Role::create($request->all());
         $role->permissions()->sync($request->permissions);
         session()->flash('success','Role Added Successfully');
