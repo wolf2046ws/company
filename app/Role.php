@@ -23,7 +23,7 @@ class Role extends Model
     }
 
 
-    // public function groups(){
-    //     return $this->belongsToMany(group::class);
-    // }
+//    public function group(){
+  //       return $this->belongsToMany(group::class);
+    //}
 }

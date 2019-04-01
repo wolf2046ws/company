@@ -261,7 +261,8 @@ class userController extends Controller
     }
 
     public function deleteUserData($id){
-        $userData = UserData::findOrFail($id);
+        
+	$userData = UserData::findOrFail($id);
         $userData->delete();
         session()->flash('success','User Data Deleted Successfully');
         return redirect()->back();

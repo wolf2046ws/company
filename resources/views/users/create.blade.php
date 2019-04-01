@@ -44,7 +44,9 @@
                     <select required  name="resort_id" class="form-control" id="resort">
                         @foreach($resorts as $resort)
                             <option
-                            value="{{ $resort->id }}"> {{ $resort->name }} </option>
+				{{--$resort->name --}}
+				{{-- value="resort->id"--}}
+                            value="{{ $resort->id }}"> {{$resort->name}} </option>
                         @endforeach
                     </select>
                 </div>
@@ -90,8 +92,9 @@
     </script>
     <script type="text/javascript">
 
-        $('#resort').change(function(){
-            var resort_id = $(this).val();
+        $('#resort').click(function(){
+            var resort_id = $("#resort").val();
+
             if(resort_id){
                 $.ajax({
                     type:"GET",

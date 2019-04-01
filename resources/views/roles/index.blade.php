@@ -49,7 +49,7 @@
             <th> {{ $role->name }}</th>
             <th> {{ $role->description }}</th>
             <th> {{ $role->resort->name }}</th>
-            <th> {{ $role->group->name }}</th>
+            <th> {{ $role->group['name'] }}</th>
             <th> {{ $role->permissions->count() }}</th>
             <th>
                 <form method="POST" action="{{ route('role.destroy', $role->id) }}">

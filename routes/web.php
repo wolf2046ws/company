@@ -32,7 +32,7 @@ Route::group(['middleware' => ['web','shared_variables','check_auth','route_perm
         Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
         Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
-        Route::delete('/user-data/{id}','UserController@deleteUserData')->name('userData.destroy');
+        Route::delete('/user-data/{id}','userController@deleteUserData')->name('userData.destroy');
 
         Route::get('dropdownlist','DropdownController@index');
         Route::get('get-group-list/{id}','DropdownController@getGroupList');
