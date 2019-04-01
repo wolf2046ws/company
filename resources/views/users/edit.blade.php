@@ -126,7 +126,7 @@
 </script>
     <script type="text/javascript">
 
-    $('#resort').change(function(){
+    $('#resort').click(function(){
         var resort_id = $(this).val();
         if(resort_id){
         $.ajax({

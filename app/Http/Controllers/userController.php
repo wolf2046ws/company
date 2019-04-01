@@ -58,7 +58,7 @@ class userController extends Controller
         }
         else{
             $user->status = 'Enabled';
-            $ldap->user_disable('moab');
+            $ldap->user_enable($user->user_name);
             //dd($ldap->user_enable($user->user_name));
         }
         $user->save();
@@ -88,7 +88,8 @@ class userController extends Controller
             $resorts = Resort::where('id','=','0')->get();
         }
         $roles = Role::all();
-        return view('users.create', compact(
+        
+	return view('users.create', compact(
             'departments',
              'resorts',
              'groups',

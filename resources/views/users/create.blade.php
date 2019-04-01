@@ -6,6 +6,7 @@
 @endsection
 
 @section('content')
+	
     <form method="POST" action="{{ route('user.store') }}">
         @csrf
         <div class="row">
@@ -34,7 +35,7 @@
             </div>
         </div><!-- end row-->
         <br>
-
+	
         <br>
             <div class="row">
                 <div class="col-sm-1 align-self-center">
@@ -92,7 +93,7 @@
     </script>
     <script type="text/javascript">
 
-        $('#resort').click(function(){
+        $('#resort').change(function(){
             var resort_id = $("#resort").val();
 
             if(resort_id){
