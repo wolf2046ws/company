@@ -1087,6 +1087,7 @@ class ldapUsers {
 
         //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
 		$result=@ldap_add($this->_conn,$sd, $add);
+
 		if ($result!=true){ return (false); }
 
         return (true);
@@ -1255,20 +1256,15 @@ class ldapUsers {
         $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
         $entries = ldap_get_entries($this->_conn, $sr);
 		//dd(var_dump($entries[0]['samaccountname'][0]));
-		if (($entries[0]['useraccountcontrol'][0] == "512")) {
-			return $entries = array();
-			//dd("Userhas name");
-		}else {
-			//dd("User Has Username");
+		if ( (isset($entries[0]['useraccountcontrol'][0])) && ($entries[0]['useraccountcontrol'][0] == "514")) {
 			return $entries;
-		}
-		//if($entries[0]['samaccountname']['count'] > 0){return $entries;}else{return $entries = array();}
-		//dd($entries[0]['useraccountcontrol']);
-		/*if (!(in_array("sn", $entries))) {
-			// code...
-			$entries[0]["sn"] = "";
 
-		}*/
+		}else {
+
+			return $entries = array();
+
+		}
+
         if (isset($entries[0])) {
             if ($entries[0]['count'] >= 1) {
 				if ((in_array("memberof", $entries[0])) ){
@@ -1558,6 +1554,7 @@ class ldapUsers {
         if ($username===NULL){ return ("Missing compulsory field [username]"); }
         $attributes=array("enabled"=>1);
         $result = $this->user_modify($username, $attributes, $isGUID);
+		//dd($result);
         if ($result==false){ return (false); }
 
         return (true);
@@ -2630,9 +2627,13 @@ class ldapUsers {
     * @return string
     */
     protected function user_dn($username,$isGUID=false){
-        $user=$this->user_info($username,array("cn"),$isGUID);
+        //$user=$this->user_info($username,array("cn"),$isGUID);
+		$user=$this->user_info($username,array("cn"),$isGUID);
+		//dd($user[0]["dn"]);
         if ($user[0]["dn"]===NULL){ return (false); }
+
         $user_dn=$user[0]["dn"];
+
         return ($user_dn);
     }
     /**

@@ -12,13 +12,6 @@
 </ul>
 
 <br>
-<a  href="{{ route('resortGroup.index', $resort->id) }}"
-    class="btn btn-primary btn-lg active"
-    role="button" aria-pressed="true">
-        Resort Groups
-</a>
-<br>
-<br>
 <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
@@ -27,7 +20,6 @@
                 <th>User Name</th>
                 <th>Resort </th>
                 <th>Group </th>
-                <th>Actions</th>
             </tr>
         </thead>
 
@@ -40,16 +32,7 @@
                     <!-- <th> {{ $user->department_id ? $user->department->name : '---' }} </th> -->
                     <th> {{ $user->user->resort_id ? $user->user->resort->name : '---' }} </th>
                     <th> {{ $user->user->group_id ? $user->user->group->name : '---' }} </th>
-                    <th>
-                        <ul>
-                            <form method="POST" action="{{ route('resortUser.destroy', $user->id) }}">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                            <li ><button type="submit">
-                                Delete</button></li>
-                         </form>
-                        </ul>
-                    </th>
+
                 </tr>
             @endforeach
         </tbody>

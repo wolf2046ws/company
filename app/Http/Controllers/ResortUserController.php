@@ -23,20 +23,21 @@ class ResortUserController extends Controller
     {
 
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        dd($authUserID);
 
         /*$users = \DB::table('users_data')
         ->where('user_id',$authUserID[0]->id)
         ->get();*/
 
-        $users_resort = UserData::where('user_id',$authUserID[0]->id)
+        $users_resort = UserData::where('user_id',$authUserID->id)
         ->groupBy('resort_id')->get();
 
 
-        $users_group = UserData::where('user_id',$authUserID[0]->id)
+        $users_group = UserData::where('user_id',$authUserID->id)
         ->groupBy('group_id')->get();
 
 
-        $userData = User::where('resort_id', $authUserID[0]->resort_id)
+        $userData = User::where('resort_id', $authUserID->resort_id)
         ->where('user_name','!=','0')
         ->get();
 

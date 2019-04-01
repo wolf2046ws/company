@@ -51,39 +51,6 @@ class PermissionTableSeeder extends Seeder
 
         ]);
 
-        //department URL
-        DB::table('permissions')->insert([
-            'description' => 'user can view departments index page',
-            'slug' => 'Department',
-            'url' => 'department.index',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can create new department',
-            'slug' => 'Department',
-            'url' => 'department.create',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can update department',
-            'slug' => 'Department',
-            'url' => 'department.edit',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can delete department',
-            'slug' => 'Department',
-            'url' => 'department.Destroy',
-            'status' => 'true'
-
-        ]);
-
 
         //resort URL
         DB::table('permissions')->insert([
@@ -250,46 +217,6 @@ class PermissionTableSeeder extends Seeder
             'status' => 'true'
 
         ]);
-
-
-
-        //department-user URL
-        DB::table('permissions')->insert([
-            'description' => 'user can view department user index page',
-            'slug' => 'Department Users',
-            'url' => 'department-users.index',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can create new user in your department',
-            'slug' => 'Department Users',
-            'url' => 'department-users.create',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can update user data in your department',
-            'slug' => 'Department Users',
-            'url' => 'department-users.edit',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can delete users in your department',
-            'slug' => 'Department Users',
-            'url' => 'department-users.Destroy',
-            'status' => 'true'
-
-        ]);
-
-
-
-
-
 
 
 

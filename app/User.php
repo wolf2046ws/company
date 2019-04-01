@@ -29,7 +29,7 @@ class User extends Authenticatable
         'title',
         'memberof',
         'department',
-        'enabled',
+        'status',
 
         'contract_start','contract_end',
         'gender', 'manager',
@@ -81,13 +81,24 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function checkPermission($permissionName){
+        foreach($this->permissions() as $permission){
+            if($permission->url == $permissionName){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function permissions(){
         //get usre group
         //get all user $roles
         //get all roles $permissions
         //filter all permissions to get the unique permissions
-        $roles = GroupRoles::select('id')->where('group_id',$this->group_id)->distinct()->get()->toArray();
+
+        $roles = UserData::select('role_id')->where('user_id',$this->id)->get();
+
         $permissions = RolePermissions::whereIn('role_id',$roles)->distinct()->get(['permission_id'])->toArray();
         $permissions = permission::select('url','description')->whereIn('id',$permissions)->get();
         return $permissions;

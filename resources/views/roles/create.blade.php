@@ -36,7 +36,7 @@
                 <h5> Role Name </h5>
             </div>
             <div class="col-sm-4">
-                <input type="text" name="name" value="{{old('name')}}" class="form-control" id="exampleInputEmail1"  placeholder="Name">
+                <input type="text" required name="name" value="{{old('name')}}" class="form-control" id="exampleInputEmail1"  placeholder="Name">
             </div>
 
         </div><!-- end row-->
@@ -46,7 +46,7 @@
                 <h5> Role Description </h5>
             </div>
             <div class="col-sm-4">
-                <input type="text" name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
+                <input type="text" required name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
             </div>
         </div><!-- end row-->
         <br>

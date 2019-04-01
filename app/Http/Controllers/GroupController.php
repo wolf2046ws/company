@@ -47,6 +47,11 @@ class GroupController extends Controller
     {
         //
 //        dd($request->all());
+        $group = Group::where('resort_id',$request->resort_id)->where('name',$request->name)->first();
+        if($group){
+            session()->flash('warning','This Resort already has this group');
+            return redirect()->back();
+        }
         $group = Group::create($request->all());
         session()->flash('success','Group Added Successfully');
         return redirect(route('group.index'));

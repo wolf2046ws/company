@@ -6,6 +6,7 @@ use App\Role;
 use App\Group;
 use App\permission;
 use Illuminate\Http\Request;
+use App\Http\Requests\RoleValidation;
 
 class RoleController extends Controller
 {
@@ -40,10 +41,9 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleValidation $request)
     {
         //
-//        dd($request->all());
         $role = Role::create($request->all());
         $role->permissions()->sync($request->permissions);
         session()->flash('success','Role Added Successfully');
