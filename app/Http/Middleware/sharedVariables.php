@@ -18,6 +18,8 @@ class sharedVariables
      */
     public function handle($request, Closure $next)
     {
+      //return $next($request);
+
         view()->share('resorts',Resort::all());
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
         view()->share('AuthUser',$AuthUser);

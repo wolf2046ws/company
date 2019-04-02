@@ -14,12 +14,12 @@
 Route::get('/', function () {
     return redirect('/login');
     //return view('welcome');
-})->name('master')->middleware('shared_variables');
+})->name('master');
 
 Route::post('/user-update-components/{id}','userController@updateComponents')->name('user.updateComponents');
 
 
-Route::group(['middleware' => ['web','shared_variables','check_auth','route_permissions']],function(){
+Route::group(['middleware' => ['web','check_auth','shared_variables','route_permissions']],function(){
     Route::get('/user-disabled','userController@getDisbleUser')->name('user.disabled');
     Route::post('/user-change-status','userController@changeStatus')->name('user.changeStatus');
         Route::resource('/user','userController');

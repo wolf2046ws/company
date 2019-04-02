@@ -8,6 +8,8 @@ use App\Permission;
 use App\Resort;
 use Illuminate\Http\Request;
 
+
+
 class GroupController extends Controller
 {
     /**

@@ -44,27 +44,17 @@ class RoutePermissions
         $valid_routes = [
             'user.store',
             'user.update',
-
+            'resort.show',
             'group.store',
-            'group.update',
 
-            'department.store',
-            'department.update',
-
-            'resort.store',
-            'resort.update',
 
             'role.store',
-            'role.update',
 
             'permission.store',
-            'permission.update',
 
             'resort-users.store',
             'resort-users.update',
 
-            'department-users.store',
-            'department-users.update'
 
         ];
 

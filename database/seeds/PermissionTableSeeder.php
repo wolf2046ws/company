@@ -30,7 +30,7 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view User data page',
             'slug' => 'Users',
-            'url' => 'user.show',
+            'url' => 'user.edit',
             'status' => 'true'
 
         ]);
@@ -40,13 +40,12 @@ class PermissionTableSeeder extends Seeder
             'slug' => 'Users',
             'url' => 'user.edit',
             'status' => 'true'
-
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'user can delete other User',
+            'description' => 'user can delete user data',
             'slug' => 'Users',
-            'url' => 'user.Destroy',
+            'url' => 'userData.destroy',
             'status' => 'true'
 
         ]);
@@ -103,13 +102,7 @@ class PermissionTableSeeder extends Seeder
 
         ]);
 
-        DB::table('permissions')->insert([
-            'description' => 'user can update group',
-            'slug' => 'Group',
-            'url' => 'group.edit',
-            'status' => 'true'
 
-        ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can delete group',
@@ -136,20 +129,12 @@ class PermissionTableSeeder extends Seeder
 
         ]);
 
-        DB::table('permissions')->insert([
-            'description' => 'user can update permission',
-            'slug' => 'Permission',
-            'url' => 'permission.edit',
-            'status' => 'true'
-
-        ]);
 
         DB::table('permissions')->insert([
             'description' => 'user can delete permission',
             'slug' => 'Permission',
             'url' => 'permission.Destroy',
             'status' => 'true'
-
         ]);
 
         //role URL
@@ -170,14 +155,6 @@ class PermissionTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'user can update role',
-            'slug' => 'Role',
-            'url' => 'role.edit',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
             'description' => 'user can delete role',
             'slug' => 'Role',
             'url' => 'role.Destroy',
@@ -189,35 +166,9 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can view resort user index page',
             'slug' => 'Resort Users',
-            'url' => 'resort-users.index',
+            'url' => 'resort.index',
             'status' => 'true'
-
         ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can create new user in your resort',
-            'slug' => 'Resort Users',
-            'url' => 'resort-users.create',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can update user data in your resort',
-            'slug' => 'Resort Users',
-            'url' => 'resort-users.edit',
-            'status' => 'true'
-
-        ]);
-
-        DB::table('permissions')->insert([
-            'description' => 'user can delete users in your resort',
-            'slug' => 'Resort Users',
-            'url' => 'resort-users.Destroy',
-            'status' => 'true'
-
-        ]);
-
 
 
     }

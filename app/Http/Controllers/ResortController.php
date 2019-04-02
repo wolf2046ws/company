@@ -7,6 +7,10 @@ use App\UserData;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
+
+
+
+
 class ResortController extends Controller
 {
     /**
