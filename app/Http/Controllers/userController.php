@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 use App\User;
 use App\Department;
 use App\Resort;
 use App\Role;
 use App\UserData;
+
 
 
 use App\ldapUsers;
@@ -25,16 +28,42 @@ class userController extends Controller
      */
     public function index()
     {
-	//$ldapHelper = new ldapHelperMethods();
-        //$users_new = $ldapHelper->l_get_all_user();
-        //dd($users);
-	//dd($users_new);
 
 	//$users = User::latest()->get();
-        $users = User::latest()->where('user_name','!=','0')->get();
-
+    $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
 
 	return view('users.index', compact('users'));
+    }
+
+
+    public function getDisbleUser(){
+        $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
+        return view('users.index', compact('users'));
+    }
+
+    public function changeStatus(Request $request){
+
+
+        $user = User::where('user_id',$request->id)->first();
+        if(!$user){
+            session()->flash('warning','User Not Found');
+            return redirect()->back();
+        }
+
+        $ldap = new ldapUsers();
+
+        if($user->status == 'Enabled'){
+            $user->status = 'Disabled';
+            $ldap->user_disable($user->user_name);
+        }
+        else{
+            $user->status = 'Enabled';
+            $ldap->user_enable($user->user_name);
+            //dd($ldap->user_enable($user->user_name));
+        }
+        $user->save();
+        session()->flash('success','User Updated Successfully');
+        return redirect()->back();
     }
 
 
@@ -50,9 +79,17 @@ class userController extends Controller
         //
         $departments = Department::all();
         $groups = Group::all();
-        $resorts = Resort::all();
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        $userData = UserData::select('resort_id')->where('user_id',$authUserID->id)->get();
+        if(count($userData) != 0){
+            $resorts = Resort::whereIn("id",$userData)->get();
+        }
+        else{
+            $resorts = Resort::where('id','=','0')->get();
+        }
         $roles = Role::all();
-        return view('users.create', compact(
+        
+	return view('users.create', compact(
             'departments',
              'resorts',
              'groups',
@@ -68,19 +105,56 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
        //store to data base
-    //    $ldap = new ldapUsers();
-    //    $ldapHelper = new ldapHelperMethods();
+       $ldap = new ldapUsers();
 
-    //    $request['user_name'] = 'AhmedMO';
-    //    dd($ldap->user_create($request->all()));
+       $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
+       mb_substr($request['last_name'], 0, 2, "UTF-8"));
 
-       $request['user_id'] = Str::random(6);
-       $request['user_name'] = Str::random(6);
+       $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
+       mb_substr($request['last_name'], 0, 3, "UTF-8"));
 
-       $user = User::create($request->all());
-       session()->flash('success','User Added Successfully');
-       return redirect(route('user.index'));
+
+       $all_username = $ldap->all_users();
+
+       foreach ($all_username as $username) {
+           if ($first_username == $username) {
+               $request['user_name'] = $second_username;
+               dump($request['user_name']);
+           }else{
+               $request['user_name'] = $first_username;
+           }
+       }
+
+
+        $new_user = $ldap->user_create(
+           array(
+                "user_name"     => $request['user_name'],
+                "first_name"    => $request['first_name'],
+                "last_name"     => $request['last_name'],
+                "email"         => $request['user_name']."@regenbogen-ag.de",
+                "container"     => array("CN=Users")
+           ));
+        dump($new_user);
+        dd("Stop");
+       if(!$new_user){
+           session()->flash('warning','Failed to create user');
+           return redirect(route('user.index'));
+
+       }
+
+        $request['user_id'] = Str::random(6);
+        $user = User::create($request->all());
+        $userData = UserData::create([
+            'user_id' => $user->id,
+            'group_id' => $request['group_id'],
+            'role_id' => $request['role_id'],
+            'resort_id' => $request['resort_id']
+        ]);
+
+        session()->flash('success','User Added Successfully');
+        return redirect(route('user.edit',$user->id));
 
     }
 
@@ -90,6 +164,7 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
         $user = User::where('user_id',$id)->first();
@@ -108,21 +183,16 @@ class userController extends Controller
      */
     public function edit($id)
     {
-        $departments = Department::all();
-        $resorts = Resort::all();
+        $user = User::findOrFail($id);
+        $user_data = UserData::where('user_id',$id)->get();
         $groups = Group::all();
-        $user = User::where('user_id',$id)->first();
         $roles = Role::all();
 
-        if($user == null){
-            session()->flash('warning','User Not Found');
-            return redirect()->back();
-        }
+
         return view('users.edit', compact(
-            'departments',
             'groups',
-            'resorts',
             'user',
+            'user_data',
             'roles'
         ));
 
@@ -144,7 +214,9 @@ class userController extends Controller
         if($user){
             $userData = UserData::where('user_id',$user->id)->get();
             foreach ($userData as $key) {
-                if($key->resort_id == $request->resort_id && $key->group_id == $request->group_id && $key->role_id == $request->role_id)
+                if($key->resort_id == $request->resort_id &&
+                $key->group_id == $request->group_id &&
+                $key->role_id == $request->role_id)
                 {
                     session()->flash('warning','User allready has this data');
                     return redirect()->back();
@@ -179,12 +251,22 @@ class userController extends Controller
     {
 
         $ldap = new ldapUsers();
-       $ldap->user_delete($id);
+        $ldap->user_disable($id);
+
         $user = User::where('user_name',$id)->first();
         $user->delete();
+
         session()->flash('success','User Deleted Successfully');
         return redirect()->back();
 
+    }
+
+    public function deleteUserData($id){
+        
+	$userData = UserData::findOrFail($id);
+        $userData->delete();
+        session()->flash('success','User Data Deleted Successfully');
+        return redirect()->back();
     }
 
 }

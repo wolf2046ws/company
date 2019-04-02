@@ -20,20 +20,23 @@ Route::post('/user-update-components/{id}','userController@updateComponents')->n
 
 
 Route::group(['middleware' => ['web','shared_variables','check_auth','route_permissions']],function(){
-
+    Route::get('/user-disabled','userController@getDisbleUser')->name('user.disabled');
+    Route::post('/user-change-status','userController@changeStatus')->name('user.changeStatus');
         Route::resource('/user','userController');
         Route::resource('/permission', 'PermissionController');
         Route::resource('/group', 'GroupController');
         Route::resource('/role', 'RoleController');
-        Route::resource('/department', 'DepartmentController');
         Route::resource('/resort', 'ResortController');
         Route::resource('/resort-users', 'ResortUserController');
-        Route::resource('/department-users', 'DepartmentUserController');
         Route::get('/resort-groups/{id}','ResortController@resortGroup')->name('resortGroup.index');
         Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
         Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
-        Route::delete('/users-resort-delete/{id}','ResortController@deleteUser')->name('resortUser.destroy');
+        Route::delete('/user-data/{id}','userController@deleteUserData')->name('userData.destroy');
+
+        Route::get('dropdownlist','DropdownController@index');
+        Route::get('get-group-list/{id}','DropdownController@getGroupList');
+        Route::get('get-role-list/{id}','DropdownController@getRoleList');
 });
 
 

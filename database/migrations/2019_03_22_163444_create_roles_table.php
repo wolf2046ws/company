@@ -18,6 +18,7 @@ class CreateRolesTable extends Migration
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->integer('group_id')->unsigned();
+            $table->integer('resort_id')->unsigned();
             $table->timestamps();
         });
     }

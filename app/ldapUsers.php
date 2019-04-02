@@ -49,7 +49,7 @@ class ldapUsers {
 	    *
 	    * @var array
 	    */
-	    protected $_domain_controllers = array ("192.168.56.3");
+	    //protected $_domain_controllers = array ("192.168.56.3");
 
 	    /**
 	    * Optional account with higher privileges for searching
@@ -60,8 +60,8 @@ class ldapUsers {
 	    */
 		//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
 
-		protected $_ad_username="ahmed max";
-	    protected $_ad_password="Abdullah89";
+		//protected $_ad_username="ahmed max";
+	    //protected $_ad_password="Abdullah89";
 
     /**
     * Array of domain controllers. Specifiy multiple controllers if you
@@ -69,7 +69,7 @@ class ldapUsers {
     *
     * @var array
     */
-    //protected $_domain_controllers = array ("192.168.131.211");
+    protected $_domain_controllers = array ("192.168.131.211");
 
     /**
     * Optional account with higher privileges for searching
@@ -80,8 +80,8 @@ class ldapUsers {
     */
 	//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
 
-	//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
-    //protected $_ad_password="engels@$12MM";
+      protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
+      protected $_ad_password="engels@$12MM";
 
     /**
     * AD does not return the primary group. http://support.microsoft.com/?kbid=321360
@@ -1052,10 +1052,7 @@ class ldapUsers {
         if (!array_key_exists("email",$attributes)){ return ("Missing compulsory field [email]"); }
         if (!array_key_exists("container",$attributes)){ return ("Missing compulsory field [container]"); }
         if (!is_array($attributes["container"])){ return ("Container attribute must be an array."); }
-        if (array_key_exists("password",$attributes) && (!$this->_use_ssl && !$this->_use_tls)){
-            throw new adLDAPException('SSL must be configured on your webserver and enabled in the class to set passwords.');
-        }
-        if (!array_key_exists("display_name",$attributes)){ $attributes["display_name"]=$attributes["firstname"]." ".$attributes["surname"]; }
+        if (!array_key_exists("display_name",$attributes)){ $attributes["display_name"]=$attributes["first_name"]." ".$attributes["last_name"]; }
         // Translate the schema
         $add=$this->adldap_schema($attributes);
 
@@ -1065,23 +1062,33 @@ class ldapUsers {
         } else {
         	$add["cn"][0]=$attributes["display_name"];
         }
-        $add["samaccountname"][0]=$attributes["username"];
+		$add["givenname"][0] = $attributes["first_name"];
+		$add["sn"][0] = $attributes["last_name"];
+		$add["userprincipalname"][0] = $attributes["user_name"]."@regenbogen.ag";
+        $add["samaccountname"][0]=$attributes["user_name"];
         $add["objectclass"][0]="top";
         $add["objectclass"][1]="person";
         $add["objectclass"][2]="organizationalPerson";
         $add["objectclass"][3]="user"; //person?
+
         //$add["name"][0]=$attributes["firstname"]." ".$attributes["surname"];
         // Set the account control attribute
         $control_options=array("NORMAL_ACCOUNT");
-        if (!$attributes["enabled"]){ $control_options[]="ACCOUNTDISABLE"; }
+        $control_options[]="ACCOUNTDISABLE";
         $add["userAccountControl"][0]=$this->account_control($control_options);
         //echo ("<pre>"); print_r($add);
         // Determine the container
         $attributes["container"]=array_reverse($attributes["container"]);
-        $container="OU=".implode(",OU=",$attributes["container"]);
+        $container=$attributes["container"];
+
         // Add the entry
-        $result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
-        if ($result!=true){ return (false); }
+
+		$sd = "CN=".$add["cn"][0].",".$container[0].",".$this->_base_dn;
+
+        //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
+		$result=@ldap_add($this->_conn,$sd, $add);
+
+		if ($result!=true){ return (false); }
 
         return (true);
     }
@@ -1139,6 +1146,148 @@ class ldapUsers {
     */
 
     public function user_info($username,$fields=NULL,$isGUID=false){
+        if ($username===NULL){ return (false); }
+        if (!$this->_bind){ return (false); }
+        if ($isGUID === true) {
+            $username = $this->strguid2hex($username);
+            $filter="objectguid=".$username;
+        }
+        else if (strstr($username, "@")) {
+             $filter="userPrincipalName=".$username;
+        }
+        else {
+             $filter="samaccountname=".$username;
+             //$filter="uid=".$username; /* fix for uid */
+        }
+        // $filter = "(&(objectCategory=person)({$filter}))";
+        $filter = "({$filter})"; /* fix for data */
+        if ($fields===NULL){
+				if (isset($fields['description'])) {
+					array_push("description", $fields);
+				}else{
+					$fields['description'] = NULL;
+				}
+
+	$fields=array("givenname","initials",
+	            "sn","displayname",
+	            "description","office","telephonenumber",
+	            "mail","userprincipalname","samaccountname",
+	            "title","memberof",
+	            "department","useraccountcontrol",
+	            "dn","objectsid","primarygroupid","objectsid");
+	}
+
+        if (!in_array("objectsid",$fields)){
+            $fields[] = "objectsid";
+        }
+        $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+        $entries = ldap_get_entries($this->_conn, $sr);
+		//dd(var_dump($entries[0]['samaccountname'][0]));
+		if ( (isset($entries[0]['useraccountcontrol'][0])) && ($entries[0]['useraccountcontrol'][0] == "514")) {
+			return $entries = array();
+			//dd("Userhas name");
+		}else {
+			//dd("User Has Username");
+			return $entries;
+		}
+		//if($entries[0]['samaccountname']['count'] > 0){return $entries;}else{return $entries = array();}
+		//dd($entries[0]['useraccountcontrol']);
+		/*if (!(in_array("sn", $entries))) {
+			// code...
+			$entries[0]["sn"] = "";
+
+		}*/
+        if (isset($entries[0])) {
+            if ($entries[0]['count'] >= 1) {
+				if ((in_array("memberof", $entries[0])) ){
+	                if (in_array("memberof", $fields)) {
+	                    // AD does not return the primary group in the ldap query, we may need to fudge it
+	                    if ($this->_real_primarygroup && isset($entries[0]["primarygroupid"][0]) && isset($entries[0]["objectsid"][0])){
+	                        //$entries[0]["memberof"][]=$this->group_cn($entries[0]["primarygroupid"][0]);
+	                        $entries[0]["memberof"][]=$this->get_primary_group($entries[0]["primarygroupid"][0], $entries[0]["objectsid"][0]);
+	                    } else {
+	                        $entries[0]["memberof"][]="CN=Domain Users,CN=Users,".$this->_base_dn;
+	                    }
+	                    $entries[0]["memberof"]["count"]++;
+	                }
+				} // end if memerOf
+
+            } // entries[0]['count'] >= 1
+            return $entries;
+        }
+        return false;
+    }
+
+	public function user_info_disabled($username,$fields=NULL,$isGUID=false){
+        if ($username===NULL){ return (false); }
+        if (!$this->_bind){ return (false); }
+        if ($isGUID === true) {
+            $username = $this->strguid2hex($username);
+            $filter="objectguid=".$username;
+        }
+        else if (strstr($username, "@")) {
+             $filter="userPrincipalName=".$username;
+        }
+        else {
+             $filter="samaccountname=".$username;
+             //$filter="uid=".$username; /* fix for uid */
+        }
+        // $filter = "(&(objectCategory=person)({$filter}))";
+        $filter = "({$filter})"; /* fix for data */
+        if ($fields===NULL){
+				if (isset($fields['description'])) {
+					array_push("description", $fields);
+				}else{
+					$fields['description'] = NULL;
+				}
+
+	$fields=array("givenname","initials",
+	            "sn","displayname",
+	            "description","office","telephonenumber",
+	            "mail","userprincipalname","samaccountname",
+	            "title","memberof",
+	            "department","useraccountcontrol",
+	            "dn","objectsid","primarygroupid","objectsid");
+	}
+
+        if (!in_array("objectsid",$fields)){
+            $fields[] = "objectsid";
+        }
+        $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+        $entries = ldap_get_entries($this->_conn, $sr);
+		//dd(var_dump($entries[0]['samaccountname'][0]));
+		if ( (isset($entries[0]['useraccountcontrol'][0])) && ($entries[0]['useraccountcontrol'][0] == "514")) {
+			return $entries;
+
+		}else {
+
+			return $entries = array();
+
+		}
+
+        if (isset($entries[0])) {
+            if ($entries[0]['count'] >= 1) {
+				if ((in_array("memberof", $entries[0])) ){
+	                if (in_array("memberof", $fields)) {
+	                    // AD does not return the primary group in the ldap query, we may need to fudge it
+	                    if ($this->_real_primarygroup && isset($entries[0]["primarygroupid"][0]) && isset($entries[0]["objectsid"][0])){
+	                        //$entries[0]["memberof"][]=$this->group_cn($entries[0]["primarygroupid"][0]);
+	                        $entries[0]["memberof"][]=$this->get_primary_group($entries[0]["primarygroupid"][0], $entries[0]["objectsid"][0]);
+	                    } else {
+	                        $entries[0]["memberof"][]="CN=Domain Users,CN=Users,".$this->_base_dn;
+	                    }
+	                    $entries[0]["memberof"]["count"]++;
+	                }
+				} // end if memerOf
+
+            } // entries[0]['count'] >= 1
+            return $entries;
+        }
+        return false;
+    }
+
+
+	public function user_info_without_enable($username,$fields=NULL,$isGUID=false){
         if ($username===NULL){ return (false); }
         if (!$this->_bind){ return (false); }
         if ($isGUID === true) {
@@ -1405,6 +1554,7 @@ class ldapUsers {
         if ($username===NULL){ return ("Missing compulsory field [username]"); }
         $attributes=array("enabled"=>1);
         $result = $this->user_modify($username, $attributes, $isGUID);
+		//dd($result);
         if ($result==false){ return (false); }
 
         return (true);
@@ -2477,9 +2627,13 @@ class ldapUsers {
     * @return string
     */
     protected function user_dn($username,$isGUID=false){
-        $user=$this->user_info($username,array("cn"),$isGUID);
+        //$user=$this->user_info($username,array("cn"),$isGUID);
+		$user=$this->user_info($username,array("cn"),$isGUID);
+		//dd($user[0]["dn"]);
         if ($user[0]["dn"]===NULL){ return (false); }
+
         $user_dn=$user[0]["dn"];
+
         return ($user_dn);
     }
     /**

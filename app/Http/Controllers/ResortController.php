@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Resort;
 use App\User;
 use App\UserData;
-
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
 class ResortController extends Controller
@@ -17,7 +17,15 @@ class ResortController extends Controller
     public function index()
     {
         //
-        $resorts = Resort::latest()->get();
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        $userData = UserData::where('user_id',$authUserID->id)->first();
+        if($userData){
+            $resorts = $userData->resort()->get();
+        }
+        else{
+            $resorts = Resort::where('id','=','0')->get();
+        }
+
         return view('resort.index', compact('resorts'));
     }
 

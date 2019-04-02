@@ -1,19 +1,51 @@
 @extends('layouts.default')
 
 @section('css')
-
     <link rel="stylesheet" href="{{ asset('css/bootstrapdatatable.css')}}" >
-
 @endsection
 
 @section('content')
+<form method="POST" action="{{ route('permission.store') }}">
+    @csrf
+
+<div class="row">
+    <div class="col-sm-3 align-self-center">
+      <h5> Permission Description </h5>
+    </div>
+    <div class="col-sm-9 align-self-center">
+      <input type="text" name="description" value="" class="form-control" id="exampleInputEmail1" placeholder="Description">
+    </div>
+</div><!-- end row-->
 <br>
-<a  href="{{ route('permission.create') }}"
-    class="btn btn-primary btn-lg active"
-    role="button" aria-pressed="true">
-        Create New Permission
-</a>
+<div class="row">
+    <div class="col-sm-3 align-self-center">
+      <h5> Slug </h5>
+    </div>
+    <div class="col-sm-9 align-self-center">
+        <select name ="slug" class="form-control" id="slug">
+                <option > User </option>
+                <option > Group </option>
+                <option > Role </option>
+                <option > Permission </option>
+                <option > Resort </option>
+                <option > Resort Users </option>
+        </select>
+    </div>
+</div><!-- end row-->
 <br>
+<div class="row">
+    <div class="col-sm-12 align-self-center">
+    <input type="hidden" name="status" value="false">
+    <button  type="submit"
+        class="btn btn-primary active col-sm-12"
+        aria-pressed="true">
+            Add Permission
+    </a>
+</div>
+</div><!-- end row -->
+
+</form>
+
 <br>
 <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
@@ -34,15 +66,14 @@
                     <th> {{ $permission->slug }}</th>
                     <th>
                         @if($permission->status == 'false')
-                        <ul>
-                            <li ><a href="{{ route('permission.edit', $permission->id ) }}">Edit</a></li>
+
                             <form method="POST" action="{{ route('permission.destroy', $permission->id) }}">
                                 @csrf
                                 {{ method_field('DELETE') }}
-                            <li ><button type="submit">
-                                Delete</button></li>
-                         </form>
-                        </ul>
+                            <button class="btn-danger" type="submit">
+                                Delete </button>
+                            </form>
+                    
                         @else
                         Un Editable
                         @endif
@@ -51,20 +82,6 @@
                 </tr>
             @endforeach
         </tbody>
-
-        <!--<tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Resort</th>
-                <th>Department</th>
-                <th>Manager Name </th>
-                <th>Gender </th>
-                <th>Start date</th>
-                <th>End Date</th>
-            </tr>
-        </tfoot>-->
-
     </table>
 @endsection
 

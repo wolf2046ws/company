@@ -19,6 +19,7 @@ class GroupController extends Controller
     {
         //
         $groups = Group::latest()->get();
+//        dd($groups[2]->resort->name);
         return view('groups.index',compact('groups'));
     }
 
@@ -45,11 +46,15 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         //
-       // dd($request->all());
+//        dd($request->all());
+        $group = Group::where('resort_id',$request->resort_id)->where('name',$request->name)->first();
+        if($group){
+            session()->flash('warning','This Resort already has this group');
+            return redirect()->back();
+        }
         $group = Group::create($request->all());
-        // $group->roles()->sync($request->roles);
         session()->flash('success','Group Added Successfully');
-        return redirect(route('resortGroup.index',$group->resort_id));
+        return redirect(route('group.index'));
     }
 
     public function groupRoles($id){
@@ -108,5 +113,8 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         //
+        $group->delete();
+        session()->flash('success','Group Deleted Successfully');
+        return redirect()->back();
     }
 }
