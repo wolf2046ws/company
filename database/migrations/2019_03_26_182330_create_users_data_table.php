@@ -19,6 +19,7 @@ class CreateUsersDataTable extends Migration
             $table->unsignedInteger('group_id');
             $table->unsignedInteger('resort_id');
             $table->unsignedInteger('role_id');
+            $table->tinyInteger('is_approved')->default(0);
             $table->timestamps();
         });
     }

@@ -55,8 +55,8 @@
                                 <li class="float-left"><button class="btn-primary" type="submit">
                                     Enable </button></li>
                                 @endif
+                                </form>
                             </form>
-
                         </ul>
                     </th>
                 </tr>

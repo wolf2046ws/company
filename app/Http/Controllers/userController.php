@@ -41,6 +41,27 @@ class userController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function changeStatusApproved(Request $request, $id){
+
+        // $request->id("18") -> It's Selected
+        // $id -> It's user id
+        //$userData = UserData::where('user_id',$request->id)->get();
+
+        //$userData = UserData::where('user_id',$id)->get();
+        //dd($request->all());
+
+        $userData = UserData::findOrFail($request->id);
+        if ($userData->is_approved == 1) {
+            $userData->is_approved = 0;
+        }else{
+            $userData->is_approved = 1;
+        }
+
+        $userData->save();
+        session()->flash('success','User Updated Successfully');
+        return redirect()->back();
+    }
+
     public function changeStatus(Request $request){
 
 
@@ -67,8 +88,6 @@ class userController extends Controller
     }
 
 
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -80,6 +99,7 @@ class userController extends Controller
         $departments = Department::all();
         $groups = Group::all();
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
+
         $userData = UserData::select('resort_id')->where('user_id',$authUserID->id)->get();
         if(count($userData) != 0){
             $resorts = Resort::whereIn("id",$userData)->get();
@@ -186,12 +206,14 @@ class userController extends Controller
         $user_data = UserData::where('user_id',$id)->get();
         $groups = Group::all();
         $roles = Role::all();
+        $resorts = Resort::all();
 
 
         return view('users.edit', compact(
             'groups',
             'user',
             'user_data',
+            'resorts',
             'roles'
         ));
 
@@ -209,35 +231,74 @@ class userController extends Controller
         //1-get user DataTable
         //2-Update
         //return true
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
+        //dd($request->all());
         $user = User::where('user_id',$id)->first();
-        if($user){
-            $userData = UserData::where('user_id',$user->id)->get();
-            foreach ($userData as $key) {
-                if($key->resort_id == $request->resort_id &&
-                $key->group_id == $request->group_id &&
-                $key->role_id == $request->role_id)
-                {
-                    session()->flash('warning','User allready has this data');
-                    return redirect()->back();
-                }
-            }
-            $user->update($request->all());
+        if ($authUserID[0]->is_admin) {
 
-        }
-        else{
-            session()->flash('warning','User Not Found');
+            if($user){
+                $userData = UserData::where('user_id',$user->id)->get();
+                foreach ($userData as $key) {
+                    if($key->resort_id == $request->resort_id &&
+                    $key->group_id == $request->group_id &&
+                    $key->role_id == $request->role_id)
+                    {
+                        session()->flash('warning','User allready has this data');
+                        return redirect()->back();
+                    }
+                }
+                $request['is_approved'] = 1;
+                $user->update($request->all());
+
+            }
+            else{
+                session()->flash('warning','User Not Found');
+                return redirect()->back();
+            }
+
+
+            $userData = new UserData();
+            $userData->user_id = $user->id;
+            $userData->group_id = $request->group_id;
+            $userData->resort_id = $request->resort_id;
+            $userData->role_id = $request->role_id;
+            $userData->is_approved = $request->is_approved;
+            $userData->save();
+            session()->flash('success','User Updated Successfully');
+            return redirect()->back();
+        } // end is_admin
+        else {
+            if($user){
+                $userData = UserData::where('user_id',$user->id)->get();
+                foreach ($userData as $key) {
+                    if($key->resort_id == $request->resort_id &&
+                    $key->group_id == $request->group_id &&
+                    $key->role_id == $request->role_id)
+                    {
+                        session()->flash('warning','User allready has this data');
+                        return redirect()->back();
+                    }
+                }
+                $request['is_approved'] = 0;
+                $user->update($request->all());
+
+            }
+            else{
+                session()->flash('warning','User Not Found');
+                return redirect()->back();
+            }
+
+
+            $userData = new UserData();
+            $userData->user_id = $user->id;
+            $userData->group_id = $request->group_id;
+            $userData->resort_id = $request->resort_id;
+            $userData->role_id = $request->role_id;
+            $userData->is_approved = $request->is_approved;
+            $userData->save();
+            session()->flash('success','User Updated Successfully');
             return redirect()->back();
         }
-
-
-        $userData = new UserData();
-        $userData->user_id = $user->id;
-        $userData->group_id = $request->group_id;
-        $userData->resort_id = $request->resort_id;
-        $userData->role_id = $request->role_id;
-        $userData->save();
-        session()->flash('success','User Updated Successfully');
-        return redirect()->back();
     }
 
     /**
@@ -262,7 +323,7 @@ class userController extends Controller
 
     public function deleteUserData($id){
 
-	$userData = UserData::findOrFail($id);
+	    $userData = UserData::findOrFail($id);
         $userData->delete();
         session()->flash('success','User Data Deleted Successfully');
         return redirect()->back();

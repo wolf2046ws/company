@@ -90,6 +90,9 @@
                 <th>Resort </th>
                 <th>Group </th>
                 <th>Role </th>
+                @if($user->is_admin)
+                <th>Pending</th>
+                @endif
                 <th>Actions</th>
                 </tr>
                 </thead>
@@ -103,6 +106,30 @@
                         <th> {{ $user->resort->name }} </th>
                         <th> {{ $user->group->name }} </th>
                         <th> {{ $user->role->name }} </th>
+                        <th>
+                            <ul style="list-style:none;">
+                                    @if($user->is_approved == 1)
+
+                                    <form method="POST" action="{{ route('user.changeStatusApproved', $user->user_id) }}">
+
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{$user->id}}">
+                                        <li class="float-left"><button class="btn-danger" type="submit">
+                                            Reject </button></li>
+
+                                            @else
+                                            <form method="POST" action="{{ route('user.changeStatusApproved', $user->user_id) }}">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{$user->id}}">
+                                            <li class="float-left"><button class="btn-primary" type="submit">
+                                                Approved </button></li>
+                                            </form>
+                                    @endif
+                                </form>
+                            </ul>
+                        </th>
+
+
                         <th>
                             <form method="POST" action="{{ route('userData.destroy', $user->id) }}">
                             @csrf

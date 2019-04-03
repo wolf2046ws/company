@@ -30,7 +30,7 @@ class User extends Authenticatable
         'memberof',
         'department',
         'status',
-
+        'is_admin',
         'contract_start','contract_end',
         'gender', 'manager',
         'resort_id', 'department_id' ,

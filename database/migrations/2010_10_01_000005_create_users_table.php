@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->integer('resort_id')->unsigned()->nullable();
             $table->integer('department_id')->unsigned()->nullable();
             $table->integer('group_id')->unsigned()->nullable();
+            $table->tinyInteger('is_admin')->default(0);
             $table->timestamps();
         });
     }
