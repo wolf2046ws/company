@@ -107,7 +107,7 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'user can delete group',
             'slug' => 'Group',
-            'url' => 'group.Destroy',
+            'url' => 'group.destroy',
             'status' => 'true'
 
         ]);
@@ -167,6 +167,45 @@ class PermissionTableSeeder extends Seeder
             'description' => 'user can view resort user index page',
             'slug' => 'Resort Users',
             'url' => 'resort.index',
+            'status' => 'true'
+        ]);
+
+
+
+
+
+
+
+        //resort-user URL
+        DB::table('permissions')->insert([
+            'description' => 'user can See Disabled User Page',
+            'slug' => 'Resort Users',
+            'url' => 'user.disabled',
+            'status' => 'true'
+        ]);
+
+
+        //resort-user URL
+        DB::table('permissions')->insert([
+            'description' => 'user can Select resort',
+            'slug' => 'Resort Users',
+            'url' => 'dropdownlist.index',
+            'status' => 'true'
+        ]);
+
+        //resort-user URL
+        DB::table('permissions')->insert([
+            'description' => 'user can Select Group',
+            'slug' => 'Resort Users',
+            'url' => 'dropdownlist.getGroupList',
+            'status' => 'true'
+        ]);
+
+        //resort-user URL
+        DB::table('permissions')->insert([
+            'description' => 'user can Select Role',
+            'slug' => 'Resort Users',
+            'url' => 'dropdownlist.getRoleList',
             'status' => 'true'
         ]);
 

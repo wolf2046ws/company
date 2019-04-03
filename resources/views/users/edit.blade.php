@@ -90,7 +90,8 @@
                 <th>Resort </th>
                 <th>Group </th>
                 <th>Role </th>
-                @if($user->is_admin)
+                {{ dd($user) }}
+                @if($user->is_admin == 1)
                 <th>Pending</th>
                 @endif
                 <th>Actions</th>
@@ -106,6 +107,8 @@
                         <th> {{ $user->resort->name }} </th>
                         <th> {{ $user->group->name }} </th>
                         <th> {{ $user->role->name }} </th>
+
+
                         <th>
                             <ul style="list-style:none;">
                                     @if($user->is_approved == 1)

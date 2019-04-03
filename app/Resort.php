@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resort extends Model
 {
-    //
     public $fillable = ['name'];
 
     public function users(){

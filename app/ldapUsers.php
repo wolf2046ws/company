@@ -2,19 +2,7 @@
 
 namespace App;
 
-/**
- * @category ToolsAndUtilities
- * @package adLDAP
- * @author Scott Barnett, Richard Hyland
- * @copyright (c) 2006-2010 Scott Barnett, Richard Hyland
- * @license http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPLv2.1
- * @revision $Revision: 91 $
- * @version 3.3.2 EXTENDED (201502251229)
- * @link http://adldap.sourceforge.net/
- */
-/**
- * Define the different types of account in AD
- */
+/
 
 define ('ADLDAP_NORMAL_ACCOUNT', 805306368);
 define ('ADLDAP_WORKSTATION_TRUST', 805306369);
@@ -28,57 +16,21 @@ define ('ADLDAP_CONTAINER', 'CN');
 
 
 class ldapUsers {
-    /**
-    * The account suffix for your domain, can be set when the class is invoked
-    *
-    * @var string
-    */
-	protected $_account_suffix = "@regenbogen.ag";
 
-    /**
-    * The base dn for your domain
-    *
-    * @var string
-    */
-	//protected $_base_dn = "DC=regenbogen,DC=ag";
+	protected $_account_suffix = "@regenbogen.ag";
 	protected $_base_dn = "DC=regenbogen,DC=ag";
 
-	    /**
-	    * Array of domain controllers. Specifiy multiple controllers if you
-	    * would like the class to balance the LDAP queries amongst multiple servers
-	    *
-	    * @var array
-	    */
-	    protected $_domain_controllers = array ("192.168.56.3");
-
-	    /**
-	    * Optional account with higher privileges for searching
-	    * This should be set to a domain admin account
-	    *
-	    * @var string
-	    * @var string
-	    */
-		//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
-
-		protected $_ad_username="ahmed max";
-	    protected $_ad_password="Abdullah89";
+	protected $_domain_controllers = array ("192.168.56.3");
+	protected $_ad_username="ahmed max";
+	protected $_ad_password="Abdullah89";
 
 
     //protected $_domain_controllers = array ("192.168.131.211");
+    //protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
+    //protected $_ad_password="engels@$12MM";
 
-	//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
 
-      //protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
-      //protected $_ad_password="engels@$12MM";
-
-    /**
-    * AD does not return the primary group. http://support.microsoft.com/?kbid=321360
-    * This tweak will resolve the real primary group.
-    * Setting to false will fudge "Domain Users" and is much faster. Keep in mind though that if
-    * someone's primary group is NOT domain users, this is obviously going to mess up the results
-    *
-    * @var bool
-    */
+	
 	protected $_real_primarygroup=true;
 
     /**

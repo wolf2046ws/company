@@ -13,17 +13,21 @@ class ResortDataSeeder extends Seeder
     {
         //
         DB::table('resorts')->insert([
+            'name' => ""
+        ]);
+
+        DB::table('resorts')->insert([
             'name' => "Prerow"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Born"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Göhren"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Boltenhagen"
         ]);
@@ -35,22 +39,22 @@ class ResortDataSeeder extends Seeder
         DB::table('resorts')->insert([
             'name' => "Husum"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Ladbergen"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Egestorf"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Tecklenburg"
         ]);
-        
+
         DB::table('resorts')->insert([
             'name' => "Bad Bederkesa"
         ]);
-    
+
     }
 }

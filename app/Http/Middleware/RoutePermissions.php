@@ -19,9 +19,13 @@ class RoutePermissions
     {
         return $next($request);
         $user = User::where('user_id',Session::get('user')[0]->user_id)->first();
+
         if($user){
+
             $permissions = $user->permissions();
+
             foreach ($permissions as $permission) {
+
                 if ($request->route()->getName() == $permission->url) {
                     return $next($request);
                 }
@@ -34,9 +38,7 @@ class RoutePermissions
         session()->flash('warning','Permission Denied');
         return redirect(route('master'));
 
-    }
-
-
+    }// end handle
 
 
     public function valid_routes($request)
@@ -46,16 +48,10 @@ class RoutePermissions
             'user.update',
             'resort.show',
             'group.store',
-
-
             'role.store',
-
             'permission.store',
-
             'resort-users.store',
             'resort-users.update',
-
-
         ];
 
         foreach ($valid_routes as $route) {
@@ -64,5 +60,6 @@ class RoutePermissions
             }
         }
         return false;
-    }
+    } // end valid_routes
+
 }

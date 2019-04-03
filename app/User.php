@@ -17,24 +17,22 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name',
-        'initials',
-        'last_name',
         'display_name',
         'description',
-        'office',
-        'telephone_number',
-        'external_email',
-        'user_name','user_id',
+        'initials',
         'title',
-        'memberof',
-        'department',
+
+        'user_id',
+        'first_name',
+        'last_name',
+        'user_name',
         'status',
         'is_admin',
-        'contract_start','contract_end',
-        'gender', 'manager',
-        'resort_id', 'department_id' ,
-        'group_id', 'email', 'password',
+
+        'resort_id',
+        'group_id',
+        'email',
+        'password'
     ];
 
     protected $memberOf = [];
@@ -57,21 +55,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /*
-    public function resort(){
-        return $this->belongsTo(Resort::class);
-    }
-    public function department(){
-        return $this->belongsTo(Department::class);
-    }*/
 
     public function resort(){
         return $this->belongsTo(Resort::class);
     }
 
-    public function department(){
-        return $this->belongsTo(Department::class);
-    }
 
     public function group(){
         return $this->belongsTo(Group::class);
@@ -107,25 +95,5 @@ class User extends Authenticatable
     }
     //$user->group()->roles()->permissiosn();
 
-    public function softwares(){
-        return $this->hasMany(ComponentRequest::class)->where('component_type','Software');
-    }
-
-    public function hardwares(){
-        return $this->hasMany(ComponentRequest::class)->where('component_type','Hardware');
-    }
-
-    public function files(){
-        return $this->hasMany(ComponentRequest::class)->where('component_type','Files');
-    }
-
-    /*public function delete(){
-        //delete requests
-        //delete posts
-        //delete DOMComme
-        //delete imagearc//
-        //delete the user
-        //$this->destroy();
-    }*/
 
 }

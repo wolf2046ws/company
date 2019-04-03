@@ -16,10 +16,9 @@ Route::get('/', function () {
     //return view('welcome');
 })->name('master');
 
-Route::post('/user-update-components/{id}','userController@updateComponents')->name('user.updateComponents');
-
 
 Route::group(['middleware' => ['web','check_auth','shared_variables','route_permissions']],function(){
+
     Route::get('/user-disabled','userController@getDisbleUser')->name('user.disabled');
     Route::post('/user-change-status','userController@changeStatus')->name('user.changeStatus');
     Route::post('/user-change-status-approved/{id}','userController@changeStatusApproved')->name('user.changeStatusApproved');
@@ -36,11 +35,10 @@ Route::group(['middleware' => ['web','check_auth','shared_variables','route_perm
         Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
         Route::delete('/user-data/{id}','userController@deleteUserData')->name('userData.destroy');
 
-        Route::get('dropdownlist','DropdownController@index');
-        Route::get('get-group-list/{id}','DropdownController@getGroupList');
-        Route::get('get-role-list/{id}','DropdownController@getRoleList');
+        Route::get('dropdownlist','DropdownController@index')->name('dropDownListResort.index');
+        Route::get('get-group-list/{id}','DropdownController@getGroupList')->name('get-group.index');
+        Route::get('get-role-list/{id}','DropdownController@getRoleList')->name('get-role.index');
 });
-
 
 
 Auth::routes();

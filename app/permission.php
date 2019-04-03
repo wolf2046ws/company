@@ -6,6 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class permission extends Model
 {
-    //
     protected $fillable = ['url','description','slug','status'];
 }

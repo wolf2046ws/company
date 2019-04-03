@@ -2,7 +2,8 @@
 namespace App;
 use App\ldapUsers;
 use App\User;
-//$ldap = new ldapUsers();
+
+
 class ldapHelperMethods
 {
 
