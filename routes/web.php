@@ -4,6 +4,8 @@ Route::get('/', function () {
     return redirect('/login');
 })->name('master');
 
+// Route::get('{companyID}', ['uses' => CompanyController@index, 'middleware' => 'AuthResource']);
+
 
 Route::group(['middleware' => ['web','check_auth','shared_variables','route_permissions']],function(){
 
@@ -18,14 +20,14 @@ Route::group(['middleware' => ['web','check_auth','shared_variables','route_perm
         Route::resource('/resort', 'ResortController');
         Route::resource('/resort-users', 'ResortUserController');
         Route::get('/resort-groups/{id}','ResortController@resortGroup')->name('resortGroup.index');
-        Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
+        //Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
-        Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
+        //Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');
         Route::delete('/user-data/{id}','userController@deleteUserData')->name('userData.destroy');
 
-        Route::get('dropdownlist','DropdownController@index')->name('dropDownListResort.index');
-        Route::get('get-group-list/{id}','DropdownController@getGroupList')->name('get-group.index');
-        Route::get('get-role-list/{id}','DropdownController@getRoleList')->name('get-role.index');
+        Route::get('dropdownlist','DropdownController@index')->name('get-resort-list.index');
+        Route::get('get-group-list/{id}','DropdownController@getGroupList')->name('get-group-list.index');
+        Route::get('get-role-list/{id}','DropdownController@getRoleList')->name('get-role-list.index');
 });
 
 

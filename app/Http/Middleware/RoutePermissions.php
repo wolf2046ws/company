@@ -17,7 +17,8 @@ class RoutePermissions
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        //return $next($request);
+
         $user = User::where('user_id',Session::get('user')[0]->user_id)->first();
 
         if($user){
@@ -28,8 +29,9 @@ class RoutePermissions
 
                 if ($request->route()->getName() == $permission->url) {
                     return $next($request);
-                }
-            }
+                } // end if
+
+            } // end foreach
             if ($this->valid_routes($request)) {
                 return $next($request);
             }
@@ -44,6 +46,26 @@ class RoutePermissions
     public function valid_routes($request)
     {
         $valid_routes = [
+            'get-resort-list.index',
+            'get-group-list.index',
+            'get-role-list.index',
+            'user.index',
+            'user.disabled',
+            'user.changeStatus',
+            'user.changeStatusApproved',
+            'user.create',
+            'user.edit',
+            'userData.destroy',
+            'resort.index',
+            'group.index',
+            'group.create',
+            'group.destroy',
+            'permission.index',
+            'permission.create',
+            'permission.destroy',
+            'role.index',
+            'role.create',
+            'role.destroy',
             'user.store',
             'user.update',
             'resort.show',
@@ -51,8 +73,9 @@ class RoutePermissions
             'role.store',
             'permission.store',
             'resort-users.store',
-            'resort-users.update',
+            'resort-users.update'
         ];
+        
 
         foreach ($valid_routes as $route) {
             if ($request->route()->getName() == $route) {

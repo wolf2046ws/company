@@ -39,16 +39,16 @@
 </li>-->
 {{--@endif--}}
 
-@foreach($resorts as $resort)
-    <li class="nav-item">
-        <a class="nav-link" href="{{route('resort.show',$resort->id)}}">
-        <span data-feather="home"></span>
-        {{ $resort->name }} <span class="sr-only"></span>
-        </a>
-    </li>
-
-@endforeach
-
+@if($AuthUser->checkPermission('resort.index'))
+    @foreach($resorts as $resort)
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('resort.index',$resort->id)}}">
+            <span data-feather="home"></span>
+            {{ $resort->name }} <span class="sr-only"></span>
+            </a>
+        </li>
+    @endforeach
+@endif
 
 @if($AuthUser->checkPermission('group.index'))
 <li class="nav-item">

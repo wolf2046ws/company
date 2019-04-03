@@ -51,17 +51,15 @@
                     <th> {{ $user->last_name }} </th>
                     <th> {{ $user->user_name }} </th>
                     <th>
+                        {{ $users_resort[0]->resort->name}}
 
-                        @for($i = 0; $i < count($users_resort); $i++)
-                        {{ $users_resort[$i]->resort->name .= " , " }}
-                        @endfor
-                    
+
 
                     </th>
                     <th>
-                    @for($i = 0; $i < count($users_group); $i++)
-                        {{ $users_group[$i]->group->name .= " , " }}
-                    @endfor
+
+                        {{ $users_group[0]->group->name }}
+
                     </th>
 
                     <th>

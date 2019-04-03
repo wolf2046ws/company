@@ -27,21 +27,7 @@ class userDataValidation extends FormRequest
             //
 
             'first_name' => 'required|max:100',
-            'last_name' => 'required|max:100',
-            'gender'=> 'required|in:male,female',
-            'contract_start' => 'required',
-            'contract_end' => 'required' ,
-            'department_id' => 'required|exists:departments,id',
-            'company_id' => 'required|exists:companies,id',
-            'resort_id' => 'required|exists:resorts,id',
-            "softwares"    => "required|array",
-            "softwares.*"  => "required|string|distinct|exists:software,id",
-
-            "hardwares"    => "required|array",
-            "hardwares.*"  => "required|string|distinct|exists:hardware,id",
-
-            "access_files"    => "required|array",
-            "access_files.*"  => "required|string|distinct|exists:access_files,id"
+            'last_name' => 'required|max:100'
 
         ];
     }

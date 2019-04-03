@@ -27,14 +27,16 @@ class ldapHelperMethods
             $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
             $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
             $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
+
             $testuser = User::where('user_name',$user['user_name'])->first();
-            if($testuser != null){
+            
+            /*if($testuser != null){
                 $user['group_id'] = $testuser->group_id;
                 $user['department_id'] = $testuser->department_id;
                 $user['resort_id'] = $testuser->resort_id;
-            }
+            }*/
         }
-        return $user;
+        return $testuser;
     }
 
     public function l_get_all_user(){

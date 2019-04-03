@@ -21,69 +21,32 @@ class userController extends Controller
     	//$users = User::latest()->get();user.disabled
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
     	return view('users.index', compact('users'));
-    }
-
-
-    public function getDisbleUser(){
-        $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
-        return view('users.index', compact('users'));
-    }
-
-    public function changeStatusApproved(Request $request, $id){
-
-        $userData = UserData::findOrFail($request->id);
-        if ($userData->is_approved == 1) {
-            $userData->is_approved = 0;
-        }else{
-            $userData->is_approved = 1;
-        }
-
-        $userData->save();
-        session()->flash('success','User Updated Successfully');
-        return redirect()->back();
-    }
-
-    public function changeStatus(Request $request){
-        $user = User::where('user_id',$request->id)->first();
-        if(!$user){
-            session()->flash('warning','User Not Found');
-            return redirect()->back();
-        }
-
-        $ldap = new ldapUsers();
-
-        if($user->status == 'Enabled'){
-            $user->status = 'Disabled';
-            $ldap->user_disable($user->user_name);
-        }
-        else{
-            $user->status = 'Enabled';
-            $ldap->user_enable($user->user_name);
-        }
-        $user->save();
-        session()->flash('success','User Updated Successfully');
-        return redirect()->back();
-    }
+    } // end index
 
     public function create()
     {
+
         $groups = Group::all();
-        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
         $userData = UserData::select('resort_id')->where('user_id',$authUserID->id)->get();
+
+
         if(count($userData) != 0){
             $resorts = Resort::whereIn("id",$userData)->get();
         }
         else{
             $resorts = Resort::where('id','=','0')->get();
         }
+
         $roles = Role::all();
 
-	return view('users.create', compact(
-             'resorts',
-             'groups',
-             'roles'
-            ));
-    }
+        return view('users.create', compact(
+                 'resorts',
+                 'groups',
+                 'roles'
+                ));
+    } // end create
+
 
     public function store(Request $request)
     {
@@ -117,42 +80,45 @@ class userController extends Controller
            ));
 
        if(!$new_user){
-           session()->flash('warning','Failed to create user');
+           session()->flash('warning','Failed to create user, Please contact IT ');
            return redirect(route('user.index'));
-
        }
 
-        $request['user_id'] = Str::random(6);
-        $user = User::create($request->all());
-        $userData = UserData::create([
-            'user_id' => $user->id,
-            'group_id' => $request['group_id'],
-            'role_id' => $request['role_id'],
-            'resort_id' => $request['resort_id']
-        ]);
+       $user = User::create($request->all());
+
+       if (Session::get('user')[0]->is_admin == 1){
+           //$request['user_id'] = Str::random(6);
+           $userData = UserData::create([
+               'user_id' => $user->id,
+               'group_id' => $request['group_id'],
+               'role_id' => $request['role_id'],
+               'resort_id' => $request['resort_id'],
+               'is_approved' => 1
+           ]);
+       }else{
+           $userData = UserData::create([
+               'user_id' => $user->id,
+               'group_id' => $request['group_id'],
+               'role_id' => $request['role_id'],
+               'resort_id' => $request['resort_id'],
+               'is_approved' => 0
+           ]);
+       }
 
         session()->flash('success','User Added Successfully');
-        return redirect(route('user.edit',$user->id));
+        return redirect()->back();
 
     } // end store
 
 
-
-    public function show($id)
-    {
-        $user = User::where('user_id',$id)->first();
-        if($user == null){
-            session()->flash('warning','User Not Found');
-            return redirect(route('user.index'));
-        }
-        return view('users.show',compact('user'));
-    }
-
-
     public function edit($id)
     {
+        $authUserID = Session::get('user');
         $user = User::findOrFail($id);
-        $user_data = UserData::where('user_id',$id)->get();
+        $user_data = UserData::where('user_id',$user->id)->get();
+
+        //$user_data = UserData::where('id',$id)->get();
+
         $groups = Group::all();
         $roles = Role::all();
         $resorts = Resort::all();
@@ -162,11 +128,11 @@ class userController extends Controller
             'user',
             'user_data',
             'resorts',
-            'roles'
+            'roles',
+            'authUserID'
         ));
 
-    }
-
+    } // end edit
 
     public function update(Request $request, $id)
     {
@@ -237,7 +203,7 @@ class userController extends Controller
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
         }
-    }
+    } // end update
 
 
     public function destroy($id)
@@ -251,13 +217,67 @@ class userController extends Controller
         session()->flash('success','User Deleted Successfully');
         return redirect()->back();
 
+    } // end destroy
+
+    public function getDisbleUser(){
+        $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
+        return view('users.index', compact('users'));
     }
+
+    public function changeStatusApproved(Request $request, $id){
+
+        $userData = UserData::findOrFail($request->id);
+        if ($userData->is_approved == 1) {
+            $userData->is_approved = 0;
+        }else{
+            $userData->is_approved = 1;
+        }
+
+        $userData->save();
+        session()->flash('success','User Updated Successfully');
+        return redirect()->back();
+    }
+
+    public function changeStatus(Request $request){
+        $user = User::where('user_id',$request->id)->first();
+        if(!$user){
+            session()->flash('warning','User Not Found');
+            return redirect()->back();
+        }
+
+        $ldap = new ldapUsers();
+
+        if($user->status == 'Enabled'){
+            $user->status = 'Disabled';
+            $ldap->user_disable($user->user_name);
+        }
+        else{
+            $user->status = 'Enabled';
+            $ldap->user_enable($user->user_name);
+        }
+        $user->save();
+        session()->flash('success','User Updated Successfully');
+        return redirect()->back();
+    }
+
+
+    // Show User
+    /*public function show($id)
+    {
+        $user = User::where('user_id',$id)->first();
+        if($user == null){
+            session()->flash('warning','User Not Found');
+            return redirect(route('user.index'));
+        }
+        return view('users.show',compact('user'));
+    }*/
+
 
     public function deleteUserData($id){
 
 	    $userData = UserData::findOrFail($id);
         $userData->delete();
-        
+
         session()->flash('success','User Data Deleted Successfully');
         return redirect()->back();
     }

@@ -66,9 +66,9 @@
                 <th>Group Name</th>
                 <th>Group Description</th>
                 <th># Roles</th>
-                <th># Users</th>
                 <th>Actions</th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -79,7 +79,7 @@
                     <th> {{ $group->name }}</th>
                     <th> {{ $group->description }}</th>
                     <th> {{ $group->roles->count() }}</th>
-                    <th> {{ $group->users->count() }}</th>
+
                     <th>
                         <form method="POST" action="{{ route('group.destroy', $group->id) }}">
                             @csrf
@@ -88,22 +88,11 @@
                             Delete </button>
                         </form>
                     </th>
+
                 </tr>
             @endforeach
         </tbody>
 
-        <!--<tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Resort</th>
-                <th>Department</th>
-                <th>Manager Name </th>
-                <th>Gender </th>
-                <th>Start date</th>
-                <th>End Date</th>
-            </tr>
-        </tfoot>-->
 
     </table>
 @endsection

@@ -15,7 +15,6 @@
   <div class="container">
     <!-- Example row of columns -->
     <p class="lead">User Name : {{$user->user_name}}</p>
-    <p class="lead">Department : {{$user->department->name}}</p>
     <p class="lead">Resort : {{$user->resort->name}}</p>
     <p class="lead">Group : {{$user->group->name}}</p>
     <p class="lead">Roles </p>

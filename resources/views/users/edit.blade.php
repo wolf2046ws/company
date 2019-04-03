@@ -90,8 +90,7 @@
                 <th>Resort </th>
                 <th>Group </th>
                 <th>Role </th>
-                {{ dd($user) }}
-                @if($user->is_admin == 1)
+                @if($authUserID[0]->is_admin == 1)
                 <th>Pending</th>
                 @endif
                 <th>Actions</th>
@@ -108,6 +107,7 @@
                         <th> {{ $user->group->name }} </th>
                         <th> {{ $user->role->name }} </th>
 
+                        @if($authUserID[0]->is_admin == 1)
 
                         <th>
                             <ul style="list-style:none;">
@@ -131,7 +131,7 @@
                                 </form>
                             </ul>
                         </th>
-
+                        @endif
 
                         <th>
                             <form method="POST" action="{{ route('userData.destroy', $user->id) }}">

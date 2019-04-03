@@ -2,8 +2,6 @@
 
 namespace App;
 
-/
-
 define ('ADLDAP_NORMAL_ACCOUNT', 805306368);
 define ('ADLDAP_WORKSTATION_TRUST', 805306369);
 define ('ADLDAP_INTERDOMAIN_TRUST', 805306370);
@@ -30,7 +28,7 @@ class ldapUsers {
     //protected $_ad_password="engels@$12MM";
 
 
-	
+
 	protected $_real_primarygroup=true;
 
     /**

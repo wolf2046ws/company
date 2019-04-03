@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
-use AuthenticatesUsers;
 use App\ldapUsers;
 use App\ldapHelperMethods;
 use Illuminate\Support\Facades\Session;
@@ -50,7 +49,7 @@ class LoginController extends Controller
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
-
+        
 	    Session::push('user',$user);
 
         return \redirect('/user');
@@ -61,6 +60,6 @@ class LoginController extends Controller
         Session::pull('user');
         return redirect('/login');
     }
-    
+
 
 }

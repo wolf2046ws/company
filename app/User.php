@@ -29,8 +29,6 @@ class User extends Authenticatable
         'status',
         'is_admin',
 
-        'resort_id',
-        'group_id',
         'email',
         'password'
     ];
@@ -70,30 +68,23 @@ class User extends Authenticatable
     }
 
     public function checkPermission($permissionName){
+
         foreach($this->permissions() as $permission){
             if($permission->url == $permissionName){
                 return true;
             }
         }
+        
         return false;
     }
 
 
     public function permissions(){
-        //get usre group
-        //get all user $roles
-        //get all roles $permissions
-        //filter all permissions to get the unique permissions
-
         $roles = UserData::select('role_id')->where('user_id',$this->id)->get();
-
         $permissions = RolePermissions::whereIn('role_id',$roles)->distinct()->get(['permission_id'])->toArray();
         $permissions = permission::select('url','description')->whereIn('id',$permissions)->get();
         return $permissions;
-
-        //return array of unique user permissions
     }
-    //$user->group()->roles()->permissiosn();
 
 
 }

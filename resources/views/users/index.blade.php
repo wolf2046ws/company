@@ -25,9 +25,9 @@
             @foreach($users as $user)
 
                 <tr>
-                    <th>{{ $user->first_name }}</a></th>
+                    <th> {{ $user->first_name }}</a></th>
                     <th> {{ $user->last_name }} </th>
-                    <th>{{$user->status}}</th>
+                    <th> {{ $user->status}}</th>
                     <th> {{ $user->user_name }} </th>
 
                     <th>
