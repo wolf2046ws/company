@@ -88,7 +88,7 @@ class userController extends Controller
             $resorts = Resort::where('id','=','0')->get();
         }
         $roles = Role::all();
-        
+
 	return view('users.create', compact(
             'departments',
              'resorts',
@@ -136,8 +136,7 @@ class userController extends Controller
                 "email"         => $request['user_name']."@regenbogen-ag.de",
                 "container"     => array("CN=Users")
            ));
-        dump($new_user);
-        dd("Stop");
+
        if(!$new_user){
            session()->flash('warning','Failed to create user');
            return redirect(route('user.index'));
@@ -262,7 +261,7 @@ class userController extends Controller
     }
 
     public function deleteUserData($id){
-        
+
 	$userData = UserData::findOrFail($id);
         $userData->delete();
         session()->flash('success','User Data Deleted Successfully');

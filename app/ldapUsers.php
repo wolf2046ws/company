@@ -49,7 +49,7 @@ class ldapUsers {
 	    *
 	    * @var array
 	    */
-	    //protected $_domain_controllers = array ("192.168.56.3");
+	    protected $_domain_controllers = array ("192.168.56.3");
 
 	    /**
 	    * Optional account with higher privileges for searching
@@ -60,28 +60,16 @@ class ldapUsers {
 	    */
 		//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
 
-		//protected $_ad_username="ahmed max";
-	    //protected $_ad_password="Abdullah89";
+		protected $_ad_username="ahmed max";
+	    protected $_ad_password="Abdullah89";
 
-    /**
-    * Array of domain controllers. Specifiy multiple controllers if you
-    * would like the class to balance the LDAP queries amongst multiple servers
-    *
-    * @var array
-    */
-    protected $_domain_controllers = array ("192.168.131.211");
 
-    /**
-    * Optional account with higher privileges for searching
-    * This should be set to a domain admin account
-    *
-    * @var string
-    * @var string
-    */
+    //protected $_domain_controllers = array ("192.168.131.211");
+
 	//protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
 
-      protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
-      protected $_ad_password="engels@$12MM";
+      //protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
+      //protected $_ad_password="engels@$12MM";
 
     /**
     * AD does not return the primary group. http://support.microsoft.com/?kbid=321360
