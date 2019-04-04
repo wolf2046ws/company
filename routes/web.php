@@ -6,6 +6,7 @@ Route::get('/', function () {
 
 // Route::get('{companyID}', ['uses' => CompanyController@index, 'middleware' => 'AuthResource']);
 
+Route::get('/user/create', 'userController@create')->name('userCreate');
 
 Route::group(['middleware' => ['web','check_auth','shared_variables','route_permissions']],function(){
 

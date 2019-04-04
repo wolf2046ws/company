@@ -62,9 +62,16 @@ class PermissionTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'User Can Create User ',
+            'description' => 'User Can View Create User Page',
             'slug' => 'Users',
             'url' => 'user.create',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
+            'description' => 'User Can Save Created User',
+            'slug' => 'Users',
+            'url' => 'user.store',
             'status' => 'true'
         ]);
 

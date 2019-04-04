@@ -20,6 +20,7 @@ class userController extends Controller
     {
     	//$users = User::latest()->get();user.disabled
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
+
     	return view('users.index', compact('users'));
     } // end index
 
@@ -88,21 +89,41 @@ class userController extends Controller
 
        if (Session::get('user')[0]->is_admin == 1){
            //$request['user_id'] = Str::random(6);
-           $userData = UserData::create([
+           /*$userData = UserData::create([
                'user_id' => $user->id,
                'group_id' => $request['group_id'],
                'role_id' => $request['role_id'],
                'resort_id' => $request['resort_id'],
                'is_approved' => 1
-           ]);
+           ]);*/
+           $userData = new UserData();
+           $userData->user_id = $user->id;
+           $userData->group_id = $request->group_id;
+           $userData->resort_id = $request->resort_id;
+           $userData->role_id = $request->role_id;
+           $userData->is_approved = 1;
+           $userData->save();
+           dd("ADmin store@userControlere");
+
+
        }else{
-           $userData = UserData::create([
+           $userData = new UserData();
+           $userData->user_id = $user->id;
+           $userData->group_id = $request->group_id;
+           $userData->resort_id = $request->resort_id;
+           $userData->role_id = $request->role_id;
+           $userData->is_approved = 0;
+           $userData->save();
+
+
+           /*$userData = UserData::create([
                'user_id' => $user->id,
                'group_id' => $request['group_id'],
                'role_id' => $request['role_id'],
                'resort_id' => $request['resort_id'],
                'is_approved' => 0
-           ]);
+           ]);*/
+
        }
 
         session()->flash('success','User Added Successfully');
@@ -115,6 +136,7 @@ class userController extends Controller
     {
         $authUserID = Session::get('user');
         $user = User::findOrFail($id);
+        //dd("Stop Edit");
         $user_data = UserData::where('user_id',$user->id)->get();
 
         //$user_data = UserData::where('id',$id)->get();
@@ -239,7 +261,7 @@ class userController extends Controller
     }
 
     public function changeStatus(Request $request){
-        $user = User::where('user_id',$request->id)->first();
+        $user = User::where('user_id', $request->id)->first();
         if(!$user){
             session()->flash('warning','User Not Found');
             return redirect()->back();

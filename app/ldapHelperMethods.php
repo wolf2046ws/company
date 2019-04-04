@@ -29,7 +29,7 @@ class ldapHelperMethods
             $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
 
             $testuser = User::where('user_name',$user['user_name'])->first();
-            
+
             /*if($testuser != null){
                 $user['group_id'] = $testuser->group_id;
                 $user['department_id'] = $testuser->department_id;
@@ -49,30 +49,35 @@ class ldapHelperMethods
                     ->user_info($user_name);
             if($ldap_user_info != false){
 
-                //check the database if the user exists
-                //create the user to the database
 
 		$ldap_user_info[0]['objectsid'][0]  = (new ldapUsers())->username2guid($user_name);
-                $user = User::where('user_id',$ldap_user_info[0]['objectsid'][0])->first();
 
-		if($user == null){
-                  $user = new User();
-                  $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
-                  $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
-                  $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
-                  $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
-                  $user['status'] = 'Enabled';
-                  $testuser = User::where('user_id',$user['user_id'])->first();
-                  if($testuser != null){
-                      $user['group_id'] = $testuser->group_id;
-                      $user['department_id'] = $testuser->department_id;
-                      $user['resort_id'] = $testuser->resort_id;
-                  }
-                  $user->save();
+        $user = User::where('user_id',$ldap_user_info[0]['objectsid'][0])->first();
+        if ($user == null) {
+            if (isset($ldap_user_info[0]["userprincipalname"][0]) && ($ldap_user_info[0]["userprincipalname"][0] != "0")) {
+                $user = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
+                $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
+                $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
+                $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
+                $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
+                $user['status'] = 'Enabled';
+                //$testuser = User::where('user_id',$user['user_id'])->first();
+                $user->save();
 
-                }
+            }else{
+                $user = new User();
+                $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
+                $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
+                $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
+                $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
+                $user['status'] = 'Enabled';
+                //$testuser = User::where('user_id',$user['user_id'])->first();
+                $user->save();
+            }
+        }
 
-                array_push($ldap_final_users,$user);
+        array_push($ldap_final_users,$user);
+
             }
         }
         return $ldap_final_users;
@@ -88,33 +93,37 @@ class ldapHelperMethods
                     ->user_info_disabled($user_name);
             if($ldap_user_info != false){
 
-                //check the database if the user exists
-                //create the user to the database
+    		$ldap_user_info[0]['objectsid'][0]  = (new ldapUsers())->username2guid($user_name);
+            $user = User::where('user_id',$ldap_user_info[0]['objectsid'][0])->first();
 
-		$ldap_user_info[0]['objectsid'][0]  = (new ldapUsers())->username2guid($user_name);
-                $user = User::where('user_id',$ldap_user_info[0]['objectsid'][0])->first();
+            if($user == null){
+                if (isset($ldap_user_info[0]["userprincipalname"][0]) && ($ldap_user_info[0]["userprincipalname"][0] != "0")) {
+                    $user = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
+                    $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
+                    $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
+                    $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
+                    $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
+                    $user['status'] = 'Disabled';
+                    //$testuser = User::where('user_id',$user['user_id'])->first();
+                    $user->save();
 
-		if($user == null){
-                  $user = new User();
-                  $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
-                  $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
-                  $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
-                  $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
-                  $user['status'] = 'Disabled';
-
-                  $testuser = User::where('user_id',$user['user_id'])->first();
-                  if($testuser != null){
-                      $user['group_id'] = $testuser->group_id;
-                      $user['department_id'] = $testuser->department_id;
-                      $user['resort_id'] = $testuser->resort_id;
-                  }
-                  $user->save();
-
+                }else{
+                    $user = new User();
+                    $user['user_id'] = $ldap_user_info[0]['objectsid'][0];
+                    $user['user_name'] = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
+                    $user['first_name'] = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
+                    $user['last_name'] = isset(($ldap_user_info[0]["sn"][0])) ? ($ldap_user_info[0]["sn"][0]) : FALSE;
+                    $user['status'] = 'Disabled';
+                    //$testuser = User::where('user_id',$user['user_id'])->first();
+                    $user->save();
                 }
 
-                array_push($ldap_final_users,$user);
-            }
         }
+
+        array_push($ldap_final_users,$user);
+
+        }
+    }
         return $ldap_final_users;
     }
 

@@ -16,12 +16,10 @@ class checkAuth
      */
     public function handle($request, Closure $next)
     {
-        //return $next($request);
         $user = Session::get('user');
         if($user == null){
             return redirect(route('login'));
         }
-       // dd($user);
         return $next($request);
     }
 }
