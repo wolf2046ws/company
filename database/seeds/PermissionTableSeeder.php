@@ -76,9 +76,16 @@ class PermissionTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'User Can Edit User Information ',
+            'description' => 'User Can View Edit User Information ',
             'slug' => 'Users',
             'url' => 'user.edit',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
+            'description' => 'User Can Save Edit User Information ',
+            'slug' => 'Users',
+            'url' => 'user.update',
             'status' => 'true'
         ]);
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Role;
+use Illuminate\Support\Facades\Session;
 
 class UserDataTableSeeder extends Seeder
 {

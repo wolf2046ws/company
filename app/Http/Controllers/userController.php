@@ -103,8 +103,6 @@ class userController extends Controller
            $userData->role_id = $request->role_id;
            $userData->is_approved = 1;
            $userData->save();
-           dd("ADmin store@userControlere");
-
 
        }else{
            $userData = new UserData();

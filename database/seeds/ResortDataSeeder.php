@@ -12,9 +12,6 @@ class ResortDataSeeder extends Seeder
     public function run()
     {
         //
-        DB::table('resorts')->insert([
-            'name' => ""
-        ]);
 
         DB::table('resorts')->insert([
             'name' => "Prerow"

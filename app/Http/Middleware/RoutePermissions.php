@@ -36,7 +36,7 @@ class RoutePermissions
         }
 
         //$request->merge(compact('allowed_url'));
-        
+
         //return $next($request);
     }// end handle
 
