@@ -29,9 +29,8 @@
                     <th> <a href="{{ route('user.show', $user->user_id ) }}">{{ $user->user->first_name }}</a></th>
                     <th> {{ $user->user->last_name }} </th>
                     <th> {{ $user->user->user_name }} </th>
-                    <th> {{ $user->user->resort_id ? $user->user->resort->name : '---' }} </th>
-                    <th> {{ $user->user->group_id ? $user->user->group->name : '---' }} </th>
-
+                    <th> {{ $user->resort->name }} </th>
+                    <th> {{ $user->group->name }} </th>
                 </tr>
             @endforeach
         </tbody>

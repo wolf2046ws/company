@@ -92,7 +92,7 @@ class PermissionTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'description' => 'User Can View Resort-User Page',
             'slug' => 'Resort',
-            'url' => 'resort.index',
+            'url' => 'resort.show',
             'status' => 'true'
         ]);
 

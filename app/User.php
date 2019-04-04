@@ -55,12 +55,12 @@ class User extends Authenticatable
 
 
     public function resort(){
-        return $this->belongsTo(Resort::class);
+        return $this->belongsToMany(Resort::class);
     }
 
 
     public function group(){
-        return $this->belongsTo(Group::class);
+        return $this->belongsToMany(Group::class);
     }
 
     public function role(){
@@ -74,7 +74,7 @@ class User extends Authenticatable
                 return true;
             }
         }
-        
+
         return false;
     }
 

@@ -57,6 +57,7 @@ class ResortController extends Controller
     {
         $users = UserData::latest()->where('resort_id',$id)->get();
         $resort = Resort::findOrFail($id);
+
         return view('resort.show',compact('users','resort'));
 
     }
