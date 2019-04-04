@@ -26,7 +26,7 @@
         <tbody>
             @foreach($users as $user)
                 <tr>
-                    <th> <a href="{{ route('user.show', $user->user_id ) }}">{{ $user->user->first_name }}</a></th>
+                    <th> {{ $user->user->first_name }} </th>
                     <th> {{ $user->user->last_name }} </th>
                     <th> {{ $user->user->user_name }} </th>
                     <th> {{ $user->resort->name }} </th>

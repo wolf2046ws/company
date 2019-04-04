@@ -28,14 +28,16 @@ class RoutePermissions
 
             if (in_array($request->route()->getName(), $allowed_url)) {
                 return $next($request);
-
             }else{
                 dump('Permission Denied');
                 dd("Denied");
             }
-        
+
         }
 
+        //$request->merge(compact('allowed_url'));
+        
+        //return $next($request);
     }// end handle
 
 
