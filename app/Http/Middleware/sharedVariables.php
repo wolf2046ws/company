@@ -15,8 +15,6 @@ class sharedVariables
     {
         $allowed_url = array();
 
-
-
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
         $userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
         if($userData){
@@ -44,7 +42,7 @@ class sharedVariables
             dump('Permission Denied');
             dd("Denied");
         }
-        
+
         view()->share('allowed_url',$allowed_url);
         view()->share('resorts',$resorts);
         view()->share('AuthUser',$AuthUser);

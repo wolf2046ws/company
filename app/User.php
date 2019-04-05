@@ -80,8 +80,14 @@ class User extends Authenticatable
 
 
     public function permissions(){
-        $roles = UserData::select('role_id')->where('user_id',$this->id)->get();
-        $permissions = RolePermissions::whereIn('role_id',$roles)->distinct()->get(['permission_id'])->toArray();
+        $roles_new = UserData::select('role_id','is_approved')
+        ->where('user_id',$this->id)
+        ->where('is_approved','=','1')
+        ->get();
+        //dd($roles_new);
+        //$roles = UserData::select('role_id')->where('user_id',$this->id)->get();
+        //$permissions = RolePermissions::whereIn('role_id',$roles)->distinct()->get(['permission_id'])->toArray();
+        $permissions = RolePermissions::whereIn('role_id',$roles_new)->distinct()->get(['permission_id'])->toArray();
         $permissions = permission::select('url','description')->whereIn('id',$permissions)->get();
         return $permissions;
     }
