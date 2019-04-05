@@ -60,10 +60,11 @@ class ldapHelperMethods
 
                             if (isset($ldap_user_info[0]["userprincipalname"][0])) {
                                 $user_test = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
+
                             }
 
 
-                if (($user == null) && ($user_test->user_name == NULL)) {
+                if (($user == null) && ($user_test == NULL)) {
 
                     $user = new User();
                     $user->user_id = $ldap_user_info[0]['objectsid'][0];
@@ -78,7 +79,6 @@ class ldapHelperMethods
                         if (isset($ldap_user_info[0]["userprincipalname"][0]) && ($ldap_user_info[0]["userprincipalname"][0] != "0")) {
 
                             $user = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
-
                             $user->user_id = $ldap_user_info[0]['objectsid'][0];
                             $user->user_name = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;
                             $user->first_name = isset(($ldap_user_info[0]["givenname"][0])) ? ($ldap_user_info[0]["givenname"][0]) : FALSE;
@@ -92,6 +92,7 @@ class ldapHelperMethods
                 array_push($ldap_final_users,$user);
                 }
         }// end foreach
+
     return $ldap_final_users;
 }// end Method l_get_all_user
 
@@ -114,11 +115,14 @@ public function get_all_disabled_user(){
                     (new ldapUsers())->username2guid($user_name);
 
             $user = User::where('user_id',$ldap_user_info[0]['objectsid'][0])->first();
+
             if (isset($ldap_user_info[0]["userprincipalname"][0])) {
                 $user_test = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
+            }else{
+                $user_test = NULL;
             }
 
-            if (($user == null) && ($user_test->user_name == NULL)) {
+            if (($user == null) && ($user_test == NULL)) {
                 $user = new User();
                 $user->user_id = $ldap_user_info[0]['objectsid'][0];
                 $user->user_name  = isset(($ldap_user_info[0]["userprincipalname"][0])) ? (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]) : FALSE;

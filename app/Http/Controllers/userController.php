@@ -269,13 +269,16 @@ class userController extends Controller
         $ldap = new ldapUsers();
         //dd($user->user_name);
             // Working Enable and disable
+            // User must have password to enable or disable it
         //dd($ldap->user_enable($user->user_name));
+
 
         if($user->status == 'Enabled'){
             $user->status = 'Disabled';
             $ldap->user_disable($user->user_name);
         }
         else{
+
             $user->status = 'Enabled';
             $ldap->user_enable($user->user_name);
         }
