@@ -38,10 +38,13 @@ class sharedVariables
             }
         }
 
-        if (!in_array($request->route()->getName(), $allowed_url)) {
-            dump('Permission Denied');
-            dd("Denied");
+        if(in_array($request->route()->getName(), $allowed_url)){
+
+        }else{
+            Session::pull('user');
+            return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
         }
+
 
         view()->share('allowed_url',$allowed_url);
         view()->share('resorts',$resorts);

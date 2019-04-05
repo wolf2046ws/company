@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
+                @include('includes.messages')
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -39,7 +39,7 @@
                             </div>
                         </div>
 
-    
+
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">

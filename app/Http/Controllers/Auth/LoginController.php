@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
@@ -10,16 +11,67 @@ use App\ldapHelperMethods;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use App\User;
+use App\UserData;
+use App\Resort;
 
 class LoginController extends Controller
 {
 
-    protected $redirectTo = '/';
+    //protected $redirectTo = '/user';
 
 
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        //$this->middleware('shared_variables');
+    }
+
+    public function redirectTo(){
+
+        $allowed_url = array();
+
+        $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        $userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
+        if($userData){
+            $resorts = Resort::whereIn("id",$userData)->get();
+        }
+        else{
+            $resorts = Resort::where('id','=','0')->get();
+        }
+
+        if ($AuthUser->is_admin == 1) {
+            $permissions = $AuthUser->permissions();
+            foreach ($permissions as $permission) {
+                array_push($allowed_url, $permission->url);
+            }
+        }
+
+        if($AuthUser->is_admin == 0){
+            $permissions = $AuthUser->permissions();
+            foreach ($permissions as $permission) {
+                array_push($allowed_url, $permission->url);
+            }
+        }
+
+        switch ($allowed_url) {
+            case in_array('user.index', $allowed_url):
+                    return redirect('/user');
+                break;
+
+            case in_array('user.create', $allowed_url):
+                    return redirect('/user/create');
+                break;
+
+            case in_array('resort.show', $allowed_url):
+                return redirect('/resort/1');
+                break;
+
+            default:
+                Session::pull('user');
+                return redirect('/login');
+                break;
+        }
     }
 
 
@@ -52,7 +104,10 @@ class LoginController extends Controller
 
 	    Session::push('user',$user);
 
-        return \redirect('/user');
+        $this->middleware('shared_variables');
+        //dd("After Middleware in LoginController");
+        return $this->redirectTo();
+
     }
 
     public function logout(Request $request)
