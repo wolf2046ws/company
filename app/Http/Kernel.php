@@ -3,7 +3,6 @@
 namespace App\Http;
 
 
-use App\Http\Middleware\RoutePermissions;
 use App\Http\Middleware\checkAuth;
 use App\Http\Middleware\sharedVariables;
 
@@ -66,7 +65,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'route_permissions' => RoutePermissions::class,
         'check_auth' => checkAuth::class,
         'shared_variables' => sharedVariables::class
 

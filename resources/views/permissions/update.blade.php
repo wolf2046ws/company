@@ -14,14 +14,9 @@
     <div class="form-group col-md-3">
         <label for="Select1">SLUG</label>
         <select name ="slug" class="form-control" id="slug">
-                <option > User </option>
-                <option > Group </option>
-                <option > Role </option>
-                <option > Permission </option>
-                <option > Department </option>
-                <option > Resort </option>
-                <option > Resort Users </option>
-                <option > Department Users </option>
+                <option > Web </option>
+                <option > Folder </option>
+
         </select>
     </div>
 

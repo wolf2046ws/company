@@ -18,6 +18,7 @@
         </div>
         <div class="col-sm-4">
             <select required name="resort_id" class="form-control" id="resort">
+                <option value=""> Select Resort</option>
                 @foreach($resorts as $resort)
                     <option
                             value="{{ $resort->id }}"> {{ $resort->name }} </option>

@@ -16,7 +16,7 @@ class UserDataTableSeeder extends Seeder
         //
         foreach (Role::all() as $role) {
           DB::table('users_data')->insert([
-              'user_id' => 1,
+              'user_id' => 5,
               'group_id' => $role->group_id,
               'resort_id' => $role->resort_id,
               'role_id' => $role->id

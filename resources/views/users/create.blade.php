@@ -43,11 +43,9 @@
                 </div>
                 <div class="col-sm-2 align-self-center">
                     <select required  name="resort_id" class="form-control" id="resort">
+                        <option value=""> Select Resort</option>
                         @foreach($resorts as $resort)
-                            <option
-				{{--$resort->name --}}
-				{{-- value="resort->id"--}}
-                            value="{{ $resort->id }}"> {{$resort->name}} </option>
+                            <option value="{{ $resort->id }}"> {{$resort->name}} </option>
                         @endforeach
                     </select>
                 </div>
@@ -92,7 +90,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js">
     </script>
     <script type="text/javascript">
-    
+
         $('#resort').change(function(){
             var resort_id = $("#resort").val();
 

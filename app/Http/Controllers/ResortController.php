@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class ResortController extends Controller
 {
-
+    /*
     public function index()
     {
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
@@ -25,9 +25,9 @@ class ResortController extends Controller
             $resorts = Resort::where('id','=','0')->get();
         }
         return view('resort.index', compact('resorts'));
-    }
+    }*/
 
-
+    /*
     public function create()
     {
         return view('resort.create');
@@ -42,7 +42,7 @@ class ResortController extends Controller
         }
         session()->flash('warning','Resort Exists');
         return redirect()->back();
-    }
+    }*/
 
 
     public function deleteUser($id){
@@ -68,33 +68,33 @@ class ResortController extends Controller
         return view('resort.groupsIndex',compact('groups','resort'));
       }
 
-
+      /*
       public function resortCreateGroup($id){
         $resort = Resort::findOrFail($id);
         return view('groups.create',compact('id'));
-      }
-
+    }*/
+    /*
     public function edit($id)
     {
         $resort = Resort::findOrFail($id);
         return view('resort.update', compact('resort'));
-    }
+    }*/
 
-
+    /*
     public function update(Request $request, $id)
     {
         $resort = Resort::findOrFail($id);
         $resort->update($request->all());
         session()->flash('success','Resort Updated Successfully');
         return redirect()->back();
-    }
+    }*/
 
-
+    /*
     public function destroy($id)
     {
         $resort = Resort::findOrFail($id);
         $resort->delete();
         session()->flash('success','Resort Deleted Successfully');
         return redirect()->back();
-    }
+    }*/
 }

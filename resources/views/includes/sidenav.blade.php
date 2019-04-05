@@ -30,7 +30,6 @@
 </li>
 @endif
 
-
 @foreach($resorts as $resort)
     <li class="nav-item">
         <a class="nav-link" href="{{route('resort.show',$resort->id)}}">

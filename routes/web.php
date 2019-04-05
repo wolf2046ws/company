@@ -6,9 +6,8 @@ Route::get('/', function () {
 
 // Route::get('{companyID}', ['uses' => CompanyController@index, 'middleware' => 'AuthResource']);
 
-Route::get('/user/create', 'userController@create')->name('userCreate');
 
-Route::group(['middleware' => ['web','check_auth','shared_variables','route_permissions']],function(){
+Route::group(['middleware' => ['web','check_auth','shared_variables']],function(){
 
     Route::get('/user-disabled','userController@getDisbleUser')->name('user.disabled');
     Route::post('/user-change-status','userController@changeStatus')->name('user.changeStatus');
@@ -20,7 +19,7 @@ Route::group(['middleware' => ['web','check_auth','shared_variables','route_perm
         Route::resource('/role', 'RoleController');
         Route::resource('/resort', 'ResortController');
         Route::resource('/resort-users', 'ResortUserController');
-        Route::get('/resort-groups/{id}','ResortController@resortGroup')->name('resortGroup.index');
+        //Route::get('/resort-groups/{id}','ResortController@resortGroup')->name('resortGroup.index');
         //Route::get('/resort-creategroups/{id}','ResortController@resortCreateGroup')->name('resortGroup.create');
         Route::get('/group-roles/{id}','GroupController@groupCreateRoles')->name('groupRoles.create');
         //Route::get('/group-createroles/{id}','GroupController@groupRoles')->name('groupRoles.index');

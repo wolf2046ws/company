@@ -1039,7 +1039,7 @@ class ldapUsers {
     * @return array
     */
     public function user_delete($username,$isGUID=false) {
-        $userinfo = $this->user_info($username, array("*"),$isGUID);
+        $userinfo = $this->user_info_disabled($username, array("*"),$isGUID);
         $dn = $userinfo[0]['distinguishedname'][0];
         $result=$this->dn_delete($dn);
         if ($result!=true){ return (false); }
@@ -1411,21 +1411,25 @@ class ldapUsers {
         // Translate the update to the LDAP schema
         $mod=$this->adldap_schema($attributes);
 
+
         // Check to see if this is an enabled status update
         if (!$mod && !array_key_exists("enabled", $attributes)){ return (false); }
 
-        // Set the account control attribute (only if specified)
+		// Set the account control attribute (only if specified)
         if (array_key_exists("enabled",$attributes)){
             if ($attributes["enabled"]){ $control_options=array("NORMAL_ACCOUNT"); }
             else { $control_options=array("NORMAL_ACCOUNT","ACCOUNTDISABLE"); }
             $mod["userAccountControl"][0]=$this->account_control($control_options);
+
         }
         // Do the update
-        $result=@ldap_modify($this->_conn,$user_dn,$mod);
-        if ($result==false){ return (false); }
 
+    	$result=@ldap_modify($this->_conn,$user_dn,$mod);
+        if ($result==false){ return (false); }
         return (true);
     }
+
+
 
     /**
     * Modify a user without use of adLDAP schema
@@ -1457,10 +1461,9 @@ class ldapUsers {
             else { $control_options=array("NORMAL_ACCOUNT","ACCOUNTDISABLE"); }
             $mod["userAccountControl"][0]=$this->account_control($control_options);
         }
-        // Do the update
+
         $result=@ldap_modify($this->_conn,$user_dn,$mod);
         if ($result==false){ return (false); }
-
         return (true);
     }
 
@@ -1492,7 +1495,6 @@ class ldapUsers {
         if ($username===NULL){ return ("Missing compulsory field [username]"); }
         $attributes=array("enabled"=>1);
         $result = $this->user_modify($username, $attributes, $isGUID);
-		//dd($result);
         if ($result==false){ return (false); }
 
         return (true);

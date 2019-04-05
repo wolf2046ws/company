@@ -50,6 +50,7 @@
             <div class="form-group col-md-3">
                 <label for="resort">Select Resort</label>
                 <select required name="resort_id" class="form-control" id="resort">
+                    <option value=""> Select Resort</option>
                     @foreach($resorts as $resort)
                         <option
                         value="{{ $resort->id }}"> {{ $resort->name }} </option>

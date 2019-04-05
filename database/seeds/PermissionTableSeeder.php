@@ -14,154 +14,199 @@ class PermissionTableSeeder extends Seeder
         ####################################################
         DB::table('permissions')->insert([
             'description' => 'User Can Select Resort from Dropdown',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'get-resort-list.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Select Group from Dropdown',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'get-group-list.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Select Role from Dropdown',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'get-role-list.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Enabled User Page',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Disabled User Page',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.disabled',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Enable/Disable User ',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.changeStatus',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Approve/Reject User Request',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.changeStatusApproved',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Create User Page',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.create',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Save Created User',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.store',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'User Can View Edit User Information ',
-            'slug' => 'Users',
+            'description' => 'User Can View User Information ',
+            'slug' => 'Web',
             'url' => 'user.edit',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Save Edit User Information ',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'user.update',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Delete User Information ',
-            'slug' => 'Users',
+            'slug' => 'Web',
             'url' => 'userData.destroy',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Resort-User Page',
-            'slug' => 'Resort',
+            'slug' => 'Web',
             'url' => 'resort.show',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View All Groups',
-            'slug' => 'Group',
+            'slug' => 'Web',
             'url' => 'group.index',
             'status' => 'true'
         ]);
 
+        /*DB::table('permissions')->insert([
+            'description' => 'User Can ResortGroup Index ****',
+            'slug' => 'Web',
+            'url' => 'resortGroup.index',
+            'status' => 'true'
+        ]);*/
+
         DB::table('permissions')->insert([
-            'description' => 'User Can Create Group',
-            'slug' => 'Group',
+            'description' => 'User Can View Create Group Page',
+            'slug' => 'Web',
             'url' => 'group.create',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
+            'description' => 'User Can Store Created Group',
+            'slug' => 'Web',
+            'url' => 'group.store',
+            'status' => 'true'
+        ]);
+
+
+        DB::table('permissions')->insert([
+            'description' => 'User Can Create Group in his Resorst ****',
+            'slug' => 'Web',
+            'url' => 'groupRoles.create',
+            'status' => 'true'
+        ]);
+
+
+        DB::table('permissions')->insert([
+            'description' => 'User Can View Create Role-Group Page',
+            'slug' => 'Web',
+            'url' => 'groupRoles.create',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
             'description' => 'User Can Delete Group',
-            'slug' => 'Group',
+            'slug' => 'Web',
             'url' => 'group.destroy',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Permission Page',
-            'slug' => 'Permission',
+            'slug' => 'Web',
             'url' => 'permission.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
-            'description' => 'User Can Create Permission',
-            'slug' => 'Permission',
+            'description' => 'User Can Veiw Create Permission',
+            'slug' => 'Web',
             'url' => 'permission.create',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
+            'description' => 'User Can Store Created Permission',
+            'slug' => 'Web',
+            'url' => 'permission.store',
+            'status' => 'true'
+        ]);
+
+
+        DB::table('permissions')->insert([
             'description' => 'User Can Delete Permission',
-            'slug' => 'Permission',
+            'slug' => 'Web',
             'url' => 'permission.destroy',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can View Role Page',
-            'slug' => 'Role',
+            'slug' => 'Web',
             'url' => 'role.index',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
             'description' => 'User Can Create Role',
-            'slug' => 'Role',
+            'slug' => 'Web',
             'url' => 'role.create',
             'status' => 'true'
         ]);
 
         DB::table('permissions')->insert([
+            'description' => 'User Can Save Role',
+            'slug' => 'Web',
+            'url' => 'role.store',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
             'description' => 'User Can Delete Role',
-            'slug' => 'Role',
+            'slug' => 'Web',
             'url' => 'role.destroy',
             'status' => 'true'
         ]);
@@ -173,7 +218,7 @@ class PermissionTableSeeder extends Seeder
         /*
         DB::table('permissions')->insert([
             'description' => 'user can view resort user index page',
-            'slug' => 'Resort Users',
+            'slug' => 'Web Web',
             'url' => 'resort.index',
             'status' => 'true'
         ]);*/
@@ -183,7 +228,7 @@ class PermissionTableSeeder extends Seeder
         //resort-user URL
         DB::table('permissions')->insert([
             'description' => 'user can Select resort',
-            'slug' => 'Resort Users',
+            'slug' => 'Web Web',
             'url' => 'dropdownlist.index',
             'status' => 'true'
         ]);
@@ -191,7 +236,7 @@ class PermissionTableSeeder extends Seeder
         //resort-user URL
         DB::table('permissions')->insert([
             'description' => 'user can Select Group',
-            'slug' => 'Resort Users',
+            'slug' => 'Web Web',
             'url' => 'dropdownlist.getGroupList',
             'status' => 'true'
         ]);
@@ -199,7 +244,7 @@ class PermissionTableSeeder extends Seeder
         //resort-user URL
         DB::table('permissions')->insert([
             'description' => 'user can Select Role',
-            'slug' => 'Resort Users',
+            'slug' => 'Web Web',
             'url' => 'dropdownlist.getRoleList',
             'status' => 'true'
         ]);*/

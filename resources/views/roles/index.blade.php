@@ -89,7 +89,7 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
 
             $('#resort').change(function(){
                 var resort_id = $(this).val();
@@ -121,7 +121,7 @@
 
 
 
-        </script>
+        </script>-->
 
 
 <script src="{{ asset('js/jquerydatatable.js') }}" ></script>

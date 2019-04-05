@@ -29,13 +29,13 @@ class PermissionController extends Controller
         return redirect(route('permission.index'));
     }
 
-
+    /*
     public function show(permission $permission)
     {
 
-    }
+    }*/
 
-
+    /*
     public function edit($permission)
     {
         $permission = Permission::findOrFail($permission);
@@ -49,7 +49,7 @@ class PermissionController extends Controller
         $permission->update($request->all());
         session()->flash('success','permission Updated Successfully');
         return redirect()->back();
-    }
+    }*/
 
 
     public function destroy($permission)
@@ -59,5 +59,5 @@ class PermissionController extends Controller
         session()->flash('success','Permission Deleted Successfully');
         return redirect()->back();
     }
-    
+
 }

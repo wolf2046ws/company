@@ -12,7 +12,7 @@
             </div>
             <div class="col-sm-2 align-self-center">
                 <select required name="resort_id" class="form-control" id="resort">
-                    <option value="">Resort</option>
+                    <option value=""> Select Resort</option>
                 @foreach($resorts as $resort)
                         <option value="{{ $resort->id }}"> {{ $resort->name }} </option>
                     @endforeach

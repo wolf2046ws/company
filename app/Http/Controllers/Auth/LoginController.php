@@ -49,7 +49,7 @@ class LoginController extends Controller
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
-        
+
 	    Session::push('user',$user);
 
         return \redirect('/user');

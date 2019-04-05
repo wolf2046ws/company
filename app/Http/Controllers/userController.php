@@ -18,6 +18,7 @@ class userController extends Controller
 
     public function index()
     {
+
     	//$users = User::latest()->get();user.disabled
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
 
@@ -225,7 +226,7 @@ class userController extends Controller
         }
     } // end update
 
-
+/*
     public function destroy($id)
     {
 
@@ -238,7 +239,7 @@ class userController extends Controller
         return redirect()->back();
 
     } // end destroy
-
+*/
     public function getDisbleUser(){
         $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
         return view('users.index', compact('users'));
@@ -266,6 +267,9 @@ class userController extends Controller
         }
 
         $ldap = new ldapUsers();
+        //dd($user->user_name);
+            // Working Enable and disable
+        //dd($ldap->user_enable($user->user_name));
 
         if($user->status == 'Enabled'){
             $user->status = 'Disabled';
@@ -279,18 +283,6 @@ class userController extends Controller
         session()->flash('success','User Updated Successfully');
         return redirect()->back();
     }
-
-
-    // Show User
-    /*public function show($id)
-    {
-        $user = User::where('user_id',$id)->first();
-        if($user == null){
-            session()->flash('warning','User Not Found');
-            return redirect(route('user.index'));
-        }
-        return view('users.show',compact('user'));
-    }*/
 
 
     public function deleteUserData($id){

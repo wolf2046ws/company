@@ -44,7 +44,7 @@ class RoleController extends Controller
         //
     }
 
-
+    /*
     public function edit($role)
     {
         $role = Role::findOrFail($role);
@@ -59,7 +59,7 @@ class RoleController extends Controller
         $role->update($request->all());
         session()->flash('success','role Updated Successfully');
         return redirect()->back();
-    }
+    }*/
 
 
     public function destroy(Role $role)

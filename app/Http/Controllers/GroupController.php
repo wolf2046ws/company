@@ -54,7 +54,7 @@ class GroupController extends Controller
         return view('roles.create',compact('id','permissions'));
     }
 
-
+/*
     public function show(Group $group)
     {
 
@@ -69,7 +69,7 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
 
-    }
+    }*/
 
 
     public function destroy(Group $group)
