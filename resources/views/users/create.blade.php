@@ -44,6 +44,7 @@
                 <div class="col-sm-2 align-self-center">
                     <select required  name="resort_id" class="form-control" id="resort">
                         <option value=""> Select Resort</option>
+
                         @foreach($resorts as $resort)
                             <option value="{{ $resort->id }}"> {{$resort->name}} </option>
                         @endforeach
@@ -72,6 +73,14 @@
 
 
         </div><!-- end row-->
+        <br>
+        <div class="row">
+            <div class="col-sm-12 align-self-center">
+                <h5>Comment:</h5>
+                <textarea class="form-control" rows="5" id="comment" value="comment"></textarea>
+            </div>
+        </div>
+
         <br>
         <div class="row">
             <div class="col-sm-12 align-self-center">

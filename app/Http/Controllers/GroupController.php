@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\UserData;
 use App\Group;
 use App\Role;
 use App\Permission;
 use App\Resort;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 
 
@@ -74,6 +76,8 @@ class GroupController extends Controller
 
     public function destroy(Group $group)
     {
+        /*$users_group = UserData::where('user_id',)
+        ->groupBy('group_id')->get();*/
         $group->delete();
         session()->flash('success','Group Deleted Successfully');
         return redirect()->back();

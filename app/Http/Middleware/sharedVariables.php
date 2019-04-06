@@ -16,7 +16,12 @@ class sharedVariables
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
-        $userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
+        $userData = UserData::select('resort_id')
+                ->where('user_id',$AuthUser->id)
+                ->where('is_approved', '=', '1')
+                ->get();
+
+        //dd(Resort::whereIn("id",$userData)->get());
         if($userData){
             $resorts = Resort::whereIn("id",$userData)->get();
         }
@@ -45,6 +50,11 @@ class sharedVariables
             return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
         }
 
+        // $userData = all resort id that user have access to it
+            // /resort/$userData
+        //$userDatadd($userData->resort_id);
+
+    
 
         view()->share('allowed_url',$allowed_url);
         view()->share('resorts',$resorts);

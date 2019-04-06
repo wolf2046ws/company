@@ -80,7 +80,7 @@ class User extends Authenticatable
 
 
     public function permissions(){
-        $roles_new = UserData::select('role_id','is_approved')
+        $roles_new = UserData::select('role_id')
         ->where('user_id',$this->id)
         ->where('is_approved','=','1')
         ->get();

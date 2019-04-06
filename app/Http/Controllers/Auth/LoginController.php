@@ -32,7 +32,13 @@ class LoginController extends Controller
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
-        $userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
+
+        //$userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
+        $userData = UserData::select('resort_id','is_approved')
+        ->where('user_id',$AuthUser->id)
+        ->where('is_approved', '=', '1')
+        ->get();
+
         if($userData){
             $resorts = Resort::whereIn("id",$userData)->get();
         }
@@ -53,25 +59,27 @@ class LoginController extends Controller
                 array_push($allowed_url, $permission->url);
             }
         }
+    
+            switch ($allowed_url) {
+                case in_array('user.index', $allowed_url):
+                        return redirect('/user');
+                    break;
 
-        switch ($allowed_url) {
-            case in_array('user.index', $allowed_url):
-                    return redirect('/user');
-                break;
+                case in_array('user.create', $allowed_url):
+                        return redirect('/user/create');
+                    break;
 
-            case in_array('user.create', $allowed_url):
-                    return redirect('/user/create');
-                break;
+                case in_array('resort.show', $allowed_url):
+                    return redirect('/resort/{$userData[0]->resort_id}');
+                    break;
 
-            case in_array('resort.show', $allowed_url):
-                return redirect('/resort/1');
-                break;
+                default:
+                    Session::pull('user');
+                    return redirect('/login');
+                    break;
+            }
 
-            default:
-                Session::pull('user');
-                return redirect('/login');
-                break;
-        }
+
     }
 
 

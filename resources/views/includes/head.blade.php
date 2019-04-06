@@ -7,7 +7,7 @@
       <meta name="author" content="">
       <link rel="icon" href="../../../../favicon.ico">
 
-      <title>Dashboard Template for Bootstrap</title>
+      <title> Regenbogen Permission </title>
 
       <!-- Bootstrap core CSS -->
       <link href="{{ asset('css/bootstrap.min.css') }}" media="all" rel="stylesheet" type="text/css" />

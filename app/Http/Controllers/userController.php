@@ -18,30 +18,54 @@ class userController extends Controller
 
     public function index()
     {
-
-    	//$users = User::latest()->get();user.disabled
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
-
     	return view('users.index', compact('users'));
     } // end index
 
     public function create()
     {
-
-        $groups = Group::all();
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
-        $userData = UserData::select('resort_id')->where('user_id',$authUserID->id)->get();
 
+        if ($authUserID->is_admin == 1) {
 
-        if(count($userData) != 0){
-            $resorts = Resort::whereIn("id",$userData)->get();
-        }
-        else{
-            $resorts = Resort::where('id','=','0')->get();
-        }
+            $userData = UserData::select('resort_id')
+                    ->where('user_id',$authUserID->id)->get();
 
-        $roles = Role::all();
+            if(count($userData) != 0){
+                $resorts = Resort::whereIn("id",$userData)->get();
+            }
+            else{
+                $resorts = Resort::where('id','=','0')->get();
+            }
+            $groups = Group::all();
+            $roles = Role::all();
 
+        }else {
+            // Find Resorts that approved is 1
+            $userData = UserData::select('resort_id')
+                ->where('user_id',$authUserID->id)
+                ->where('is_approved', '=', '1')
+                ->get();
+
+            if(count($userData) != 0){
+                $resorts = Resort::whereIn("id",$userData)->get();
+            }
+            else{
+                $resorts = Resort::where('id','=','0')->get();
+            }
+            for ($i=0; $i < count($resorts); $i++) {
+                $usergroups = UserData::select('group_id')
+                    ->where('user_id',$authUserID->id)
+                    ->where('resort_id', '=', $resorts[$i]->id)
+                    ->where('is_approved', '=', '1')
+                    ->get();
+                    for ($i=0; $i < count($usergroups); $i++) {
+                        $groups = Group::where('id', '=', $usergroups[$i]->group_id)
+                        ->get();
+                    }
+            } // end for count($resorts)
+        } // end else
+    
         return view('users.create', compact(
                  'resorts',
                  'groups',
@@ -89,14 +113,6 @@ class userController extends Controller
        $user = User::create($request->all());
 
        if (Session::get('user')[0]->is_admin == 1){
-           //$request['user_id'] = Str::random(6);
-           /*$userData = UserData::create([
-               'user_id' => $user->id,
-               'group_id' => $request['group_id'],
-               'role_id' => $request['role_id'],
-               'resort_id' => $request['resort_id'],
-               'is_approved' => 1
-           ]);*/
            $userData = new UserData();
            $userData->user_id = $user->id;
            $userData->group_id = $request->group_id;
@@ -113,16 +129,6 @@ class userController extends Controller
            $userData->role_id = $request->role_id;
            $userData->is_approved = 0;
            $userData->save();
-
-
-           /*$userData = UserData::create([
-               'user_id' => $user->id,
-               'group_id' => $request['group_id'],
-               'role_id' => $request['role_id'],
-               'resort_id' => $request['resort_id'],
-               'is_approved' => 0
-           ]);*/
-
        }
 
         session()->flash('success','User Added Successfully');
@@ -160,8 +166,8 @@ class userController extends Controller
 
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id',$id)->first();
-        if ($authUserID[0]->is_admin) {
 
+        if ($authUserID[0]->is_admin == 1) {
             if($user){
                 $userData = UserData::where('user_id',$user->id)->get();
                 foreach ($userData as $key) {
@@ -178,10 +184,9 @@ class userController extends Controller
 
             }
             else{
-                session()->flash('warning','User Not Found');
+                session()->flash('warning','User Not Found in Database');
                 return redirect()->back();
             }
-
 
             $userData = new UserData();
             $userData->user_id = $user->id;

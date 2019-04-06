@@ -20,6 +20,7 @@
                 <th>User Name</th>
                 <th>Resort </th>
                 <th>Group </th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -31,6 +32,14 @@
                     <th> {{ $user->user->user_name }} </th>
                     <th> {{ $user->resort->name }} </th>
                     <th> {{ $user->group->name }} </th>
+                    <th>
+                        <li style="margin-right:15px;">
+                            <a href="{{ route('user.edit', $user->id ) }}">
+                                <button class="btn-primary" type="submit">
+                                Edit</button>
+                            </a>
+                    </li>
+                </th>
                 </tr>
             @endforeach
         </tbody>

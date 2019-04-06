@@ -13,9 +13,10 @@ use Illuminate\Http\Request;
 
 class ResortController extends Controller
 {
-    /*
-    public function index()
+
+    /*public function index()
     {
+
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->first();
         $userData = UserData::select('resort_id')->where('user_id',$authUserID->id)->get();
         if($userData){
@@ -24,7 +25,9 @@ class ResortController extends Controller
         else{
             $resorts = Resort::where('id','=','0')->get();
         }
+        $resorts = "dsfffs";
         return view('resort.index', compact('resorts'));
+
     }*/
 
     /*
