@@ -19,7 +19,8 @@ class UserDataTableSeeder extends Seeder
               'user_id' => 5,
               'group_id' => $role->group_id,
               'resort_id' => $role->resort_id,
-              'role_id' => $role->id
+              'role_id' => $role->id,
+              'is_approved' => 1
           ]);
         }
     }

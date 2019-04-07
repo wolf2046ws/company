@@ -53,19 +53,25 @@ class userController extends Controller
             else{
                 $resorts = Resort::where('id','=','0')->get();
             }
+            $groups = array();
+
             for ($i=0; $i < count($resorts); $i++) {
                 $usergroups = UserData::select('group_id')
                     ->where('user_id',$authUserID->id)
                     ->where('resort_id', '=', $resorts[$i]->id)
                     ->where('is_approved', '=', '1')
                     ->get();
+
                     for ($i=0; $i < count($usergroups); $i++) {
-                        $groups = Group::where('id', '=', $usergroups[$i]->group_id)
+                        $groups_new = Group::where('id', '=', $usergroups[$i]->group_id)
                         ->get();
+                        array_push($groups, $groups_new);
                     }
+
             } // end for count($resorts)
+            
         } // end else
-    
+
         return view('users.create', compact(
                  'resorts',
                  'groups',

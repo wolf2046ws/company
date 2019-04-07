@@ -42,7 +42,7 @@ class sharedVariables
                 array_push($allowed_url, $permission->url);
             }
         }
-
+        
         if(in_array($request->route()->getName(), $allowed_url)){
 
         }else{
@@ -54,7 +54,7 @@ class sharedVariables
             // /resort/$userData
         //$userDatadd($userData->resort_id);
 
-    
+
 
         view()->share('allowed_url',$allowed_url);
         view()->share('resorts',$resorts);

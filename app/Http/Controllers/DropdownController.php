@@ -24,25 +24,37 @@ class DropdownController extends Controller
     public function getGroupList($id)
     {
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
-        //$resort = Resort::findOrFail($id);
-        /*$resort = UserData::select('resort_id','is_approved')
-        ->where('user_id',$authUserID->id)
-        ->where('is_approved', '=', '1')
-        ->get();*/
+
         $resort = Resort::findOrFail($id);
 
+        // If user is admin , get all groups
         if ($authUserID->is_admin == 1) {
 
             $groups = $resort->groups->pluck("name", "id");
-        }else{
-            $groups_reosort = UserData::select('group_id')
+
+        }
+        // Else is user bring all groups that the user is member of
+        else{
+                $groups = array();
+
+                $groups_reosort = UserData::select('group_id')
                         ->where('resort_id',$resort->id)
                         ->where('user_id',$authUserID->id)
                         ->get();
-                        
-            $groups =  Group::where('id', $groups_reosort[0]->group_id)
-                    ->pluck("name", "id");
-        }
+
+                    for ($i=0; $i < count($groups_reosort); $i++) {
+                        $groups_new =  Group::select('name', 'id')
+                            ->where('id', $groups_reosort[$i]->group_id)
+                            ->get();
+
+                        for ($x=0; $x < count($groups_new); $x++) {
+                            $id = $groups_new[$x]->id;
+                            $name = $groups_new[$x]->name;
+                            $groups[$id] = $name;
+                        }
+                    } // end for
+        } // end else
+
         return response()->json($groups);
     }
 
