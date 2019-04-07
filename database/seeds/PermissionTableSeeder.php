@@ -34,6 +34,13 @@ class PermissionTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
+            'description' => 'User Can See User Detalied Page',
+            'slug' => 'Web',
+            'url' => 'user.show',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
             'description' => 'User Can View Enabled User Page',
             'slug' => 'Web',
             'url' => 'user.index',

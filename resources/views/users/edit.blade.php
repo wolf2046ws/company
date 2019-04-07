@@ -91,7 +91,7 @@
                 <th>Resort </th>
                 <th>Group </th>
                 <th>Role </th>
-                @if($authUserID[0]->is_admin == 1)
+                @if($authUserID->is_admin == 1)
                 <th>Pending</th>
                 @endif
                 <th>Actions</th>
@@ -108,7 +108,7 @@
                         <th> {{ $user->group->name }} </th>
                         <th> {{ $user->role->name }} </th>
 
-                        @if($authUserID[0]->is_admin == 1)
+                        @if($authUserID->is_admin == 1)
 
                         <th>
                             <ul style="list-style:none;">

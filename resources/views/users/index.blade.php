@@ -25,7 +25,7 @@
             @foreach($users as $user)
 
                 <tr>
-                    <th> {{ $user->first_name }}</a></th>
+                    <th><a href="{{ route('user.show', $user->id ) }}"> {{ $user->first_name }}</a></th>
                     <th> {{ $user->last_name }} </th>
                     <th> {{ $user->status}}</th>
                     <th> {{ $user->user_name }} </th>

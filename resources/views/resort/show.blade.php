@@ -8,7 +8,9 @@
 
 @section('content')
 <ul class="breadcrumb">
-  <li>{{$resort->name}}</li>
+
+    <li><a href="{{ url()->current() }}"> {{$resort->name}} </a></li>
+    <!--<li><a href="{{ url()->previous() }}"> Back </a></li>-->
 </ul>
 
 <br>
@@ -25,16 +27,18 @@
         </thead>
 
         <tbody>
+
             @foreach($users as $user)
                 <tr>
-                    <th> {{ $user->user->first_name }} </th>
+                    <th><a href="{{ route('user.show', $user->user_id ) }}"> {{ $user->user->first_name }} </a></th>
                     <th> {{ $user->user->last_name }} </th>
                     <th> {{ $user->user->user_name }} </th>
                     <th> {{ $user->resort->name }} </th>
                     <th> {{ $user->group->name }} </th>
+
                     <th>
                         <li style="margin-right:15px;">
-                            <a href="{{ route('user.edit', $user->id ) }}">
+                            <a href="{{ route('user.edit', $user->user_id ) }}">
                                 <button class="btn-primary" type="submit">
                                 Edit</button>
                             </a>

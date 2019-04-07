@@ -69,7 +69,7 @@ class userController extends Controller
                     }
 
             } // end for count($resorts)
-            
+
         } // end else
 
         return view('users.create', compact(
@@ -145,6 +145,7 @@ class userController extends Controller
 
     public function edit($id)
     {
+        /*
         $authUserID = Session::get('user');
         $user = User::findOrFail($id);
         //dd("Stop Edit");
@@ -154,7 +155,12 @@ class userController extends Controller
 
         $groups = Group::all();
         $roles = Role::all();
-        $resorts = Resort::all();
+        $resorts = Resort::all();*/
+
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+        $user = User::findOrFail($id);
+        $user_data = UserData::where('user_id',$user->id)->get();
+
 
         return view('users.edit', compact(
             'groups',
@@ -169,7 +175,6 @@ class userController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id',$id)->first();
 
@@ -237,6 +242,14 @@ class userController extends Controller
         }
     } // end update
 
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user_data = UserData::where('user_id',$user->id)->get();
+
+        return view('users.show', compact('user','user_data'));
+    }
 /*
     public function destroy($id)
     {
