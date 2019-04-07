@@ -6,7 +6,7 @@ use App\User;
 use App\UserData;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-
+use App\Group;
 
 
 
@@ -58,8 +58,16 @@ class ResortController extends Controller
 
     public function show($id)
     {
-        $users = UserData::latest()->where('resort_id',$id)->get();
         $resort = Resort::findOrFail($id);
+        
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+        $users = UserData::latest()
+            ->where('resort_id',$id)
+            ->whereIn('group_id', (UserData::select('group_id')
+                ->where('user_id', $authUserID->id)
+                ->where('resort_id',$id)
+                ->get()))
+            ->get();
 
         return view('resort.show',compact('users','resort'));
 
