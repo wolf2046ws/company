@@ -69,9 +69,9 @@ class ResortController extends Controller
                 ->get()))
             ->groupBy('user_id')
             ->get();
-        $id = substr(url()->current(), strrpos(url()->current(), '/') + 1);
+        //$id = substr(url()->current(), strrpos(url()->current(), '/') + 1);
         //echo $id;
-        $url = url()->previous();
+        //$url = url()->previous();
         return view('resort.show',compact('users','resort'));
 
     }
