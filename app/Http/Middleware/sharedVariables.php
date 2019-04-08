@@ -7,15 +7,26 @@ use Closure;
 use App\Resort;
 use App\UserData;
 use Session;
+use App\ldapUsers;
+use App\ldapHelperMethods;
 
 class sharedVariables
 {
 
     public function handle($request, Closure $next)
     {
+
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
+        
+        if ($AuthUser == NULL) {
+            $ldap = new ldapUsers();
+            $ldapHelper = new ldapHelperMethods();
+
+            $ldapHelper->l_get_all_user();
+            $ldapHelper->get_all_disabled_user();
+        }
         $userData = UserData::select('resort_id')
                 ->where('user_id',$AuthUser->id)
                 ->where('is_approved', '=', '1')

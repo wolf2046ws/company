@@ -29,6 +29,7 @@ class LoginController extends Controller
 
     public function redirectTo(){
 
+        
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
@@ -59,7 +60,7 @@ class LoginController extends Controller
                 array_push($allowed_url, $permission->url);
             }
         }
-    
+
             switch ($allowed_url) {
                 case in_array('user.index', $allowed_url):
                         return redirect('/user');

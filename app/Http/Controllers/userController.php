@@ -24,6 +24,7 @@ class userController extends Controller
 
     public function create()
     {
+        
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
 
         if ($authUserID->is_admin == 1) {
