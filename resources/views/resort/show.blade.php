@@ -30,6 +30,7 @@
 
             @foreach($users as $user)
                 <tr>
+    
                     <th><a href="{{ route('user.show', $user->user_id ) }}"> {{ $user->user->first_name }} </a></th>
                     <th> {{ $user->user->last_name }} </th>
                     <th> {{ $user->user->user_name }} </th>
@@ -43,7 +44,7 @@
                                 Edit</button>
                             </a>
                     </li>
-                </th>->
+                </th>-->
                 </tr>
             @endforeach
         </tbody>

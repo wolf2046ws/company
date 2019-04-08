@@ -61,14 +61,25 @@ class ResortController extends Controller
         $resort = Resort::findOrFail($id);
 
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
-        $users = UserData::latest()
-            ->where('resort_id',$id)
-            ->whereIn('group_id', (UserData::select('group_id')
-                ->where('user_id', $authUserID->id)
+        if ($authUserID->is_admin == 1) {
+            $users = UserData::latest()
+                ->where('resort_id',$resort->id)
+                ->groupBy('user_id')
+                ->get();
+
+        }else{
+            $users = UserData::latest()
                 ->where('resort_id',$id)
-                ->get()))
-            ->groupBy('user_id')
-            ->get();
+                ->whereIn('group_id', (UserData::select('group_id')
+                    ->where('user_id', $authUserID->id)
+                    ->where('resort_id',$id)
+                    ->get()))
+                ->groupBy('user_id')
+                ->get();
+
+        }
+
+
         //$id = substr(url()->current(), strrpos(url()->current(), '/') + 1);
         //echo $id;
         //$url = url()->previous();
