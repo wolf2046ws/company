@@ -70,7 +70,7 @@ class sharedVariables
                         ->get()))
                     ->groupBy('user_id')
                     ->get();
-                    
+
                 if (count($all_user) > 0) {
                     for ($x=0; $x < count($all_user); $x++) {
                         array_push($users_id , $all_user[$x]->user_id);
@@ -96,7 +96,6 @@ class sharedVariables
                     if (in_array($id, $users_id)) {
 
                     }else{
-                        dd("NOt founded");
                         Session::pull('user');
                         return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
