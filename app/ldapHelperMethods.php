@@ -60,7 +60,8 @@ class ldapHelperMethods
 
                             if (isset($ldap_user_info[0]["userprincipalname"][0])) {
                                 $user_test = User::where('user_name', (\explode('@',$ldap_user_info[0]["userprincipalname"][0])[0]))->first();
-
+                            }else{
+                                $user_test = NULL;
                             }
 
 

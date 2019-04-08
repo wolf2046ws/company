@@ -117,6 +117,14 @@ class PermissionTableSeeder extends Seeder
             'status' => 'true'
         ]);
 
+        DB::table('permissions')->insert([
+            'description' => 'User Can View Detalied Groups',
+            'slug' => 'Web',
+            'url' => 'group.show',
+            'status' => 'true'
+        ]);
+
+
         /*DB::table('permissions')->insert([
             'description' => 'User Can ResortGroup Index ****',
             'slug' => 'Web',
@@ -194,6 +202,13 @@ class PermissionTableSeeder extends Seeder
             'description' => 'User Can View Role Page',
             'slug' => 'Web',
             'url' => 'role.index',
+            'status' => 'true'
+        ]);
+
+        DB::table('permissions')->insert([
+            'description' => 'User Can View Role Detalied Page',
+            'slug' => 'Web',
+            'url' => 'role.show',
             'status' => 'true'
         ]);
 

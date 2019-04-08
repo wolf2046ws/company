@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\permission;
+use App\Permission;
+use App\UserData;
+use App\User;
+use App\RolePermissions;
+
 use Illuminate\Http\Request;
 
 
@@ -12,7 +16,7 @@ class PermissionController extends Controller
 
     public function index()
     {
-        $permissions = permission::latest()->get();
+        $permissions = Permission::latest()->get();
         return view('permissions.index',compact('permissions'));
     }
 
@@ -24,7 +28,7 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
-        permission::create($request->all());
+        Permission::create($request->all());
         session()->flash('success','Permission Added Successfully');
         return redirect(route('permission.index'));
     }
@@ -54,10 +58,23 @@ class PermissionController extends Controller
 
     public function destroy($permission)
     {
+        // $permission->id
         $permission = Permission::findOrFail($permission);
-        $permission->delete();
-        session()->flash('success','Permission Deleted Successfully');
-        return redirect()->back();
+
+        $roles = RolePermissions::where('permission_id', $permission->id)->get();
+
+        if (count($roles) > 0) {
+            $user_has_permission = UserData::where('role_id',$roles[0]->role_id)
+            ->get()
+            ->count();
+            session()->flash('warning','The Permission has user '. $permission->name . ' has user');
+            return redirect()->back();
+        }else{
+            $permission->delete();
+            session()->flash('success','Permission '. $permission->name .' Deleted Successfully');
+            return redirect()->back();
+        }
+
     }
 
 }

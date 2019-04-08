@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\UserData;
+use App\User;
 use App\Group;
 use App\Role;
 use App\Permission;
@@ -52,16 +53,26 @@ class GroupController extends Controller
 
     public function groupCreateRoles($id){
         $group = Group::findOrFail($id);
-        $permissions = permission::latest()->get();
+        $permissions = Permission::latest()->get();
         return view('roles.create',compact('id','permissions'));
     }
 
-/*
-    public function show(Group $group)
-    {
 
+    public function show($id)
+    {
+        /*$user = User::findOrFail($id);
+        $user_data = UserData::where('user_id',$user->id)->get();*/
+        $group = Group::findOrFail($id);
+
+        $user_data = UserData::where('resort_id',$group->resort_id)
+        ->where('group_id', '=', $group->id)
+        ->groupBy('role_id')
+        ->get();
+
+        return view('groups.show', compact('group', 'user_data'));
     }
 
+/*
     public function edit(Group $group)
     {
 
@@ -76,10 +87,23 @@ class GroupController extends Controller
 
     public function destroy(Group $group)
     {
+        //$group->id    $group->resort_id
+        $user_has_group = UserData::where('resort_id',$group->resort_id)
+        ->where('group_id',$group->id)
+        ->get()
+        ->count();
+
+        if ($user_has_group > 0) {
+            session()->flash('warning','The Group '. $group->name . ' has user');
+            return redirect()->back();
+        }else {
+            $group->delete();
+            session()->flash('success', $group->name . ' Deleted Successfully');
+        }
+
         /*$users_group = UserData::where('user_id',)
         ->groupBy('group_id')->get();*/
-        $group->delete();
-        session()->flash('success','Group Deleted Successfully');
+
         return redirect()->back();
     }
 }

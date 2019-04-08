@@ -46,7 +46,7 @@
     @foreach($roles as $role)
         <tr>
             <th> {{ $role->id }}</th>
-            <th> {{ $role->name }}</th>
+            <th><a href="{{ route('role.show', $role->id ) }}"> {{ $role->name }}</a></th>
             <th> {{ $role->description }}</th>
             <th> {{ $role->resort->name }}</th>
             <th> {{ $role->group['name'] }}</th>

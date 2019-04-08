@@ -77,7 +77,7 @@
                 <tr>
                     <th> {{ $group->id }}</th>
                     <th> {{ $group->resort->name }}</th>
-                    <th> {{ $group->name }}</th>
+                    <th> <a href="{{ route('group.show', $group->id ) }}">{{ $group->name }}</a></th>
                     <th> {{ $group->description }}</th>
                     <th> {{ $group->roles->count() }}</th>
 

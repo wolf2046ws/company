@@ -9,7 +9,7 @@ class Role extends Model
     protected $fillable = ['name','description','group_id' , 'resort_id'];
 
     public function permissions(){
-        return $this->belongsToMany(permission::class,'role_permission');
+        return $this->belongsToMany(Permission::class,'role_permission');
     }
 
     public function group(){

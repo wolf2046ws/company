@@ -22,7 +22,7 @@
                 <th>User Name</th>
                 <th>Resort </th>
                 <th>Group </th>
-                <th>Actions</th>
+                <!--<th>Actions</th>-->
             </tr>
         </thead>
 
@@ -36,14 +36,14 @@
                     <th> {{ $user->resort->name }} </th>
                     <th> {{ $user->group->name }} </th>
 
-                    <th>
+                    <!--<th>
                         <li style="margin-right:15px;">
-                            <a href="{{ route('user.edit', $user->user_id ) }}">
+                            <a href="{{--route('user.edit', $user->user_id ) --}}">
                                 <button class="btn-primary" type="submit">
                                 Edit</button>
                             </a>
                     </li>
-                </th>
+                </th>->
                 </tr>
             @endforeach
         </tbody>
