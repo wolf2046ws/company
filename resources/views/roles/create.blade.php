@@ -50,22 +50,71 @@
             </div>
         </div><!-- end row-->
         <br>
-        <div class="row border">
-            <div class="col-sm-12 align-self-center">
-                <h5>Select Permissions </h5>
-            </div>
-            @foreach($permissions as $permission)
-                <div style="width: 20rem;">
-                    <div class="custom-control custom-checkbox">
-                        <input class="form-check-input" name="permissions[]"
-                               type="checkbox" id="inlineCheckbox1"
-                               value="{{$permission->id}}">
-                        <label class="form-check-label" for="inlineCheckbox1">{{$permission->description}}</label>
-                    </div>
-                </div>
-            @endforeach
+        <br>
 
-        </div><!--end row-->
+        <div class="col-sm-12 align-self-center">
+            <h5>Select Permissions </h5>
+        </div>
+        <br>
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item active">
+                <a class="nav-link" data-toggle="tab" href="#web"> Web </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#ad"> Groups AD </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#sdsd"> Files </a>
+              </li>
+            </ul>
+
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+
+                    <div class="tab-pane container" id="web" >
+                        <div class="row">
+                        @foreach($p_slug_web as $slug_web)
+                        <div class="col-md-4">
+                            <div class="tab-pane container active" id="web" >
+                                <div class="custom-control custom-checkbox" >
+                                    <input class="form-check-input" name="permissions[]"
+                                           type="checkbox" id="inlineCheckbox1"
+                                           value="{{$slug_web->id}}">
+                                    <label class="form-check-label" for="inlineCheckbox1">{{$slug_web->description}}</label>
+                                </div>
+                            </div>
+                        </div><!-- end col -->
+                        @endforeach
+                        </div><!-- end row-->
+                    </div><!-- end web -->
+
+                    <div class="tab-pane container" id="ad">
+                        <div class="row">
+                        @foreach($p_slug_ad as $slug_ad)
+                            <div class="col-md-4">
+                                <div class="custom-control custom-checkbox ">
+                                    <input class="form-check-input" name="permissions[]"
+                                           type="checkbox" id="inlineCheckbox1"
+                                           value="{{$slug_ad->id}}">
+                                    <label class="form-check-label" for="inlineCheckbox1">{{$slug_ad->description}}</label>
+                                </div>
+                            </div><!-- end col -->
+                        @endforeach
+                        </div><!-- end row-->
+                    </div><!-- end ad-->
+
+                    <div class="tab-pane container" id="sdsd">
+                        Test
+                    </div>
+            </div>
+
+
+
         <br>
         <div class="row">
             <div class=" col-sm-12 align-self-center">

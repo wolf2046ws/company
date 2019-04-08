@@ -2,7 +2,7 @@
 namespace App;
 use App\ldapUsers;
 use App\User;
-
+use App\Permission;
 
 class ldapHelperMethods
 {
@@ -149,6 +149,29 @@ public function get_all_disabled_user(){
     }// end foreach
 return $ldap_final_users;
 }// end Method l_get_all_user
+
+
+
+public function get_all_groups(){
+
+    foreach ((new ldapUsers())->all_security_groups() as $group_id => $group_name ) {
+
+        $groups = Permission::where('description', $group_name)->get()->count();
+        if ($groups > 0) {
+
+        }else{
+            $permission = new Permission();
+            $permission->description = $group_name;
+            $permission->status = true;
+            $permission->slug = 'Active Directory Groups';
+            $permission->url = $group_id;
+            $permission->save();
+        }
+
+    }
+}
+
+
 
     /*public function clean_up_entry( $entry ) {
          $retEntry = array();

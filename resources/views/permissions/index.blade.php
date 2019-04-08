@@ -23,12 +23,8 @@
     </div>
     <div class="col-sm-9 align-self-center">
         <select name ="slug" class="form-control" id="slug">
-                <option > User </option>
-                <option > Group </option>
-                <option > Role </option>
-                <option > Permission </option>
-                <option > Resort </option>
-                <option > Resort Users </option>
+                <option > Web </option>
+                <option > Active Directory Groups </option>
         </select>
     </div>
 </div><!-- end row-->
@@ -73,7 +69,7 @@
                             <button class="btn-danger" type="submit">
                                 Delete </button>
                             </form>
-                    
+
                         @else
                         Un Editable
                         @endif

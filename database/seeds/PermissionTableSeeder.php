@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
+use App\ldapUsers;
+
 class PermissionTableSeeder extends Seeder
 {
     /**
@@ -11,6 +13,16 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        /*$ldap = new ldapUsers();
+
+        foreach ($ldap->all_security_groups() as $group_id => $group_name ) {
+            DB::table('permissions')->insert([
+                'description' => $group_name,
+                'slug' => 'Active Directory Groups',
+                'url' => $group_id,
+                'status' => 'true'
+            ]);
+        }*/
         ####################################################
         DB::table('permissions')->insert([
             'description' => 'User Can Select Resort from Dropdown',

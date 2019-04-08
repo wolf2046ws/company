@@ -17,7 +17,7 @@ class CreatePermissionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('url')->nullable();
             $table->string('slug')->nullable();
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
             $table->enum('status',['true','false'])->nullable();
             $table->timestamps();
         });

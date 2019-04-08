@@ -6,6 +6,8 @@ use App\Role;
 use App\Group;
 use App\UserData;
 use App\Permission;
+use App\ldapUsers;
+
 use App\RolePermissions;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoleValidation;
@@ -21,9 +23,27 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::latest()->get();
+        $p_slug_web = Permission::latest()
+        ->where('slug','Web')
+        ->get();
+
+        /*$ldap = new ldapUsers();
+
+        foreach ($ldap->all_security_groups() as $key => $value) {
+            dd($key , " " , $value);
+        }*/
+
+
+        $p_slug_ad = Permission::latest()
+        ->where('slug','Active Directory Groups')
+        ->get();
+
         $groups = Group::latest()->get();
-        return view('roles.create',compact('permissions','groups'));
+
+        return view('roles.create',compact('permissions',
+                                        'groups',
+                                        'p_slug_web',
+                                        'p_slug_ad'));
     }
 
     public function store(Request $request)

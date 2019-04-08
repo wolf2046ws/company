@@ -9,7 +9,9 @@ use App\User;
 use App\Resort;
 use App\Role;
 use App\UserData;
+use App\Permission;
 use App\ldapUsers;
+use App\RolePermissions;
 use App\ldapHelperMethods;
 use App\Http\Requests\userDataValidation;
 
@@ -24,7 +26,7 @@ class userController extends Controller
 
     public function create()
     {
-        
+
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
 
         if ($authUserID->is_admin == 1) {
@@ -199,6 +201,7 @@ class userController extends Controller
                 session()->flash('warning','User Not Found in Database');
                 return redirect()->back();
             }
+            $ldap = new ldapUsers();
 
             $userData = new UserData();
             $userData->user_id = $user->id;
@@ -206,7 +209,30 @@ class userController extends Controller
             $userData->resort_id = $request->resort_id;
             $userData->role_id = $request->role_id;
             $userData->is_approved = $request->is_approved;
+
+            //$userData->save();
+
+            ##################
+            // Add User in add with member of groups
+            $role = Role::findOrFail($userData->role_id);
+
+            $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+            ->get();
+
+            for ($i=0; $i < count($user_data_new); $i++) {
+                $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
+                ->where('slug', 'Active Directory Groups')->get();
+
+                dd($ldap->group_add_user($permssion[0]->description,$user->user_name));
+
+                dd("Stop adding");
+            }
+
+            dd("Stop");
+            //group_add_user();
+            dd($userData , "update . userController");
             $userData->save();
+            ##################
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
         } // end is_admin
@@ -237,6 +263,8 @@ class userController extends Controller
             $userData->resort_id = $request->resort_id;
             $userData->role_id = $request->role_id;
             $userData->is_approved = $request->is_approved;
+
+            dd($userData , "update . userController");
             $userData->save();
             session()->flash('success','User Updated Successfully');
             return redirect()->back();

@@ -29,7 +29,7 @@ class LoginController extends Controller
 
     public function redirectTo(){
 
-        
+
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
@@ -109,6 +109,8 @@ class LoginController extends Controller
         }
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
+        $ldapHelper->get_all_groups();
+        
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
 
 	    Session::push('user',$user);
