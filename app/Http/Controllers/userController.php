@@ -146,11 +146,12 @@ class userController extends Controller
            for ($i=0; $i < count($user_data_new); $i++) {
                $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                ->where('slug', 'Active Directory Groups')->get();
-               if (is_array($permssion)) {
-               $ldap->group_add_user($permssion[0]->description,$user->user_name);
-           }else{
-               $userData->save();
-           }
+               if ($permssion) {
+                   $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                }else{
+                    $userData->save();
+                }
+                
          }
 
 
@@ -313,7 +314,7 @@ class userController extends Controller
                 $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                 ->where('slug', 'Active Directory Groups')->get();
 
-                if (is_array($permssion)) {
+                if ($permssion) {
                     $ldap->group_add_user($permssion[0]->description,$user->user_name);
                 }else{
                     $userData->save();
