@@ -184,7 +184,7 @@ class userController extends Controller
         dd($request->comment);
         dd("Stop");*/
 
-        $to = "it@regenbogen-ag.de";
+        /*$to = "it@regenbogen-ag.de";
         $subject = "New User Was Created by " .$authUserID->first_name."&nbsp". $authUserID->last_name;
         $message = '
         <html>
@@ -209,12 +209,12 @@ class userController extends Controller
         </table>
         </body>
         </html>
-        ';
+        ';*/
     // Always set content-type when sending HTML email
-    $headers = "MIME-Version: 1.0" . "\r\n";
+    /*$headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
     $headers .= 'From: 99dev' . "\r\n";
-    mail($to,$subject,$message,$headers);
+    mail($to,$subject,$message,$headers);*/
 
 
         /*mail("it@regenbogen-ag.de",
@@ -304,12 +304,19 @@ class userController extends Controller
             $user_data_new = RolePermissions::where('role_id', $userData->role_id)
             ->get();
 
+
             for ($i=0; $i < count($user_data_new); $i++) {
                 $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                 ->where('slug', 'Active Directory Groups')->get();
-                $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                
+                if (is_array($permssion)) {
+                    $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                }else{
+                    $userData->save();
+                }
+
             }
-            $userData->save();
+
             ##################
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
