@@ -20,6 +20,12 @@ class userController extends Controller
 
     public function index()
     {
+        $ldapHelper = new ldapHelperMethods();
+
+        $ldapHelper->l_get_all_user();
+        $ldapHelper->get_all_disabled_user();
+        $ldapHelper->get_all_groups();
+        
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
     	return view('users.index', compact('users'));
     } // end index
@@ -309,6 +315,13 @@ class userController extends Controller
     }
 
     public function getDisbleUser(){
+
+        $ldapHelper = new ldapHelperMethods();
+
+        $ldapHelper->l_get_all_user();
+        $ldapHelper->get_all_disabled_user();
+        $ldapHelper->get_all_groups();
+
         $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
         return view('users.index', compact('users'));
     }
