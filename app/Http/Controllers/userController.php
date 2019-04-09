@@ -128,6 +128,18 @@ class userController extends Controller
            $userData->resort_id = $request->resort_id;
            $userData->role_id = $request->role_id;
            $userData->is_approved = 1;
+           // Add User in add with member of groups
+           $role = Role::findOrFail($userData->role_id);
+
+           $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+           ->get();
+
+           for ($i=0; $i < count($user_data_new); $i++) {
+               $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
+               ->where('slug', 'Active Directory Groups')->get();
+               $ldap->group_add_user($permssion[0]->description,$user->user_name);
+           }
+
            $userData->save();
 
        }else{
@@ -137,6 +149,19 @@ class userController extends Controller
            $userData->resort_id = $request->resort_id;
            $userData->role_id = $request->role_id;
            $userData->is_approved = 0;
+
+           // Add User in add with member of groups
+           $role = Role::findOrFail($userData->role_id);
+
+           $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+           ->get();
+
+           for ($i=0; $i < count($user_data_new); $i++) {
+               $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
+               ->where('slug', 'Active Directory Groups')->get();
+               $ldap->group_add_user($permssion[0]->description,$user->user_name);
+           }
+
            $userData->save();
        }
 
@@ -222,15 +247,8 @@ class userController extends Controller
             for ($i=0; $i < count($user_data_new); $i++) {
                 $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                 ->where('slug', 'Active Directory Groups')->get();
-
-                dd($ldap->group_add_user($permssion[0]->description,$user->user_name));
-
-                dd("Stop adding");
+                $ldap->group_add_user($permssion[0]->description,$user->user_name);
             }
-
-            dd("Stop");
-            //group_add_user();
-            dd($userData , "update . userController");
             $userData->save();
             ##################
             session()->flash('success','User Updated Successfully');
@@ -264,7 +282,17 @@ class userController extends Controller
             $userData->role_id = $request->role_id;
             $userData->is_approved = $request->is_approved;
 
-            dd($userData , "update . userController");
+            // Add User in add with member of groups
+            $role = Role::findOrFail($userData->role_id);
+
+            $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+            ->get();
+
+            for ($i=0; $i < count($user_data_new); $i++) {
+                $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
+                ->where('slug', 'Active Directory Groups')->get();
+                $ldap->group_add_user($permssion[0]->description,$user->user_name);
+            }
             $userData->save();
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
@@ -279,20 +307,7 @@ class userController extends Controller
 
         return view('users.show', compact('user','user_data'));
     }
-/*
-    public function destroy($id)
-    {
 
-        $ldap = new ldapUsers();
-        $ldap->user_disable($id);
-        $user = User::where('user_name',$id)->first();
-        $user->delete();
-
-        session()->flash('success','User Deleted Successfully');
-        return redirect()->back();
-
-    } // end destroy
-*/
     public function getDisbleUser(){
         $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
         return view('users.index', compact('users'));
@@ -342,8 +357,24 @@ class userController extends Controller
 
 
     public function deleteUserData($id){
-
+        $ldap = new ldapUsers();
 	    $userData = UserData::findOrFail($id);
+        $username = User::select('user_name')->where('id', $userData->user_id)->get();
+
+        $user = User::where('user_id', $userData->user_id)->first();
+
+        // Add User in add with member of groups
+        $role = Role::findOrFail($userData->role_id);
+
+        $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+        ->get();
+
+        for ($i=0; $i < count($user_data_new); $i++) {
+            $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
+            ->where('slug', 'Active Directory Groups')->get();
+            $ldap->group_del_user($permssion[0]->description,$username[0]->user_name);
+        }
+
         $userData->delete();
 
         session()->flash('success','User Data Deleted Successfully');

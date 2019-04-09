@@ -49,71 +49,53 @@
                 <input type="text" required name="description" value="{{old('description')}}" class="form-control" id="exampleInputEmail1" placeholder="Description">
             </div>
         </div><!-- end row-->
+
+        <hr>
+
+        <button type="button" value="Filter" id="filterButt">Checked </button>
+        <input type="button" value="Reset" id="resetButt"/>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">id</th>
+                        <th>Description</th>
+                        <th>Slug</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach($p_slug_web as $slug_web)
+                        <tr>
+                            <th>
+                                 {{$slug_web->id}}
+                                <input style="margin-left: 20px !important;" class="form-check-input" name="permissions[]"
+                                  type="checkbox" id="inlineCheckbox1"
+                                  value="{{$slug_web->id}}">
+                            </th>
+                            <th> {{$slug_web->description}} </th>
+                            <th> {{$slug_web->slug}} </th>
+
+                        </tr>
+                    @endforeach
+                    @foreach($p_slug_ad as $slug_ad)
+                        <tr>
+                            <th>
+                                <input class="form-check-input" name="permissions[]"
+                                type="checkbox" id="inlineCheckbox1"
+                                value="{{$slug_ad->id}}">
+                                  {{$slug_ad->id}}
+                            </th>
+                            <th> {{$slug_ad->description}} </th>
+                            <th> {{$slug_ad->slug}} </th>
+
+                        </tr>
+                    @endforeach
+                </tbody>
+
+            </table>
         <br>
-        <br>
-
-        <div class="col-sm-12 align-self-center">
-            <h5>Select Permissions </h5>
-        </div>
-        <br>
-
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs">
-              <li class="nav-item active">
-                <a class="nav-link" data-toggle="tab" href="#web"> Web </a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#ad"> Groups AD </a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#sdsd"> Files </a>
-              </li>
-            </ul>
-
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-
-                    <div class="tab-pane container" id="web" >
-                        <div class="row">
-                        @foreach($p_slug_web as $slug_web)
-                        <div class="col-md-4">
-                            <div class="tab-pane container active" id="web" >
-                                <div class="custom-control custom-checkbox" >
-                                    <input class="form-check-input" name="permissions[]"
-                                           type="checkbox" id="inlineCheckbox1"
-                                           value="{{$slug_web->id}}">
-                                    <label class="form-check-label" for="inlineCheckbox1">{{$slug_web->description}}</label>
-                                </div>
-                            </div>
-                        </div><!-- end col -->
-                        @endforeach
-                        </div><!-- end row-->
-                    </div><!-- end web -->
-
-                    <div class="tab-pane container" id="ad">
-                        <div class="row">
-                        @foreach($p_slug_ad as $slug_ad)
-                            <div class="col-md-4">
-                                <div class="custom-control custom-checkbox ">
-                                    <input class="form-check-input" name="permissions[]"
-                                           type="checkbox" id="inlineCheckbox1"
-                                           value="{{$slug_ad->id}}">
-                                    <label class="form-check-label" for="inlineCheckbox1">{{$slug_ad->description}}</label>
-                                </div>
-                            </div><!-- end col -->
-                        @endforeach
-                        </div><!-- end row-->
-                    </div><!-- end ad-->
-
-                    <div class="tab-pane container" id="sdsd">
-                        Test
-                    </div>
-            </div>
-
-
 
         <br>
         <div class="row">
@@ -124,18 +106,50 @@
         </div>
     </form>
     <br>
-    <br>
+
 @endsection
 
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#example').DataTable();
-        } );
+            var table = $('#example').DataTable();
+            //var checked = [];
+            $('#filterButt').click(function(){
+                $('#example tbody').find('tr:not(:has(:checkbox:checked))').hide();
+            });
+            $('#resetButt').click(function(){
+                $('#example').find('tr').show();
+                $('#example input:checkbox').removeAttr('checked');
+            });
+
+
+                 // Iterate over all selected checkboxes
+
+                     /*$('input[type="checkbox"]').click(function(){
+                         if($(this).prop("checked") == true){
+                             $('.permission:checked').val();
+                             checked.push($(this).val());
+                         }
+                         else if($(this).prop("checked") == false){
+                             var index = checked.indexOf($(this).val());
+                             if (index !== -1) checked.splice(index, 1);
+                         }
+                         var str = '<div>'
+                         checked.forEach(function(slide) {
+                           str +=  slide + ' , ';
+                         });
+                        str += '</div>';
+                         document.getElementById("result").innerHTML = str;
+                     });*/
+
+                 });
+
+
     </script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
     <script type="text/javascript">
+
 
         $('#resort').change(function(){
             var resort_id = $(this).val();
@@ -163,9 +177,6 @@
                 $("#group").empty();
             }
         });
-
-
-
 
     </script>
 
