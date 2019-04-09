@@ -90,25 +90,27 @@ class userController extends Controller
     {
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
 
-       $ldap = new ldapUsers();
+        $ldap = new ldapUsers();
 
-       $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
-       mb_substr($request['last_name'], 0, 2, "UTF-8"));
+        $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
+        mb_substr($request['last_name'], 0, 2, "UTF-8"));
 
-       $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
-       mb_substr($request['last_name'], 0, 3, "UTF-8"));
+        $second_username = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .
+        mb_substr($request['last_name'], 0, 3, "UTF-8"));
+
+        $third_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
+        mb_substr($request['last_name'], 0, 3, "UTF-8"));
 
 
-       $all_username = $ldap->all_users();
+        $all_username = $ldap->all_users();
 
-       foreach ($all_username as $username) {
-           if ($first_username == $username) {
-               $request['user_name'] = $second_username;
-           }else{
-               $request['user_name'] = $first_username;
-           }
-       }
-
+        if (in_array($first_username, $all_username)) {
+            $request['user_name'] = $second_username;
+        }elseif(in_array($second_username, $all_username)){
+            $request['user_name'] = $third_username;
+        }else{
+            $request['user_name'] = $first_username;
+        }
 
         $new_user = $ldap->user_create(
            array(
@@ -119,15 +121,29 @@ class userController extends Controller
                 "container"     => array("CN=Users")
            ));
 
-       if(!$new_user){
 
-           session()->flash('warning','Failed to create user, Please contact IT ');
-           return redirect(route('user.index'));
-       }
+           if ($new_user === false) {
+
+               $request['last_name'] .= rand(5, 90);
+               $new_user_2 = $ldap->user_create(
+                  array(
+                       "user_name"     => $request['user_name'],
+                       "first_name"    => $request['first_name'],
+                       "last_name"     => $request['last_name'],
+                       "email"         => $request['user_name']."@regenbogen-ag.de",
+                       "container"     => array("CN=Users")
+                  ));
+
+                  if ($new_user_2 === true) {
+                      $user = User::create($request->except('comment'));
+                  }elseif($new_user_2 === false){
+                      session()->flash('warning','Failed to create user, Please contact IT ');
+                      return redirect(route('user.index'));
+                  }
+           }
 
        //$user = User::create($request->all()->except('comment'));
         $user = User::create($request->except('comment'));
-
 
        if ($authUserID->is_admin == 1){
            $userData = new UserData();
@@ -142,16 +158,16 @@ class userController extends Controller
            $user_data_new = RolePermissions::where('role_id', $userData->role_id)
            ->get();
 
-
            for ($i=0; $i < count($user_data_new); $i++) {
                $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                ->where('slug', 'Active Directory Groups')->get();
-               if ($permssion) {
+
+               if (count($permssion) > 0) {
                    $ldap->group_add_user($permssion[0]->description,$user->user_name);
                 }else{
                     $userData->save();
                 }
-                
+
          }
 
 
@@ -172,10 +188,15 @@ class userController extends Controller
            for ($i=0; $i < count($user_data_new); $i++) {
                $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                ->where('slug', 'Active Directory Groups')->get();
-               $ldap->group_add_user($permssion[0]->description,$user->user_name);
+               if (count($permssion) > 0) {
+                   $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                }else{
+                    $userData->save();
+                }
+
            }
 
-           $userData->save();
+
        }
 
         /*echo $authUserID->user_name . "<br>";
@@ -314,7 +335,7 @@ class userController extends Controller
                 $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                 ->where('slug', 'Active Directory Groups')->get();
 
-                if ($permssion) {
+                if (count($permssion) > 0) {
                     $ldap->group_add_user($permssion[0]->description,$user->user_name);
                 }else{
                     $userData->save();
