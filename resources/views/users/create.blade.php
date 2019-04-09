@@ -77,7 +77,7 @@
         <div class="row">
             <div class="col-sm-12 align-self-center">
                 <h5>Comment:</h5>
-                <textarea class="form-control" rows="5" id="comment" value="comment"></textarea>
+                <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
             </div>
         </div>
 

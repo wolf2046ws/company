@@ -28,6 +28,7 @@ class User extends Authenticatable
         'user_name',
         'status',
         'is_admin',
+        'comment',
 
         'email',
         'password'

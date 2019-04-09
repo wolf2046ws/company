@@ -7,6 +7,7 @@ use App\Group;
 use App\UserData;
 use App\Permission;
 use App\ldapUsers;
+use App\ldapHelperMethods;
 
 use App\RolePermissions;
 use Illuminate\Http\Request;
@@ -23,6 +24,8 @@ class RoleController extends Controller
 
     public function create()
     {
+        $ldapHelper = new ldapHelperMethods();
+        $ldapHelper->get_all_groups();
         $p_slug_web = Permission::latest()
         ->where('slug','Web')
         ->get();

@@ -21,11 +21,8 @@ class userController extends Controller
     public function index()
     {
         $ldapHelper = new ldapHelperMethods();
-
         $ldapHelper->l_get_all_user();
-        $ldapHelper->get_all_disabled_user();
-        $ldapHelper->get_all_groups();
-        
+
         $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
     	return view('users.index', compact('users'));
     } // end index
@@ -91,6 +88,8 @@ class userController extends Controller
 
     public function store(Request $request)
     {
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+
        $ldap = new ldapUsers();
 
        $first_username = strtolower(mb_substr($request['first_name'], 0, 2, "UTF-8") .
@@ -121,13 +120,16 @@ class userController extends Controller
            ));
 
        if(!$new_user){
+
            session()->flash('warning','Failed to create user, Please contact IT ');
            return redirect(route('user.index'));
        }
 
-       $user = User::create($request->all());
+       //$user = User::create($request->all()->except('comment'));
+        $user = User::create($request->except('comment'));
 
-       if (Session::get('user')[0]->is_admin == 1){
+
+       if ($authUserID->is_admin == 1){
            $userData = new UserData();
            $userData->user_id = $user->id;
            $userData->group_id = $request->group_id;
@@ -170,6 +172,25 @@ class userController extends Controller
 
            $userData->save();
        }
+
+        /*echo $authUserID->user_name . "<br>";
+        echo $authUserID->first_name. "<br>";
+        echo $authUserID->last_name. "<br>";
+
+            echo $user->user_name. "<br>";
+            echo $user->first_name. "<br>";
+            echo $user->last_name. "<br>";
+
+        dd($request->comment);
+        dd("Stop");*/
+
+        mail("it@regenbogen-ag.de",
+        "New User was created by {{ $authUserID->first_name . " " . $authUserID->last_name}} ",
+            "<b>{{$authUserID->first_name . " " . $authUserID->last_name}} </b> has create user
+            <br>
+            User name create : {{ $user->user_name  }}
+            <br> 
+            First name :  {{$user->last_name . " " . $user->first_name}} <br>");
 
         session()->flash('success','User Added Successfully');
         return redirect()->back();
@@ -317,10 +338,8 @@ class userController extends Controller
     public function getDisbleUser(){
 
         $ldapHelper = new ldapHelperMethods();
-
-        $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
-        $ldapHelper->get_all_groups();
+
 
         $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
         return view('users.index', compact('users'));
