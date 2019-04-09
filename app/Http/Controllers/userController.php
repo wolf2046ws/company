@@ -192,7 +192,8 @@ class userController extends Controller
         <title>New Entry</title>
         </head>
         <body>
-        <table style="border: 1px solid black;">
+
+        <table border="1" style="border-collapse:collapse">
         <tr>
         <th>Firstname</th>
         <th>Lastname</th>
