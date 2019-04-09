@@ -185,33 +185,34 @@ class userController extends Controller
         dd("Stop");*/
 
         $to = "it@regenbogen-ag.de";
-        $subject = "New User Was Created by". $authUserID->first_name. "&nbsp&nbsp" . $authUserID->last_name;
-        $message = "
+        $subject = "New User Was Created by " .$authUserID->first_name."&nbsp". $authUserID->last_name;
+        $message = '
         <html>
         <head>
         <title>New Entry</title>
         </head>
         <body>
-        <p>A table as email</p>
-        <table>
+        <table style="border: 1px solid black;">
         <tr>
         <th>Firstname</th>
         <th>Lastname</th>
         <th>Username</th>
+        <th>Comment</th>
         </tr>
         <tr>
-        <td>". $user->first_name ."</td>
-        <td>". $user->last_name ."</td>
-        <td>". $user->user_name ."</td>
+        <td>'. $user->first_name .'</td>
+        <td>'. $user->last_name .'</td>
+        <td>'. $user->user_name .'</td>
+        <td>'. $user->user_name .'</td>
         </tr>
         </table>
         </body>
         </html>
-        ";
+        ';
     // Always set content-type when sending HTML email
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
-    $headers .= 'From: name' . "\r\n";
+    $headers .= 'From: 99dev' . "\r\n";
     mail($to,$subject,$message,$headers);
 
 
