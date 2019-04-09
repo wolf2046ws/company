@@ -184,13 +184,44 @@ class userController extends Controller
         dd($request->comment);
         dd("Stop");*/
 
-        mail("it@regenbogen-ag.de",
+        $to = "it@regenbogen-ag.de";
+        $subject = "New User Was Created by". $authUserID->first_name. "&nbsp&nbsp" . $authUserID->last_name;
+        $message = "
+        <html>
+        <head>
+        <title>New Entry</title>
+        </head>
+        <body>
+        <p>A table as email</p>
+        <table>
+        <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Username</th>
+        </tr>
+        <tr>
+        <td>". $user->first_name ."</td>
+        <td>". $user->last_name ."</td>
+        <td>". $user->user_name ."</td>
+        </tr>
+        </table>
+        </body>
+        </html>
+        ";
+    // Always set content-type when sending HTML email
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
+    $headers .= 'From: name' . "\r\n";
+    mail($to,$subject,$message,$headers);
+
+
+        /*mail("it@regenbogen-ag.de",
         "New User was created by {{ $authUserID->first_name . " " . $authUserID->last_name}} ",
             "<b>{{$authUserID->first_name . " " . $authUserID->last_name}} </b> has create user
             <br>
             User name create : {{ $user->user_name  }}
-            <br> 
-            First name :  {{$user->last_name . " " . $user->first_name}} <br>");
+            <br>
+            First name :  {{$user->last_name . " " . $user->first_name}} <br>");*/
 
         session()->flash('success','User Added Successfully');
         return redirect()->back();
