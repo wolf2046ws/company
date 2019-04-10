@@ -15,6 +15,8 @@
 
           <thead>
               <tr>
+                  <th>Resort</th>
+                  <th>Group</th>
                   <th>Role</th>
                   <th>Permission</th>
               </tr>
@@ -23,7 +25,9 @@
           <tbody>
                 @foreach($permissions as $permission)
                     <tr>
-                        <th>  {{ $role->name }} </th>    
+                        <th> {{ $role->resort->name }} </th>
+                        <th> {{ $role->group->name }} </th>
+                        <th>  {{ $role->name }} </th>
                         <th> {{ ($permission[0]->description) }} </th>
                     </tr>
                 @endforeach

@@ -8,6 +8,7 @@ use App\UserData;
 use App\Permission;
 use App\ldapUsers;
 use App\ldapHelperMethods;
+use App\GroupRoles;
 
 use App\RolePermissions;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ class RoleController extends Controller
             array_push($permissions, $permssion);
         }
 
-        return view('roles.show', compact('role', 'permissions'));
+        return view('roles.show', compact('role', 'permissions', 'group'));
     }
 
     /*
