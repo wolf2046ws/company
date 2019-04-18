@@ -15,56 +15,70 @@ class sharedVariables
 
     public function handle($request, Closure $next)
     {
+        //Verify the user session with Database
+        $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)
+                ->first();
 
-        $allowed_url = array();
-
-        $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
-
-        if ($AuthUser == NULL) {
-            $ldap = new ldapUsers();
-            $ldapHelper = new ldapHelperMethods();
-
-            $ldapHelper->l_get_all_user();
-            $ldapHelper->get_all_disabled_user();
-        }
+        //Check The Resort if is_Approved by admin
         $userData = UserData::select('resort_id')
                 ->where('user_id',$AuthUser->id)
                 ->where('is_approved', '=', '1')
                 ->get();
 
-        //dd(Resort::whereIn("id",$userData)->get());
-        if($userData){
+        if (count($userData) > 0) {
             $resorts = Resort::whereIn("id",$userData)->get();
         }
-        else{
-            $resorts = Resort::where('id','=','0')->get();
+
+        // User Don't Have Any Access to any Resort
+        if (count($userData) == 0) {
+            Session::pull('user');
+            return redirect()->back()
+                ->withInput($request->all())
+                ->withErrors(['warning' => 'You don\'t have permission to access this page']);
         }
 
+
+        //Get User Permission URL
+        $allowed_url = array();
+
+        //Get All Permission belongs to logged user
+        $permissions = $AuthUser->permissions();
+
+        //If the user is admin bring all permission and save it to an array
         if ($AuthUser->is_admin == 1) {
-            $permissions = $AuthUser->permissions();
             foreach ($permissions as $permission) {
                 array_push($allowed_url, $permission->url);
             }
         }
 
-        if($AuthUser->is_admin == 0){
-            $permissions = $AuthUser->permissions();
+        //If the User is user and has permission to access the system
+        if($AuthUser->is_admin == 0 && (count($permissions) > 0) ){
             foreach ($permissions as $permission) {
                 array_push($allowed_url, $permission->url);
             }
         }
 
-        if(in_array($request->route()->getName(), $allowed_url)){
+        //If user does't have any permission to access the Website
+        if(count($permissions)  == 0){
+            Session::pull('user');
+            return redirect()->back()
+                ->withInput($request->all())
+                ->withErrors(['warning' => 'You don\'t have permission to access this page']);
+        }
+
+
+
+        /*if(in_array($request->route()->getName(), $allowed_url)){
 
         }else{
             return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
-        }
+        }*/
 
         //Limit User to his Resorts
         //Save Resorts_id in array
 
 
-        if($AuthUser->is_admin == 0){
+        /*if($AuthUser->is_admin == 0){
             $resorts_id = array();
             for ($i=0; $i < count($resorts); $i++) {
                 array_push($resorts_id, $resorts[$i]->id);
@@ -109,7 +123,7 @@ class sharedVariables
                         return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
             }// end request->route()->getName()
-        } // end $AuthUser->is_admin == 0
+        } // end $AuthUser->is_admin == 0*/
 
 
 

@@ -18,90 +18,25 @@ use App\Resort;
 class LoginController extends Controller
 {
 
-    //protected $redirectTo = '/user';
+    protected $redirectTo = '/user/create';
 
 
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        //$this->middleware('shared_variables');
     }
-
-    public function redirectTo(){
-
-
-        $allowed_url = array();
-
-        $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
-
-        //$userData = UserData::select('resort_id')->where('user_id',$AuthUser->id)->get();
-        $userData = UserData::select('resort_id','is_approved')
-        ->where('user_id',$AuthUser->id)
-        ->where('is_approved', '=', '1')
-        ->get();
-
-        if($userData){
-            $resorts = Resort::whereIn("id",$userData)->get();
-        }
-        else{
-            $resorts = Resort::where('id','=','0')->get();
-        }
-
-        if ($AuthUser->is_admin == 1) {
-            $permissions = $AuthUser->permissions();
-            foreach ($permissions as $permission) {
-                array_push($allowed_url, $permission->url);
-            }
-        }
-
-        if($AuthUser->is_admin == 0){
-            $permissions = $AuthUser->permissions();
-            if (count($permissions) > 0) {
-                foreach ($permissions as $permission) {
-                    array_push($allowed_url, $permission->url);
-                }
-            }else{
-                Session::pull('user');
-                return redirect('/login')
-                ->withErrors(['warning' => 'You dont have permission to Access this System']);;
-            }
-
-        }
-
-
-            switch ($allowed_url) {
-                case in_array('user.index', $allowed_url):
-                        return redirect('/user');
-                    break;
-
-                case in_array('user.create', $allowed_url):
-                        return redirect('/user/create');
-                    break;
-
-                case in_array('resort.show', $allowed_url):
-                    return redirect('/resort/{$userData[0]->resort_id}');
-                    break;
-
-                default:
-                    Session::pull('user');
-                    return redirect('/login');
-                    break;
-            }
-
-
-    }
-
 
     public function showLoginForm()
     {
-
         $user = Session::get('user');
         return $user == null ? view('auth.login') : \redirect('/user');
-
     }
 
 
     public function login(AuthRequest $request){
+
+        $ldap = new ldapUsers();
+        $ldapHelper = new ldapHelperMethods();
 
         $user = Session::get('user');
 
@@ -109,23 +44,25 @@ class LoginController extends Controller
             return \redirect('/');
         }
 
-        $ldap = new ldapUsers();
-        $ldapHelper = new ldapHelperMethods();
+
 
         if($ldap->authenticate($request->email,$request->password) != true){
             return redirect()->back()->withInput($request->all())->withErrors(['password' => 'incorrect password']);
         }
-        $ldapHelper->l_get_all_user();
-        $ldapHelper->get_all_disabled_user();
-        $ldapHelper->get_all_groups();
 
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
+
+        if ($user->is_admin == 1) {
+            $ldapHelper->l_get_all_user();
+            $ldapHelper->get_all_disabled_user();
+            $ldapHelper->get_all_groups();
+        }
 
 	    Session::push('user',$user);
 
         $this->middleware('shared_variables');
-        //dd("After Middleware in LoginController");
-        return $this->redirectTo();
+
+        return redirect('/user/create');
 
     }
 

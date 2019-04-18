@@ -85,11 +85,15 @@ class User extends Authenticatable
         ->where('user_id',$this->id)
         ->where('is_approved','=','1')
         ->get();
+
         //dd($roles_new);
         //$roles = UserData::select('role_id')->where('user_id',$this->id)->get();
         //$permissions = RolePermissions::whereIn('role_id',$roles)->distinct()->get(['permission_id'])->toArray();
         $permissions = RolePermissions::whereIn('role_id',$roles_new)->distinct()->get(['permission_id'])->toArray();
-        $permissions = Permission::select('url','description')->whereIn('id',$permissions)->get();
+        $permissions = Permission::select('url','description')
+                        ->whereIn('id',$permissions)
+                        ->where('slug','Web')
+                        ->get();
         return $permissions;
     }
 
