@@ -23,6 +23,7 @@
                 <input
                 class="form-check-input" name="permissions[]"
                        type="checkbox" id="inlineCheckbox1"
+                       @if($permission->role($role->id)) selected @endif
                        value="{{$permission->id}}">
                 <label class="form-check-label" for="inlineCheckbox1">{{$permission->description}}</label>
             </div>

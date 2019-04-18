@@ -19,7 +19,7 @@ class sharedVariables
         $allowed_url = array();
 
         $AuthUser = User::where('user_id',Session::get('user')[0]->user_id)->first();
-        
+
         if ($AuthUser == NULL) {
             $ldap = new ldapUsers();
             $ldapHelper = new ldapHelperMethods();
@@ -57,8 +57,7 @@ class sharedVariables
         if(in_array($request->route()->getName(), $allowed_url)){
 
         }else{
-            Session::pull('user');
-            return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
+            return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
         }
 
         //Limit User to his Resorts
@@ -97,8 +96,8 @@ class sharedVariables
                     if (in_array($id, $resorts_id)) {
 
                     }else{
-                        Session::pull('user');
-                        return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
+                        //Session::pull('user');
+                        return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
             }// end request->route()->getName()
 
@@ -107,8 +106,7 @@ class sharedVariables
                     if (in_array($id, $users_id)) {
 
                     }else{
-                        Session::pull('user');
-                        return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
+                        return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
             }// end request->route()->getName()
         } // end $AuthUser->is_admin == 0

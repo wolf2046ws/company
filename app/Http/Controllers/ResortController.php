@@ -60,7 +60,10 @@ class ResortController extends Controller
     {
         $resort = Resort::findOrFail($id);
 
+        //Verify the user's session with Database
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+
+        //If the user is admin , show all resorts and all users
         if ($authUserID->is_admin == 1) {
             $users = UserData::latest()
                 ->where('resort_id',$resort->id)
@@ -68,6 +71,7 @@ class ResortController extends Controller
                 ->get();
 
         }else{
+            //If it's not admin , show only member of Groups
             $users = UserData::latest()
                 ->where('resort_id',$id)
                 ->whereIn('group_id', (UserData::select('group_id')

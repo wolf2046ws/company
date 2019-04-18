@@ -39,7 +39,7 @@ class PermissionController extends Controller
 
     }*/
 
-    /*
+
     public function edit($permission)
     {
         $permission = Permission::findOrFail($permission);
@@ -53,7 +53,7 @@ class PermissionController extends Controller
         $permission->update($request->all());
         session()->flash('success','permission Updated Successfully');
         return redirect()->back();
-    }*/
+    }
 
 
     public function destroy($permission)

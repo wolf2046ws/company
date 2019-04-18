@@ -9,7 +9,7 @@ class Group extends Model
     protected $fillable = ['name','description','resort_id'];
 
     public function users(){
-        return $this->hasMany(User::class);
+        return $this->hasMany(UserData::class);
     }
 
     public function roles(){

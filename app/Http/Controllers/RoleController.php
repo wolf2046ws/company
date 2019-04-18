@@ -52,7 +52,6 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-
     	$role = Role::where('group_id', $request->group_id)->where('name',$request->name)->first();
     	if($role){
     	    session()->flash('warning','This Role already in this group');
@@ -82,7 +81,7 @@ class RoleController extends Controller
         return view('roles.show', compact('role', 'permissions', 'group'));
     }
 
-    /*
+
     public function edit($role)
     {
         $role = Role::findOrFail($role);
@@ -97,7 +96,7 @@ class RoleController extends Controller
         $role->update($request->all());
         session()->flash('success','role Updated Successfully');
         return redirect()->back();
-    }*/
+    }
 
 
     public function destroy(Role $role)

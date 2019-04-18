@@ -4,7 +4,7 @@
 @section('content')
 
 
-    <form method="POST" action="{{ route('role.store') }}">
+    <form id="role-form" method="POST" action="{{ route('role.store') }}">
         @csrf
         <div class="row">
             <div class="col-sm-2 align-self-center">
@@ -52,8 +52,6 @@
 
         <hr>
 
-        <button type="button" value="Filter" id="filterButt">Checked </button>
-        <input type="button" value="Reset" id="resetButt"/>
         <table id="example" class="table table-striped table-bordered" style="width:100%">
 
                 <thead>
@@ -111,38 +109,34 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {
-            var table = $('#example').DataTable();
-            //var checked = [];
-            $('#filterButt').click(function(){
-                $('#example tbody').find('tr:not(:has(:checkbox:checked))').hide();
-            });
-            $('#resetButt').click(function(){
-                $('#example').find('tr').show();
-                $('#example input:checkbox').removeAttr('checked');
-            });
 
 
-                 // Iterate over all selected checkboxes
+    $(document).ready(function() {
 
-                     /*$('input[type="checkbox"]').click(function(){
-                         if($(this).prop("checked") == true){
-                             $('.permission:checked').val();
-                             checked.push($(this).val());
-                         }
-                         else if($(this).prop("checked") == false){
-                             var index = checked.indexOf($(this).val());
-                             if (index !== -1) checked.splice(index, 1);
-                         }
-                         var str = '<div>'
-                         checked.forEach(function(slide) {
-                           str +=  slide + ' , ';
-                         });
-                        str += '</div>';
-                         document.getElementById("result").innerHTML = str;
-                     });*/
+    var table = $('#example').DataTable();
 
-                 });
+    $('#role-form').on('submit', function(e){
+       var $form = $(this);
+
+       // Iterate over all checkboxes in the table
+       table.$('input[type="checkbox"]').each(function(){
+          // If checkbox doesn't exist in DOM
+          if(!$.contains(document, this)){
+             // If checkbox is checked
+             if(this.checked){
+                // Create a hidden element
+                $form.append(
+                   $('<input>')
+                      .attr('type', 'hidden')
+                      .attr('name', this.name)
+                      .val(this.value)
+                );
+             }
+          }
+      });
+    });
+});
+
 
 
     </script>

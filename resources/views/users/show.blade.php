@@ -3,23 +3,28 @@
 @section('content')
 
 
-
-
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-3">Name, {{$user->first_name. ' '. $user->last_name}}</h1>
-      <p class="lead">User Name : {{$user->user_name}}</p>
+      <h1 class="display-3">
+          Name :
+            <span style="color:blue;">{{$user->last_name . ', ' . $user->first_name }}</span></h1>
+      <p class="lead" style="font-size:30px;">
+        User Name :
+            <span style="font-size:30px;color:blue;">{{$user->user_name}}</span></p>
     </div>
   </div>
+
+
+
 
   <table id="example" class="table table-striped table-bordered" style="width:100%">
 
           <thead>
-              <tr>
-                  <th>Resort</th>
-                  <th>Group</th>
-                  <th>Role</th>
+              <tr style="background-color: #6495ED;color:white;">
+                  <th style="font-size:18px;">Resort</th>
+                  <th style="font-size:18px;">Group</th>
+                  <th style="font-size:18px;">Role</th>
               </tr>
           </thead>
 
@@ -28,9 +33,14 @@
                     <tr>
                       <th> {{$user_data_new->resort->name}}</th>
                       <th>  {{$user_data_new->group->name}}</th>
-                      <th>{{$user_data_new->role->name}} </th>
+                      <th>
+                            <span style="font-size:14px;color:red;">
+                                {{$user_data_new->role->name}}
+                            </span>
+                      </th>
                     </tr>
                 @endforeach
           </tbody>
+
 
 @endsection

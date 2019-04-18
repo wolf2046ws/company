@@ -1,36 +1,55 @@
-@extends('layouts.default')
+    @extends('layouts.default')
 
-@section('content')
-
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
+    @section('content')
     <div class="container">
 
-         <h1 class="display-3"> Role Name :  {{ $role->name }} </h1>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1> Role Name : <span style="color:blue;">{{ $role->name }} </span></h1>
+            </div>
 
-    </div>
-  </div>
+            <div class="col-sm-3">
+                Resort Name :
+                <span style="color:red;">{{ $role->resort->name }} </span>
+            </div>
 
-  <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <div class="col-sm-3">
+                Group Name :
+                <span style="color:red;">{{ $role->group->name }} </span>
+            </div>
+        </div><!-- end row-->
+        <br>
 
-          <thead>
-              <tr>
-                  <th>Resort</th>
-                  <th>Group</th>
-                  <th>Role</th>
-                  <th>Permission</th>
-              </tr>
-          </thead>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4> Member Of :</h4>
+            </div>
+            @foreach($role->users as $user)
+            <div class="col-sm-1">
+            <span style="padding:5px;color:red;font-weight:500;font-size:17px;border: 1px solid black;margin-right:10px;">
+                {{ $user->user->user_name }}
+            </span>
+            </div>
+            @endforeach
+        </div><!-- end row-->
+        <br>
 
-          <tbody>
-                @foreach($permissions as $permission)
-                    <tr>
-                        <th> {{ $role->resort->name }} </th>
-                        <th> {{ $role->group->name }} </th>
-                        <th>  {{ $role->name }} </th>
-                        <th> {{ ($permission[0]->description) }} </th>
-                    </tr>
-                @endforeach
-          </tbody>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4> Permission :</h4>
+            </div>
 
-@endsection
+            @foreach($permissions as $permission)
+            <div class="col-sm-4" style="margin:5px;">
+                <span style="padding:5px;font-weight:500;font-size:15px;border: 1px solid black;">
+                 {{ ($permission[0]->description) }}
+                </span>
+            </div>
+            @endforeach
+
+        </div><!---end row-->
+
+    </div><!-- end container-->
+
+
+    @endsection

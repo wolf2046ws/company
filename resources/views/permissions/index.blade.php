@@ -59,21 +59,24 @@
                 <tr>
                     <th> {{ $permission->id }}</th>
                     <th> {{ $permission->description }}</th>
-                    <th> {{ $permission->slug }}</th>
+                    <th> Actions </th>
                     <th>
                         @if($permission->status == 'false')
-
                             <form method="POST" action="{{ route('permission.destroy', $permission->id) }}">
                                 @csrf
                                 {{ method_field('DELETE') }}
-                            <button class="btn-danger" type="submit">
-                                Delete </button>
+                                <button class="btn-danger" type="submit">
+                                    Delete
+                                </button>
                             </form>
 
+                            <a href="{{ route('permission.edit', $permission->id ) }}">
+                                <button class="btn-primary" type="submit">
+                                Edit</button>
+                            </a>
                         @else
-                        Un Editable
+                            Un Editable
                         @endif
-
                     </th>
                 </tr>
             @endforeach

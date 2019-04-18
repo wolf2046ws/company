@@ -20,10 +20,15 @@ class userController extends Controller
 
     public function index()
     {
+
         $ldapHelper = new ldapHelperMethods();
         $ldapHelper->l_get_all_user();
 
-        $users = User::latest()->where('user_name','!=','0')->where('status','Enabled')->get();
+        $users = User::latest()
+            ->where('user_name','!=','0')
+            ->where('status','Enabled')
+            ->get();
+
     	return view('users.index', compact('users'));
     } // end index
 
@@ -88,6 +93,7 @@ class userController extends Controller
 
     public function store(Request $request)
     {
+        //verify the user session with user in database
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
 
         $ldap = new ldapUsers();
@@ -291,8 +297,8 @@ class userController extends Controller
     {
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id',$id)->first();
-
         if ($authUserID[0]->is_admin == 1) {
+
             if($user){
                 $userData = UserData::where('user_id',$user->id)->get();
                 foreach ($userData as $key) {
@@ -305,7 +311,9 @@ class userController extends Controller
                     }
                 }
                 $request['is_approved'] = 1;
+
                 $user->update($request->all());
+                $user->save();
 
             }
             else{
@@ -321,13 +329,14 @@ class userController extends Controller
             $userData->role_id = $request->role_id;
             $userData->is_approved = $request->is_approved;
 
-            //$userData->save();
+            $userData->save();
 
             ##################
             // Add User in add with member of groups
             $role = Role::findOrFail($userData->role_id);
 
             $user_data_new = RolePermissions::where('role_id', $userData->role_id)
+
             ->get();
 
 
@@ -344,6 +353,7 @@ class userController extends Controller
             }
 
             ##################
+
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
         } // end is_admin
@@ -361,6 +371,7 @@ class userController extends Controller
                 }
                 $request['is_approved'] = 0;
                 $user->update($request->all());
+                $user->save();
 
             }
             else{
@@ -466,11 +477,12 @@ class userController extends Controller
 
         $user_data_new = RolePermissions::where('role_id', $userData->role_id)
         ->get();
-
         for ($i=0; $i < count($user_data_new); $i++) {
             $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
             ->where('slug', 'Active Directory Groups')->get();
-            $ldap->group_del_user($permssion[0]->description,$username[0]->user_name);
+            if (count($permssion) > 0) {
+                $ldap->group_del_user($permssion[0]->description,$username[0]->user_name);
+            }
         }
 
         $userData->delete();

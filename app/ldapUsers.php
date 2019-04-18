@@ -18,14 +18,14 @@ class ldapUsers {
 	protected $_account_suffix = "@regenbogen.ag";
 	protected $_base_dn = "DC=regenbogen,DC=ag";
 
-	//protected $_domain_controllers = array ("192.168.56.3");
-	//protected $_ad_username="ahmed max";
-	//protected $_ad_password="Abdullah89";
+	protected $_domain_controllers = array ("192.168.56.3");
+	protected $_ad_username="ahmed max";
+	protected $_ad_password="Abdullah89";
 
 
-    protected $_domain_controllers = array ("192.168.131.211");
-    protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
-    protected $_ad_password="engels@$12MM";
+    //protected $_domain_controllers = array ("192.168.131.211");
+    //protected $_ad_username="CN=moabadmin,OU=BenutzerAdmin,OU=99 EDV,DC=regenbogen,DC=ag";
+    //protected $_ad_password="engels@$12MM";
 
 
 

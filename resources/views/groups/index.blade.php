@@ -65,8 +65,9 @@
                 <th>id</th>
                 <th>Resort</th>
                 <th>Group Name</th>
-                <th>Group Description</th>
+                <!--<th>Group Description</th>-->
                 <th># Roles</th>
+                <th># Users</th>
                 <th>Actions</th>
             </tr>
 
@@ -78,16 +79,24 @@
                     <th> {{ $group->id }}</th>
                     <th> {{ $group->resort->name }}</th>
                     <th> <a href="{{ route('group.show', $group->id ) }}">{{ $group->name }}</a></th>
-                    <th> {{ $group->description }}</th>
+                    <!--<th> {{--$group->description--}}</th>-->
                     <th> {{ $group->roles->count() }}</th>
+                    <th> {{ $group->users->count() }}</th>
 
                     <th>
+                        <a style="float:left;margin-right:5px;" href="{{ route('group.edit', $group->id ) }}">
+                            <button  class="btn-primary" type="submit">
+                            Edit</button>
+                        </a>
+
                         <form method="POST" action="{{ route('group.destroy', $group->id) }}">
                             @csrf
                             {{ method_field('DELETE') }}
-                        <button class="btn-danger" type="submit">
-                            Delete </button>
+                        <button style="float:left;" class="btn-danger" type="submit">
+                            Delete
+                        </button>
                         </form>
+
                     </th>
 
                 </tr>

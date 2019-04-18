@@ -10,59 +10,64 @@
 
 <table id="example" class="table table-striped table-bordered" style="width:100%">
 
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Status</th>
-                <th>User Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>User Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-            @foreach($users as $user)
-                <tr>
-                    <th><a href="{{ route('user.show', $user->id ) }}"> {{ $user->first_name }}</a></th>
-                    <th> {{ $user->last_name }} </th>
-                    <th> {{ $user->status}}</th>
-                    <th> {{ $user->user_name }} </th>
+    @foreach($users as $user)
+        <tr>
+            <th>{{ $user->id }}</th>
+            <th><a href="{{ route('user.show', $user->id ) }}"> {{  $user->last_name . ", ". $user->first_name }}</a></th>
+            <th> {{ $user->user_name }} </th>
+            <th> {{ $user->status}}</th>
 
-                    <th>
-                        <ul style="list-style:none;">
+            <th>
 
-                            @if($user->status == 'Enabled')
-
-                            <li style="margin-right:15px;">
-                                    <a href="{{ route('user.edit', $user->id ) }}">
-                                        <button class="btn-primary" type="submit">
-                                        Edit</button>
-                                    </a>
-                            </li>
+                @if($user->status == 'Enabled')
 
 
-                            <form method="POST" action="{{ route('user.changeStatus') }}">
-                                @csrf
-                                <input type="hidden" name="id" value="{{$user->user_id}}">
-                            <li class="float-left"><button class="btn-danger" type="submit">
-                                Disable </button></li>
-                                @else
-                                <form method="POST" action="{{ route('user.changeStatus') }}">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{$user->user_id}}">
-                                <li class="float-left"><button class="btn-primary" type="submit">
-                                    Enable </button></li>
-                                @endif
-                                </form>
-                            </form>
-                        </ul>
-                    </th>
-                </tr>
-            @endforeach
-        </tbody>
+                <a style="float:left;margin-right:5px;" href="{{ route('user.edit', $user->id ) }}">
+                    <button class="btn-primary" type="submit">
+                        Edit
+                    </button>
+                </a>
 
-    </table>
+
+                <form method="POST" action="{{ route('user.changeStatus') }}">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$user->user_id}}">
+
+                    <button style="float:left;" class="btn-danger" type="submit">
+                        Disable
+                    </button>
+
+                    @else
+                    <form method="POST" action="{{ route('user.changeStatus') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{$user->user_id}}">
+
+                        <button style="float:left;" class="btn-primary" type="submit">
+                            Enable
+                        </button>
+                    </form>
+                    @endif
+
+                </form>
+
+            </th>
+        </tr>
+        @endforeach
+    </tbody>
+
+</table>
 @endsection
 
 @section('js')

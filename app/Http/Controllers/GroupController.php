@@ -22,21 +22,22 @@ class GroupController extends Controller
         return view('groups.index',compact('groups'));
     }
 
-
     public function create()
     {
-        $roles = Role::latest()->get();
-        return view('groups.create',compact('roles'));
+        return view('groups.create');
     }
-
 
     public function store(Request $request)
     {
-        $group = Group::where('resort_id',$request->resort_id)->where('name',$request->name)->first();
+        $group = Group::where('resort_id',$request->resort_id)
+            ->where('name',$request->name)
+            ->first();
+        //Verify if the Resort has already this Group
         if($group){
             session()->flash('warning','This Resort already has this group');
             return redirect()->back();
         }
+        //Save Group in Database
         $group = Group::create($request->all());
         session()->flash('success','Group Added Successfully');
         return redirect(route('group.index'));
@@ -72,17 +73,33 @@ class GroupController extends Controller
         return view('groups.show', compact('group', 'user_data'));
     }
 
-/*
+
     public function edit(Group $group)
     {
+        $group = Group::findOrFail($group->id);
+        return view('groups.update', compact('group'));
 
     }
 
 
-    public function update(Request $request, Group $group)
+    public function update(Request $request, $group)
     {
+        $group = Group::where('id', $group)->first();
 
-    }*/
+        //Check the group name with the resort in Database
+        $group_name = Group::where('resort_id', $request->resort_id)
+            ->where('name', $request->name)
+            ->first();
+        if ($group_name) {
+            session()->flash('warning','This Resort already has this group');
+            return redirect()->back();
+        }
+        //Save Group in Database
+        $group->update($request->all());
+        session()->flash('success','Group Added Successfully');
+        return redirect(route('group.index'));
+
+    }
 
 
     public function destroy(Group $group)

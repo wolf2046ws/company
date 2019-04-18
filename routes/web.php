@@ -26,6 +26,7 @@ Route::group(['middleware' => ['web','check_auth','shared_variables']],function(
         Route::delete('/user-data/{id}','userController@deleteUserData')->name('userData.destroy');
 
         Route::get('dropdownlist','DropdownController@index')->name('get-resort-list.index');
+        //Route::get('get-permission-list','DropdownController@getPermissionList')->name('get-permission-list.index');
         Route::get('get-group-list/{id}','DropdownController@getGroupList')->name('get-group-list.index');
         Route::get('get-role-list/{id}','DropdownController@getRoleList')->name('get-role-list.index');
 });

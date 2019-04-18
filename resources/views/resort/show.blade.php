@@ -1,17 +1,15 @@
 @extends('layouts.default')
 
 @section('css')
-
     <link rel="stylesheet" href="{{ asset('css/bootstrapdatatable.css')}}" >
-
 @endsection
 
 @section('content')
-<ul class="breadcrumb">
+    <ul class="breadcrumb">
 
-    <li><a href="{{ url()->current() }}"> {{$resort->name}} </a></li>
-    <!--<li><a href="{{ url()->previous() }}"> Back </a></li>-->
-</ul>
+        <li> {{$resort->name}} </li>
+        <li><a href="{{ url()->previous() }}"> Back </a></li>
+    </ul>
 
 <br>
 <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -22,7 +20,7 @@
                 <th>User Name</th>
                 <th>Resort </th>
                 <th>Group </th>
-                <!--<th>Actions</th>-->
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -30,25 +28,27 @@
 
             @foreach($users as $user)
                 <tr>
-    
+
                     <th><a href="{{ route('user.show', $user->user_id ) }}"> {{ $user->user->first_name }} </a></th>
                     <th> {{ $user->user->last_name }} </th>
                     <th> {{ $user->user->user_name }} </th>
                     <th> {{ $user->resort->name }} </th>
                     <th> {{ $user->group->name }} </th>
+                    <th>
+                        <ul style="list-style:none;">
+                            <li style="margin-right:15px;">
+                                    <a href="{{ route('user.edit', $user->user_id ) }}">
+                                        <button class="btn-primary" type="submit">
+                                        Edit
+                                        </button>
+                                    </a>
+                            </li>
+                        </ul>
+                    </th>
 
-                    <!--<th>
-                        <li style="margin-right:15px;">
-                            <a href="{{--route('user.edit', $user->user_id ) --}}">
-                                <button class="btn-primary" type="submit">
-                                Edit</button>
-                            </a>
-                    </li>
-                </th>-->
                 </tr>
             @endforeach
         </tbody>
-
 
     </table>
 @endsection

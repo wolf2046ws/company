@@ -56,10 +56,18 @@ class LoginController extends Controller
 
         if($AuthUser->is_admin == 0){
             $permissions = $AuthUser->permissions();
-            foreach ($permissions as $permission) {
-                array_push($allowed_url, $permission->url);
+            if (count($permissions) > 0) {
+                foreach ($permissions as $permission) {
+                    array_push($allowed_url, $permission->url);
+                }
+            }else{
+                Session::pull('user');
+                return redirect('/login')
+                ->withErrors(['warning' => 'You dont have permission to Access this System']);;
             }
+
         }
+
 
             switch ($allowed_url) {
                 case in_array('user.index', $allowed_url):
@@ -110,7 +118,7 @@ class LoginController extends Controller
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
         $ldapHelper->get_all_groups();
-        
+
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
 
 	    Session::push('user',$user);
