@@ -6,6 +6,7 @@ use App\UserData;
 use App\User;
 use App\Group;
 use App\Role;
+use App\GroupRoles;
 use App\Permission;
 use App\Resort;
 use Illuminate\Http\Request;
@@ -18,9 +19,30 @@ class GroupController extends Controller
 
     public function index()
     {
-        $groups = Group::latest()->get();
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+
+        // If user is admin , get all groups
+        if ($authUserID->is_admin == 1) {
+            $groups = Group::latest()->get();
+        }else{
+
+            $groups_id = UserData::select('group_id')
+                ->whereIn('group_id', (UserData::select('group_id')
+                    ->where('user_id', $authUserID->id)
+                    ->get()))
+                ->groupBy('group_id')
+                ->get();
+
+            $groups = Group::
+            whereIn('id', $groups_id)
+            ->get();
+
+
+        }
+
         return view('groups.index',compact('groups'));
     }
+
 
     public function create()
     {
@@ -29,16 +51,43 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+
         $group = Group::where('resort_id',$request->resort_id)
             ->where('name',$request->name)
             ->first();
+
         //Verify if the Resort has already this Group
         if($group){
             session()->flash('warning','This Resort already has this group');
             return redirect()->back();
         }
+
         //Save Group in Database
         $group = Group::create($request->all());
+        if ($authUserID->is_admin == 0) {
+            //Create New Role for the created group
+            $role = new Role();
+            $role->resort_id = $group->resort_id;
+            $role->group_id = $group->id;
+            $role->name = 'Member Of this Group';
+            $role->description = 'Created Automtaically after user created new group';
+            $role->save();
+
+            /*$group_role = new GroupRoles();
+            $group_role->group_id = $group->id;
+            $group_role->role_id = $role->id;
+            $group_role->save();*/
+
+            $user_data = new UserData();
+            $user_data->user_id = $authUserID->id;
+            $user_data->resort_id = $group->resort_id;
+            $user_data->group_id = $group->id;
+            $user_data->role_id = $role->id;
+            $user_data->save();
+        }
+
+
         session()->flash('success','Group Added Successfully');
         return redirect(route('group.index'));
     }

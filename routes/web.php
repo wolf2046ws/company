@@ -12,6 +12,7 @@ Route::group(['middleware' => ['web','check_auth','shared_variables']],function(
     Route::get('/user-disabled','userController@getDisbleUser')->name('user.disabled');
     Route::post('/user-change-status','userController@changeStatus')->name('user.changeStatus');
     Route::post('/user-change-status-approved/{id}','userController@changeStatusApproved')->name('user.changeStatusApproved');
+    Route::post('/sync-database-with-ad','userController@syncDatabaseWithAD')->name('user.syncDatabaseWithAD');
 
         Route::resource('/user','userController');
         Route::resource('/permission', 'PermissionController');

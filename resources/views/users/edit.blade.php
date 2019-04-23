@@ -100,6 +100,7 @@
 
                 <tbody>
                     @foreach($user_data as $user)
+
                     <tr>
                         <th> {{ $user->user->first_name }} </th>
                         <th> {{ $user->user->last_name }} </th>

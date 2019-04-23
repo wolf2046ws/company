@@ -1,3 +1,4 @@
+
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
@@ -30,15 +31,19 @@
 </li>
 @endif
 
+<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"> <span data-feather="home"></span>
+Resorts <span class="sr-only"></span>
+       <span class="caret"></span></a>
+       <ul class="dropdown-menu">
 @foreach($resorts as $resort)
     <li class="nav-item">
-        <a class="nav-link" href="{{route('resort.show',$resort->id)}}">
+        <a class="dropdown-item nav-link" href="{{route('resort.show',$resort->id)}}">
         <span data-feather="home"></span>
         {{ $resort->name }} <span class="sr-only"></span>
         </a>
     </li>
 @endforeach
-
+    </ul>
 
 @if(in_array('group.index', $allowed_url))
 <li class="nav-item">

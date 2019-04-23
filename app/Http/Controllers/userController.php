@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 use App\User;
 use App\Resort;
 use App\Role;
+use Log;
+use Carbon\Carbon;
+
 use App\UserData;
 use App\Permission;
 use App\ldapUsers;
@@ -21,9 +24,6 @@ class userController extends Controller
     public function index()
     {
 
-        $ldapHelper = new ldapHelperMethods();
-        $ldapHelper->l_get_all_user();
-
         $users = User::latest()
             ->where('user_name','!=','0')
             ->where('status','Enabled')
@@ -34,8 +34,11 @@ class userController extends Controller
 
     public function create()
     {
+        $mytime = Carbon::now();
+
 
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
+        Log::info('User is logged in : ' . $authUserID->user_name . " / Time is : " . $mytime->toDateTimeString());
 
         if ($authUserID->is_admin == 1) {
 
@@ -281,7 +284,6 @@ class userController extends Controller
         $user = User::findOrFail($id);
         $user_data = UserData::where('user_id',$user->id)->get();
 
-
         return view('users.edit', compact(
             'groups',
             'user',
@@ -295,6 +297,7 @@ class userController extends Controller
 
     public function update(Request $request, $id)
     {
+        $ldap = new ldapUsers();
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id',$id)->first();
         if ($authUserID[0]->is_admin == 1) {
@@ -320,7 +323,6 @@ class userController extends Controller
                 session()->flash('warning','User Not Found in Database');
                 return redirect()->back();
             }
-            $ldap = new ldapUsers();
 
             $userData = new UserData();
             $userData->user_id = $user->id;
@@ -395,7 +397,9 @@ class userController extends Controller
             for ($i=0; $i < count($user_data_new); $i++) {
                 $permssion = Permission::where('id', $user_data_new[$i]->permission_id )
                 ->where('slug', 'Active Directory Groups')->get();
+                if (count($permssion) > 0) {
                 $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                }
             }
             $userData->save();
             session()->flash('success','User Updated Successfully');
@@ -413,11 +417,6 @@ class userController extends Controller
     }
 
     public function getDisbleUser(){
-
-        $ldapHelper = new ldapHelperMethods();
-        $ldapHelper->get_all_disabled_user();
-
-
         $users = User::latest()->where('user_name','!=','0')->where('status','Disabled')->get();
         return view('users.index', compact('users'));
     }
@@ -451,22 +450,37 @@ class userController extends Controller
 
 
         if($user->status == 'Enabled'){
+
             $user->status = 'Disabled';
-            $ldap->user_disable($user->user_name);
+            if ($ldap->user_disable($user->user_name)) {
+                session()->flash('success','User Updated Successfully');
+                $user->save();
+            }
+            if (!$ldap->user_disable($user->user_name)) {
+                session()->flash('warning','Please Reset The password in Active Directory : ' . $user->user_name);
+            }
+
         }
         else{
 
             $user->status = 'Enabled';
-            $ldap->user_enable($user->user_name);
+            if($ldap->user_enable($user->user_name)) {
+                session()->flash('success','User Updated Successfully');
+                $user->save();
+            }
+
+            if (!$ldap->user_enable($user->user_name)) {
+                session()->flash('warning','Please Reset The password in Active Directory : ' . $user->user_name);
+            }
+
         }
-        $user->save();
-        session()->flash('success','User Updated Successfully');
         return redirect()->back();
     }
 
 
     public function deleteUserData($id){
         $ldap = new ldapUsers();
+
 	    $userData = UserData::findOrFail($id);
         $username = User::select('user_name')->where('id', $userData->user_id)->get();
 
@@ -488,6 +502,15 @@ class userController extends Controller
         $userData->delete();
 
         session()->flash('success','User Data Deleted Successfully');
+        return redirect()->back();
+    }
+
+    public function syncDatabaseWithAD(){
+        $ldapHelper = new ldapHelperMethods();
+        $ldapHelper->l_get_all_user();
+        $ldapHelper->get_all_disabled_user();
+        $ldapHelper->get_all_groups();
+        session()->flash('success','Sync with AD are Successfull');
         return redirect()->back();
     }
 

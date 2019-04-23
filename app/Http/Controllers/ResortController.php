@@ -78,6 +78,7 @@ class ResortController extends Controller
                     ->where('user_id', $authUserID->id)
                     ->where('resort_id',$id)
                     ->get()))
+                ->where('is_approved','!=','0')
                 ->groupBy('user_id')
                 ->get();
 

@@ -67,6 +67,13 @@ class sharedVariables
         }
 
 
+        //If the user request page and don't have permission to access it
+        if (!in_array($request->route()->getName(), $allowed_url)) {
+            return redirect()->back()
+                ->withInput($request->all())
+                ->withErrors(['warning' => 'You don\'t have permission to access this page']);
+        }
+
 
         /*if(in_array($request->route()->getName(), $allowed_url)){
 
@@ -78,7 +85,7 @@ class sharedVariables
         //Save Resorts_id in array
 
 
-        /*if($AuthUser->is_admin == 0){
+        if($AuthUser->is_admin == 0){
             $resorts_id = array();
             for ($i=0; $i < count($resorts); $i++) {
                 array_push($resorts_id, $resorts[$i]->id);
@@ -109,9 +116,10 @@ class sharedVariables
                 $id = substr(url()->current(), strrpos(url()->current(), '/') + 1);
                     if (in_array($id, $resorts_id)) {
 
-                    }else{
-                        //Session::pull('user');
-                        return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
+                    }
+                    if(in_array($id, $resorts_id) == false){
+                        Session::pull('user');
+                        return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
             }// end request->route()->getName()
 
@@ -120,10 +128,22 @@ class sharedVariables
                     if (in_array($id, $users_id)) {
 
                     }else{
-                        return redirect()->back()->withErrors(['warning' => 'You dont have permission to access this Page']);
+                        Session::pull('user');
+                        return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
                     }
             }// end request->route()->getName()
-        } // end $AuthUser->is_admin == 0*/
+
+            if ($request->route()->getName() == 'user.edit') {
+                $id = substr(url()->current(), 27, -5);
+                if (in_array($id, $users_id)) {
+
+                }else{
+                    Session::pull('user');
+                    return redirect('/login')->withErrors(['warning' => 'You dont have permission to access this Page']);
+                }
+            }
+
+        } // end $AuthUser->is_admin == 0
 
 
 

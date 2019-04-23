@@ -267,5 +267,12 @@ class PermissionTableSeeder extends Seeder
             'status' => 'true'
         ]);
 
+        DB::table('permissions')->insert([
+            'description' => 'User Can Sync Database With AD',
+            'slug' => 'Web',
+            'url' => 'user.syncDatabaseWithAD',
+            'status' => 'true'
+        ]);
+
     }
 }
