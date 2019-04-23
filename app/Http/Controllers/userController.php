@@ -34,13 +34,12 @@ class userController extends Controller
 
     public function create()
     {
-        $mytime = Carbon::now();
 
 
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
-        Log::info('User is logged in : ' . $authUserID->user_name . " / Time is : " . $mytime->toDateTimeString());
 
         if ($authUserID->is_admin == 1) {
+            Log::info('User is logged in : ' . $authUserID->user_name);
 
             $userData = UserData::select('resort_id')
                     ->where('user_id',$authUserID->id)->get();
