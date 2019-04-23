@@ -51,12 +51,16 @@ class LoginController extends Controller
         }
 
         $user = $ldapHelper->get_user_data($ldap->user_info($request->email),$request->email);
-
+	/*dd($user);
         if ($user->is_admin == 1) {
             $ldapHelper->l_get_all_user();
             $ldapHelper->get_all_disabled_user();
             $ldapHelper->get_all_groups();
-        }
+        }*/
+           
+            $ldapHelper->l_get_all_user();
+            $ldapHelper->get_all_disabled_user();
+            $ldapHelper->get_all_groups();
 
 	    Session::push('user',$user);
 
