@@ -1,8 +1,11 @@
 
-<nav class="col-md-2 d-none d-md-block bg-light sidebar">
-  <div class="sidebar-sticky">
-    <ul class="nav flex-column">
-
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" >
+  <div class="sidebar-sticky" >
+      @if ((isset($_SERVER['HTTP_USER_AGENT'])) && (strlen(strstr($_SERVER['HTTP_USER_AGENT'], 'Firefox')) > 0))
+          <ul class="nav flex-column" style="margin-top:50px;">
+        @else
+        <ul class="nav flex-column" style="margin-top:20px;">
+        @endif
 
 @if(in_array('user.create', $allowed_url))
 <li class="nav-item">

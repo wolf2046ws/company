@@ -72,9 +72,16 @@
                 </select>
             </div>
 
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-primary mb-2 col-md-12">Update User</button>
+            </div>
 
-
-            <button type="submit" class="btn btn-primary mb-2 col-md-12">Update User</button>
+            <div class="col-sm-6">
+                    <a href="{{ url()->previous() }}">
+                    <button type="button" class="btn btn-danger col-sm-12">
+                        Cancel</button>
+                    </a>
+            </div>
         </div>
 
     </form>

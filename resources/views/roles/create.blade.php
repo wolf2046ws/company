@@ -97,9 +97,15 @@
 
         <br>
         <div class="row">
-            <div class=" col-sm-12 align-self-center">
+            <div class=" col-sm-6 align-self-center">
                 <button type="submit" class="btn btn-primary active col-sm-12">Create Role
                 </button>
+            </div>
+            <div class="col-sm-6">
+                    <a href="{{ route('role.index') }}">
+                    <button type="button" class="btn btn-danger col-sm-12">
+                        Cancel</button>
+                    </a>
             </div>
         </div>
     </form>

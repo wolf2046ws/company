@@ -52,12 +52,21 @@
             <th> {{ $role->group['name'] }}</th>
             <th> {{ $role->permissions->count() }}</th>
             <th>
+                <a style="float:left;margin-right:5px;" href="{{ route('role.edit', $role->id ) }}">
+                    <button  class="btn-primary" type="button">
+                    Edit</button>
+                </a>
+                
                 <form method="POST" action="{{ route('role.destroy', $role->id) }}">
                     @csrf
                     {{ method_field('DELETE') }}
                     <button class="btn-danger" type="submit">
                         Delete </button>
                 </form>
+
+
+
+
             </th>
         </tr>
     @endforeach

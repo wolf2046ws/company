@@ -50,9 +50,16 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <button type="submit" class="btn btn-primary col-sm-12">Add Group</button>
     </div>
+    <div class="col-sm-6">
+        <a href="{{ route('group.index') }}">
+        <button type="button" class="btn btn-danger col-sm-12">
+            Cancel</button>
+        </a>
+    </div>
+
 </div>
 
 </form>

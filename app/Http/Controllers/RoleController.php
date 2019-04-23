@@ -19,24 +19,17 @@ class RoleController extends Controller
 
     public function index()
     {
+
         $roles = Role::latest()->get();
-    	return view('roles.index', compact('roles'));
+        return view('roles.index', compact('roles'));
 	}
 
     public function create()
     {
-        $ldapHelper = new ldapHelperMethods();
-        $ldapHelper->get_all_groups();
+
         $p_slug_web = Permission::latest()
         ->where('slug','Web')
         ->get();
-
-        /*$ldap = new ldapUsers();
-
-        foreach ($ldap->all_security_groups() as $key => $value) {
-            dd($key , " " , $value);
-        }*/
-
 
         $p_slug_ad = Permission::latest()
         ->where('slug','Active Directory Groups')
@@ -65,8 +58,6 @@ class RoleController extends Controller
 
     public function show($id)
     {
-        /*$user = User::findOrFail($id);
-        $user_data = UserData::where('user_id',$user->id)->get();*/
         $role = Role::findOrFail($id);
 
         $user_data = RolePermissions::where('role_id', $role->id)
@@ -85,8 +76,25 @@ class RoleController extends Controller
     public function edit($role)
     {
         $role = Role::findOrFail($role);
-        $permissions = permission::latest()->get();
-        return view('roles.update',compact('role','permissions'));
+
+        $permission_id = RolePermissions::select('permission_id')
+                ->where('role_id', $role->id)
+                ->pluck("permission_id")
+                ->toArray();
+
+
+        $p_slug_web = Permission::latest()
+        ->where('slug','Web')
+        ->get();
+
+        $p_slug_ad = Permission::latest()
+        ->where('slug','Active Directory Groups')
+        ->get();
+
+        $group = Group::where('resort_id',$role->resort_id)
+        ->where('id', $role->group_id)->first();
+
+        return view('roles.update',compact('role','p_slug_web', 'p_slug_ad','group','permission_id'));
     }
 
 
@@ -94,8 +102,9 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($role);
         $role->update($request->all());
-        session()->flash('success','role Updated Successfully');
-        return redirect()->back();
+        $role->permissions()->sync($request->permissions);
+        session()->flash('success','Role Updated Successfully');
+        return redirect(route('role.index'));
     }
 
 

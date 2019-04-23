@@ -19,7 +19,6 @@
     <input type="hidden" name="resort_id" value="{{$id}}">
 
 
-
   <button type="submit" class="btn btn-primary mb-12">Add Group</button>
 
 </form>

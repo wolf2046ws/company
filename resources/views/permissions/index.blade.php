@@ -30,14 +30,20 @@
 </div><!-- end row-->
 <br>
 <div class="row">
-    <div class="col-sm-12 align-self-center">
+    <div class="col-sm-6 align-self-center">
     <input type="hidden" name="status" value="false">
     <button  type="submit"
         class="btn btn-primary active col-sm-12"
         aria-pressed="true">
             Add Permission
     </a>
-</div>
+    </div>
+    <div class="col-sm-6">
+            <a href="{{ route('permission.index') }}">
+            <button type="button" class="btn btn-danger col-sm-12">
+                Cancel</button>
+            </a>
+    </div>
 </div><!-- end row -->
 
 </form>

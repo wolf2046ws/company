@@ -82,9 +82,17 @@
 
         <br>
         <div class="row">
-            <div class="col-sm-12 align-self-center">
+            <div class="col-sm-6 align-self-center">
                 <button type="submit" class="btn btn-primary mb-2 col-md-12">Create User</button>
             </div>
+
+            <div class="col-sm-6">
+                    <a href="{{ route('user.create') }}">
+                    <button type="button" class="btn btn-danger col-sm-12">
+                        Cancel</button>
+                    </a>
+            </div>
+
         </div><!--end row-->
         </form>
 
