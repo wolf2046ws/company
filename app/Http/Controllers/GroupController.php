@@ -6,6 +6,7 @@ use App\UserData;
 use App\User;
 use App\Group;
 use App\Role;
+use Log;
 use App\GroupRoles;
 use App\Permission;
 use App\Resort;
@@ -70,7 +71,7 @@ class GroupController extends Controller
             $role = new Role();
             $role->resort_id = $group->resort_id;
             $role->group_id = $group->id;
-            $role->name = 'Member Of this Group';
+            $role->name = 'Mitarbeiter';
             $role->description = 'Created Automtaically after user created new group';
             $role->save();
 
@@ -85,8 +86,17 @@ class GroupController extends Controller
             $user_data->group_id = $group->id;
             $user_data->role_id = $role->id;
             $user_data->save();
+
+            Log::info(  '## New Group Added ## ' .
+                        'Logged in User : ' . $authUserID->user_name .
+                        '//  Resort : ' . Resort::select('name')->where('id', $userData->resort_id)->get() .
+                        '//  Group : ' . Group::select('name')->where('id', $userData->group_id)->get());
         }
 
+        Log::info(  '## New Group Added ##' .
+                    'Logged in User : ' . $authUserID->user_name .
+                    '//  Resort : ' . Resort::select('name')->where('id', $group->resort_id)->get() .
+                    '//  Group : ' . Group::select('name')->where('id', $group->id)->get());
 
         session()->flash('success','Group Added Successfully');
         return redirect(route('group.index'));

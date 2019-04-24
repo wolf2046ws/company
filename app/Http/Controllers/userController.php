@@ -39,7 +39,6 @@ class userController extends Controller
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
 
         if ($authUserID->is_admin == 1) {
-            Log::info('User is logged in : ' . $authUserID->user_name);
 
             $userData = UserData::select('resort_id')
                     ->where('user_id',$authUserID->id)->get();
@@ -259,6 +258,10 @@ class userController extends Controller
             <br>
             First name :  {{$user->last_name . " " . $user->first_name}} <br>");*/
 
+        Log::info( '## New User Added ##' .
+                    'Logged in User : ' . $authUserID->user_name .
+                    'New User Created : ' . $user->user_name );
+
         session()->flash('success','User Added Successfully');
         return redirect()->back();
 
@@ -317,6 +320,7 @@ class userController extends Controller
                 $user->update($request->all());
                 $user->save();
 
+
             }
             else{
                 session()->flash('warning','User Not Found in Database');
@@ -354,9 +358,16 @@ class userController extends Controller
             }
 
             ##################
+            Log::info(  '## User Updated ##' .
+                        'Logged in User : ' . $authUserID[0]->user_name .
+                        '// updated user : ' . $user->user_name .
+                        '//  Resort : ' . Resort::select('name')->where('id', $userData->resort_id)->get() .
+                        '//  Group : ' . Group::select('name')->where('id', $userData->group_id)->get().
+                        '// Role : ' . Role::select('name')->where('id', $userData->role_id)->get() );
 
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
+
         } // end is_admin
         else {
             if($user){
@@ -401,6 +412,14 @@ class userController extends Controller
                 }
             }
             $userData->save();
+
+            Log::info(  '## User Updated ##' .
+                        'Logged in User : ' . $authUserID[0]->user_name .
+                        '// updated user : ' . $user->user_name .
+                        '//  Resort : ' . Resort::select('name')->where('id', $userData->resort_id)->get() .
+                        '//  Group : ' . Group::select('name')->where('id', $userData->group_id)->get().
+                        '// Role : ' . Role::select('name')->where('id', $userData->role_id)->get() );
+
             session()->flash('success','User Updated Successfully');
             return redirect()->back();
         }
@@ -442,11 +461,6 @@ class userController extends Controller
         }
 
         $ldap = new ldapUsers();
-        //dd($user->user_name);
-            // Working Enable and disable
-            // User must have password to enable or disable it
-        //dd($ldap->user_enable($user->user_name));
-
 
         if($user->status == 'Enabled'){
 

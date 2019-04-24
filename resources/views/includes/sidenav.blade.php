@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
 
 <nav class="col-md-2 d-none d-md-block bg-light sidebar" >
   <div class="sidebar-sticky" >
@@ -7,52 +9,24 @@
         <ul class="nav flex-column" style="margin-top:20px;">
         @endif
 
+
+
+<!--text-primary as class for changing color-->
 @if(in_array('user.create', $allowed_url))
 <li class="nav-item">
-  <a class="nav-link active" href="{{route("user.create")}}">
-    <span data-feather="home"></span>
-    Create New User <span class="sr-only">(current)</span>
+  <a class="nav-link" href="{{route("user.create")}}">
+    <i class="fas fa-user-plus fa-lg" >
+        Create User
+    </i>
   </a>
 </li>
 @endif
 
-@if(in_array('user.index', $allowed_url))
-<li class="nav-item">
-<a class="nav-link active" href="{{route("user.index")}}">
-  <span data-feather="home"></span>
-  Enabled Users <span class="sr-only">(current)</span>
-</a>
-</li>
-@endif
-
-@if(in_array('user.disabled', $allowed_url))
-<li class="nav-item">
-<a class="nav-link" href="{{route("user.disabled")}}">
-  <span data-feather="home"></span>
-  Disabled Users <span class="sr-only"></span>
-</a>
-</li>
-@endif
-
-<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"> <span data-feather="home"></span>
-Resorts <span class="sr-only"></span>
-       <span class="caret"></span></a>
-       <ul class="dropdown-menu">
-@foreach($resorts as $resort)
-    <li class="nav-item">
-        <a class="dropdown-item nav-link" href="{{route('resort.show',$resort->id)}}">
-        <span data-feather="home"></span>
-        {{ $resort->name }} <span class="sr-only"></span>
-        </a>
-    </li>
-@endforeach
-    </ul>
-
 @if(in_array('group.index', $allowed_url))
 <li class="nav-item">
 <a class="nav-link" href="{{route("group.index")}}">
-  <span data-feather="home"></span>
-  Create Groups <span class="sr-only"></span>
+  <i class="fas fa-users-cog fa-lg" >
+  Create Groups </i>
 </a>
 </li>
 @endif
@@ -60,23 +34,77 @@ Resorts <span class="sr-only"></span>
 @if(in_array('role.index', $allowed_url))
 <li class="nav-item">
 <a class="nav-link" href="{{route("role.index")}}">
-  <span data-feather="home"></span>
-  Create Roles <span class="sr-only"></span>
+ <i class="fas fa-users-cog fa-lg" >
+  Create Roles </i>
 </a>
 </li>
 @endif
 
 
-
 @if(in_array('permission.index', $allowed_url))
 <li class="nav-item">
   <a class="nav-link" href="{{route('permission.index')}}">
-    <span data-feather="home"></span>
-    Create Permissions <span class="sr-only">(current)</span>
+    <i class="fas fa-users-cog fa-lg" >
+    Create Permissions </i>
   </a>
 </li>
+<div class="dropdown-divider"></div>
+
 @endif
+
+
+
+
+@if(in_array('user.index', $allowed_url))
+<li class="nav-item">
+<a class="nav-link" href="{{route("user.index")}}">
+  <i class="fas fa-user-check fa-lg">
+       Enabled Users
+  </i>
+</a>
+</li>
+@endif
+
+@if(in_array('user.disabled', $allowed_url))
+<li class="nav-item">
+<a class="nav-link" href="{{route("user.disabled")}}">
+  <i class="fas fa-user-lock fa-lg">
+  Disabled Users </i>
+</a>
+</li>
+<div class="dropdown-divider"></div>
+
+@endif
+
+
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+    <i class="fas fa-hotel fa-lg">
+        Resorts
+    </i>
+    <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        @foreach($resorts as $resort)
+        <li class="nav-item">
+            <a class="dropdown-item nav-link" href="{{route('resort.show',$resort->id)}}">
+                <i class="fas fa-hotel">
+                    {{ $resort->name }}
+                </i>
+            </a>
+        </li>
+        @endforeach
     </ul>
+
+    <div class="dropdown-divider"></div>
+
+
+    @if(in_array('logs', $allowed_url))
+    <li class="nav-item">
+        <a class="nav-link" href="{{route("logs")}}">
+            <i class="fas fa-file-alt fa-lg"> &nbsp;Logs </i>
+        </a>
+    </li>
+    @endif
+</ul>
 
 
   </div>

@@ -274,5 +274,12 @@ class PermissionTableSeeder extends Seeder
             'status' => 'true'
         ]);
 
+        DB::table('permissions')->insert([
+            'description' => 'User Can View Logs',
+            'slug' => 'Web',
+            'url' => 'logs',
+            'status' => 'true'
+        ]);
+
     }
 }

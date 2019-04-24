@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
 use App\ldapUsers;
+use Log;
 use App\ldapHelperMethods;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -44,8 +45,6 @@ class LoginController extends Controller
             return \redirect('/');
         }
 
-
-
         if($ldap->authenticate($request->email,$request->password) != true){
             return redirect()->back()->withInput($request->all())->withErrors(['password' => 'incorrect password']);
         }
@@ -57,14 +56,16 @@ class LoginController extends Controller
             $ldapHelper->get_all_disabled_user();
             $ldapHelper->get_all_groups();
         }*/
-           
-            $ldapHelper->l_get_all_user();
+
+            /*$ldapHelper->l_get_all_user();
             $ldapHelper->get_all_disabled_user();
-            $ldapHelper->get_all_groups();
+            $ldapHelper->get_all_groups();*/
 
 	    Session::push('user',$user);
 
         $this->middleware('shared_variables');
+
+        Log::info('User is logged in : ' . Session::get('user')[0]->user_name);
 
         return redirect('/user/create');
 
