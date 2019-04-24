@@ -119,15 +119,36 @@ class userController extends Controller
             $request['user_name'] = $first_username;
         }
 
+        $ous = array(
+            1 => 'OU=Benutzer,OU=10 Verwaltung',
+            2 => 'OU=Benutzer,OU=20 Boltenhagen',
+            3 => 'OU=Benutzer,OU=21 Egestorf',
+            4 => 'OU=Benutzer,OU=27 Bad Bederkesa',
+            5 => 'OU=Benutzer,OU=30 Prerow',
+            6 => 'OU=Benutzer,OU=40 Born',
+            7 => 'OU=Benutzer,OU=50 Nonnevitz',
+            8 => 'OU=Benutzer,OU=70 Goehren',
+            9 => 'OU=Benutzer,OU=71 Husum',
+            10 => 'OU=Benutzer,OU=80 Tecklenburg',
+            11 => 'OU=Benutzer,OU=85 Ladbergen'
+        );
+
+        if (array_key_exists($request->resort_id, $ous)) {
+            $ou = $ous[$request->resort_id];
+        }
+
+        //CN=john john,OU=Benutzer,OU=20 Blotenhagen,DC=regenbogen,DC=ag
+
         $new_user = $ldap->user_create(
            array(
                 "user_name"     => $request['user_name'],
                 "first_name"    => $request['first_name'],
                 "last_name"     => $request['last_name'],
                 "email"         => $request['user_name']."@regenbogen-ag.de",
-                "container"     => array("CN=Users")
-           ));
+                "container"     => array($ou)
 
+                //array("CN=Users")
+           ));
 
            if ($new_user === false) {
 

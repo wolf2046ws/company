@@ -39,6 +39,10 @@ class LoginController extends Controller
         $ldap = new ldapUsers();
         $ldapHelper = new ldapHelperMethods();
 
+        /*$ldapHelper->l_get_all_user();
+        $ldapHelper->get_all_disabled_user();
+        $ldapHelper->get_all_groups();*/
+
         $user = Session::get('user');
 
         if($user){
@@ -57,9 +61,7 @@ class LoginController extends Controller
             $ldapHelper->get_all_groups();
         }*/
 
-            /*$ldapHelper->l_get_all_user();
-            $ldapHelper->get_all_disabled_user();
-            $ldapHelper->get_all_groups();*/
+
 
 	    Session::push('user',$user);
 

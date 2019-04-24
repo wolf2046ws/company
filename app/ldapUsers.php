@@ -1025,7 +1025,6 @@ class ldapUsers {
 
         //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
 		$result=@ldap_add($this->_conn,$sd, $add);
-
 		if ($result!=true){ return (false); }
 
         return (true);
