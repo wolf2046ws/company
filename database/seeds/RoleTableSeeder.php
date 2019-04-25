@@ -14,10 +14,10 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         //
-        $ldapHelper = new ldapHelperMethods();
+        /*$ldapHelper = new ldapHelperMethods();
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
-        $ldapHelper->get_all_groups();
+        $ldapHelper->get_all_groups();*/
 
         foreach (Group::all() as $group) {
           DB::table('roles')->insert([
