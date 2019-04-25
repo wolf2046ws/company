@@ -1005,14 +1005,12 @@ class ldapUsers {
 		$add["sn"][0] = $attributes["last_name"];
 		$add["userprincipalname"][0] = $attributes["user_name"]."@regenbogen.ag";
         $add["samaccountname"][0]=$attributes["user_name"];
-		$add["homeDrive"][0]="Z:";
-		$add["homeDirectory"][0]= '\\\\10fps1\\Homes\\'.$attributes["user_name"];
         $add["objectclass"][0]="top";
         $add["objectclass"][1]="person";
         $add["objectclass"][2]="organizationalPerson";
         $add["objectclass"][3]="user";
 
-		
+
         // Set the account control attribute
         $control_options=array("NORMAL_ACCOUNT");
         $control_options[]="ACCOUNTDISABLE";
@@ -1026,8 +1024,15 @@ class ldapUsers {
 
 		$sd = "CN=".$add["cn"][0].",".$container[0].",".$this->_base_dn;
 
-        //$result=@ldap_add($this->_conn, "CN=".$add["cn"][0].", ".$container.",".$this->_base_dn, $add);
 		$result=@ldap_add($this->_conn,$sd, $add);
+
+		if ($result) {
+			$add["homeDrive"][0]="Z:";
+			$add["homeDirectory"][0]= '\\\\10fps1\\Homes\\'.$attributes["user_name"];
+
+			$result2 = $this->user_modify($attributes["user_name"], $add);
+		}
+
 		if ($result!=true){ return (false); }
 
         return (true);

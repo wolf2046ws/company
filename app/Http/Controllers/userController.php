@@ -148,8 +148,6 @@ class userController extends Controller
                 "initials"      => $request['user_name'],
                 "email"         => $ad_email."@regenbogen-ag.de",
                 "container"     => array($ou)
-
-                //array("CN=Users")
            ));
 
            if ($new_user === false) {
