@@ -138,13 +138,15 @@ class userController extends Controller
         }
 
         //CN=john john,OU=Benutzer,OU=20 Blotenhagen,DC=regenbogen,DC=ag
+        $ad_email = strtolower(mb_substr($request['first_name'], 0, 1, "UTF-8") .".". $request['last_name']);
 
         $new_user = $ldap->user_create(
            array(
                 "user_name"     => $request['user_name'],
                 "first_name"    => $request['first_name'],
                 "last_name"     => $request['last_name'],
-                "email"         => $request['user_name']."@regenbogen-ag.de",
+                "initials"      => $request['user_name'],
+                "email"         => $ad_email."@regenbogen-ag.de",
                 "container"     => array($ou)
 
                 //array("CN=Users")
@@ -159,7 +161,7 @@ class userController extends Controller
                        "first_name"    => $request['first_name'],
                        "last_name"     => $request['last_name'],
                        "email"         => $request['user_name']."@regenbogen-ag.de",
-                       "container"     => array("CN=Users")
+                       "container"     => array($ou)
                   ));
 
                   if ($new_user_2 === true) {
@@ -192,11 +194,15 @@ class userController extends Controller
 
                if (count($permssion) > 0) {
                    $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                   $userData->save();
+
                 }else{
                     $userData->save();
                 }
 
-         }
+            }
+            $userData->save();
+
 
 
        }else{
@@ -218,12 +224,15 @@ class userController extends Controller
                ->where('slug', 'Active Directory Groups')->get();
                if (count($permssion) > 0) {
                    $ldap->group_add_user($permssion[0]->description,$user->user_name);
+                   $userData->save();
+
                 }else{
                     $userData->save();
                 }
 
            }
 
+           $userData->save();
 
        }
 
@@ -291,18 +300,6 @@ class userController extends Controller
 
     public function edit($id)
     {
-        /*
-        $authUserID = Session::get('user');
-        $user = User::findOrFail($id);
-        //dd("Stop Edit");
-        $user_data = UserData::where('user_id',$user->id)->get();
-
-        //$user_data = UserData::where('id',$id)->get();
-
-        $groups = Group::all();
-        $roles = Role::all();
-        $resorts = Resort::all();*/
-
         $authUserID = User::where('id',Session::get('user')[0]->id)->first();
         $user = User::findOrFail($id);
         $user_data = UserData::where('user_id',$user->id)->get();
@@ -323,6 +320,7 @@ class userController extends Controller
         $ldap = new ldapUsers();
         $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id',$id)->first();
+
         if ($authUserID[0]->is_admin == 1) {
 
             if($user){
@@ -540,10 +538,14 @@ class userController extends Controller
     }
 
     public function syncDatabaseWithAD(){
+        $ldap = new ldapUsers();
         $ldapHelper = new ldapHelperMethods();
+        dd($ldap->user_info("ismax"),$ldap->user_info("mabd"),$ldap->user_password("mabd","rbag123!"));
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
         $ldapHelper->get_all_groups();
+
+
         session()->flash('success','Sync with AD are Successfull');
         return redirect()->back();
     }

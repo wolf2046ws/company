@@ -1000,21 +1000,24 @@ class ldapUsers {
         } else {
         	$add["cn"][0]=$attributes["display_name"];
         }
+		dd($this->user_info("usne"));
 		$add["givenname"][0] = $attributes["first_name"];
 		$add["sn"][0] = $attributes["last_name"];
 		$add["userprincipalname"][0] = $attributes["user_name"]."@regenbogen.ag";
         $add["samaccountname"][0]=$attributes["user_name"];
+		$add["homeDrive"][0]="Z:";
+		$add["homeDirectory"][0]= '\\\\10fps1\\Homes\\'.$attributes["user_name"];
         $add["objectclass"][0]="top";
         $add["objectclass"][1]="person";
         $add["objectclass"][2]="organizationalPerson";
-        $add["objectclass"][3]="user"; //person?
+        $add["objectclass"][3]="user";
 
-        //$add["name"][0]=$attributes["firstname"]." ".$attributes["surname"];
+		
         // Set the account control attribute
         $control_options=array("NORMAL_ACCOUNT");
         $control_options[]="ACCOUNTDISABLE";
         $add["userAccountControl"][0]=$this->account_control($control_options);
-        //echo ("<pre>"); print_r($add);
+
         // Determine the container
         $attributes["container"]=array_reverse($attributes["container"]);
         $container=$attributes["container"];
@@ -1108,8 +1111,8 @@ class ldapUsers {
 	$fields=array("givenname","initials",
 	            "sn","displayname",
 	            "description","office","telephonenumber",
-	            "mail","userprincipalname","samaccountname",
-	            "title","memberof",
+	            "mail","userprincipalname","samaccountname","homedrive","homedirectory",
+	            "title","memberof","pwdlastset",
 	            "department","useraccountcontrol",
 	            "dn","objectsid","primarygroupid","objectsid");
 	}
