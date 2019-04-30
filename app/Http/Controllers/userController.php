@@ -40,15 +40,7 @@ class userController extends Controller
 
         if ($authUserID->is_admin == 1) {
 
-            $userData = UserData::select('resort_id')
-                    ->where('user_id',$authUserID->id)->get();
-
-            if(count($userData) != 0){
-                $resorts = Resort::whereIn("id",$userData)->get();
-            }
-            else{
-                $resorts = Resort::where('id','=','0')->get();
-            }
+            $resorts = Resort::all();
             $groups = Group::all();
             $roles = Role::all();
 
@@ -87,7 +79,8 @@ class userController extends Controller
         return view('users.create', compact(
                  'resorts',
                  'groups',
-                 'roles'
+                 'roles',
+                 'authUserID'
                 ));
     } // end create
 
@@ -123,7 +116,7 @@ class userController extends Controller
             1 => 'OU=Benutzer,OU=10 Verwaltung',
             2 => 'OU=Benutzer,OU=20 Boltenhagen',
             3 => 'OU=Benutzer,OU=21 Egestorf',
-            4 => 'OU=Benutzer,OU=27 Bad Bederkesa',
+            4 => 'OU=Benutzer,OU=27 Bad Harzburg',
             5 => 'OU=Benutzer,OU=30 Prerow',
             6 => 'OU=Benutzer,OU=40 Born',
             7 => 'OU=Benutzer,OU=50 Nonnevitz',
@@ -150,6 +143,7 @@ class userController extends Controller
                 "container"     => array($ou)
            ));
 
+
            if ($new_user === false) {
 
                $request['last_name'] .= rand(5, 90);
@@ -163,7 +157,7 @@ class userController extends Controller
                   ));
 
                   if ($new_user_2 === true) {
-                      $user = User::create($request->except('comment'));
+                      $user = User::create($request->except('comment','easycamp','cat','hardware','software'));
                   }elseif($new_user_2 === false){
                       session()->flash('warning','Failed to create user, Please contact IT ');
                       return redirect(route('user.index'));
@@ -171,7 +165,7 @@ class userController extends Controller
            }
 
        //$user = User::create($request->all()->except('comment'));
-        $user = User::create($request->except('comment'));
+        $user = User::create($request->except('comment','easycamp','cat','hardware','software'));
 
        if ($authUserID->is_admin == 1){
            $userData = new UserData();
@@ -201,6 +195,7 @@ class userController extends Controller
             }
             $userData->save();
 
+            session()->flash('warning','Set Password for the created User in Active Directory');
 
 
        }else{
@@ -234,64 +229,91 @@ class userController extends Controller
 
        }
 
-        /*echo $authUserID->user_name . "<br>";
-        echo $authUserID->first_name. "<br>";
-        echo $authUserID->last_name. "<br>";
 
-            echo $user->user_name. "<br>";
-            echo $user->first_name. "<br>";
-            echo $user->last_name. "<br>";
 
-        dd($request->comment);
-        dd("Stop");*/
-
-        /*$to = "it@regenbogen-ag.de";
+        $to = "it@regenbogen-ag.de";
         $subject = "New User Was Created by " .$authUserID->first_name."&nbsp". $authUserID->last_name;
-        $message = '
-        <html>
-        <head>
-        <title>New Entry</title>
-        </head>
-        <body>
+        $message = '<div>
+            <h1 style="color:green;"> New User Added </h1>
+        </div>
+        <div>
+            <h2 style="color:red;"> Assign password for the belong user in Active Directoy </h2>
+        </div>
+        <div>
+            <h3>
+                Logged in :
+                <span style="color:#FF0000;font-size:25px;">'.
+                    $authUserID->last_name.', '.
+                    $authUserID->first_name.'</span>
+            </h3>
+        </div>
 
-        <table border="1" style="border-collapse:collapse">
-        <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Username</th>
-        <th>Comment</th>
-        </tr>
-        <tr>
-        <td>'. $user->first_name .'</td>
-        <td>'. $user->last_name .'</td>
-        <td>'. $user->user_name .'</td>
-        <td>'. $request->comment .'</td>
-        </tr>
-        </table>
-        </body>
-        </html>
-        ';*/
+        <div>
+            <h3>
+                Name :
+                <span style="color:blue;font-size:25px;">'.
+                    $user->last_name .', '.
+                    $user->first_name.'</span>
+            </h3>
+            <h3>
+                Username :
+                <span style="color:blue;font-size:25px;">'.
+                    $user->user_name .'</span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Easycamp :
+                <span style="color:blue;font-size:25px;"> '.
+                    $request->easycamp .' </span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Cat :
+                <span style="color:blue;font-size:25px;"> '.
+                    $request->cat .' </span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Hardware :
+                <span style="color:blue;font-size:25px;"> '.
+                    $request->hardware .' </span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Software :
+                <span style="color:blue;font-size:25px;"> '.
+                    $request->software .' </span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Comment :
+                <span style="color:blue;font-size:25px;"> '.
+                    $request->comment .' </span>
+            </h3>
+        </div>';
     // Always set content-type when sending HTML email
-    /*$headers = "MIME-Version: 1.0" . "\r\n";
+    $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
     $headers .= 'From: 99dev' . "\r\n";
-    mail($to,$subject,$message,$headers);*/
+    mail($to,$subject,$message,$headers);
 
 
-        /*mail("it@regenbogen-ag.de",
-        "New User was created by {{ $authUserID->first_name . " " . $authUserID->last_name}} ",
-            "<b>{{$authUserID->first_name . " " . $authUserID->last_name}} </b> has create user
-            <br>
-            User name create : {{ $user->user_name  }}
-            <br>
-            First name :  {{$user->last_name . " " . $user->first_name}} <br>");*/
+    Log::info( '## New User Added ##' .
+                'Logged in User : ' . $authUserID->user_name .
+                'New User Created : ' . $user->user_name );
 
-        Log::info( '## New User Added ##' .
-                    'Logged in User : ' . $authUserID->user_name .
-                    'New User Created : ' . $user->user_name );
-
-        session()->flash('success','User Added Successfully');
-        return redirect()->back();
+    session()->flash('success','User Added Successfully');
+    return redirect()->back();
 
     } // end store
 
@@ -471,6 +493,7 @@ class userController extends Controller
     }
 
     public function changeStatus(Request $request){
+        $authUserID = User::where('user_id',Session::get('user')[0]->user_id)->get();
         $user = User::where('user_id', $request->id)->first();
         if(!$user){
             session()->flash('warning','User Not Found');
@@ -504,6 +527,56 @@ class userController extends Controller
             }
 
         }
+
+        $to = "it@regenbogen-ag.de";
+        $subject = "New User Was Created by " .$authUserID->first_name."&nbsp". $authUserID->last_name;
+        $message = '<div>
+            <h1 style="color:green;"> User Status Changed </h1>
+        </div>
+        <div>
+            <h2 style="color:red;"> Assign password for the belong user in Active Directoy </h2>
+        </div>
+        <div>
+            <h3>
+                Logged in :
+                <span style="color:#FF0000;font-size:25px;">'.
+                    $authUserID->last_name.', '.
+                    $authUserID->first_name.'</span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Name :
+                <span style="color:blue;font-size:25px;">'.
+                    $user->last_name .', '.
+                    $user->first_name.'</span>
+            </h3>
+            <h3>
+                Username :
+                <span style="color:blue;font-size:25px;">'.
+                    $user->user_name .'</span>
+            </h3>
+        </div>
+
+        <div>
+            <h3>
+                Status :
+                <span style="color:blue;font-size:25px;"> '.
+                    $user->status .' </span>
+            </h3>
+        </div>';
+    // Always set content-type when sending HTML email
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\b";
+    $headers .= 'From: 99dev' . "\r\n";
+    mail($to,$subject,$message,$headers);
+
+        Log::info( '## User Disabled / Enabled ##' .
+                    'Logged in User : ' . $authUserID[0]->user_name .
+                    'User Status chnaged : ' . $user->user_name .
+                    'status: ' .   $user->status);
+
         return redirect()->back();
     }
 
@@ -538,7 +611,6 @@ class userController extends Controller
     public function syncDatabaseWithAD(){
         $ldap = new ldapUsers();
         $ldapHelper = new ldapHelperMethods();
-        dd($ldap->user_info("ismax"),$ldap->user_info("mabd"),$ldap->user_password("mabd","rbag123!"));
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
         $ldapHelper->get_all_groups();

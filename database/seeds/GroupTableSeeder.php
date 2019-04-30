@@ -13,13 +13,13 @@ class GroupTableSeeder extends Seeder
     public function run()
     {
         //
-        foreach (Resort::all() as $resort) {
+
           DB::table('groups')->insert([
-              'name' => $resort->name.' Admin',
-              'description' => 'This is resort: '.$resort->name.' Admin',
-              'resort_id' => $resort->id
+              'name' => 'Super Admin',
+              'description' => 'Has all access to Webportal',
+              'resort_id' => 1
           ]);
-        }
+
 
     }
 }

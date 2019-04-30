@@ -73,6 +73,108 @@
 
         </div><!-- end row-->
         <br>
+        @if($authUserID->is_admin == 1)
+
+        <div class="row">
+            <div class="col-sm-2">
+                <h5>Admin : </h5>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" value="1"
+                        name="is_admin">Ja
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" value="0"
+                        name="is_admin">Nein
+                    </label>
+                </div>
+            </div>
+        </div>
+        @endif
+        <br>
+        <div class="row">
+            <div class="col-sm-2">
+                <h5>Easycamp : </h5>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" value="ja"
+                        name="easycamp">Ja
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" value="nein"
+                        name="easycamp">Nein
+                    </label>
+                </div>
+
+            </div>
+        </div><!--end row-->
+
+        <br>
+        <div class="row">
+            <div class="col-sm-2">
+                <h5>Cat : </h5>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input"
+                        value="ja" name="cat">Ja
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" value="nein"
+                        name="cat">Nein
+                    </label>
+                </div>
+
+            </div>
+        </div><!--end row-->
+
+        <br>
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+              <h5> Hardware : </h5>
+            </div>
+            <div class="col-sm-10 align-self-center">
+                <input required  type="text"
+                        class="form-control"
+                        id="hardware"
+                        name="hardware"
+                        value = ""
+                        placeholder="Handy">
+            </div>
+        </div><!--end row-->
+        <br>
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+              <h5> Software : </h5>
+            </div>
+            <div class="col-sm-10 align-self-center">
+                <input required  type="text"
+                        class="form-control"
+                        id="software"
+                        name="software"
+                        value = ""
+                        placeholder="Zimbra">
+            </div>
+        </div>
+
+        <br>
         <div class="row">
             <div class="col-sm-12 align-self-center">
                 <h5>Comment:</h5>

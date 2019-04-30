@@ -26,7 +26,7 @@ class ResortDataSeeder extends Seeder
         ]);
 
         DB::table('resorts')->insert([
-            'name' => "Bad Bederkesa"
+            'name' => "Bad Harzburg"
         ]);
 
         DB::table('resorts')->insert([

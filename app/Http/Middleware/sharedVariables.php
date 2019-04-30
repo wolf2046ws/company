@@ -46,19 +46,11 @@ class sharedVariables
 
         //If the user is admin bring all permission and save it to an array
         if ($AuthUser->is_admin == 1) {
+            $resorts = Resort::all();
             foreach ($permissions as $permission) {
                 array_push($allowed_url, $permission->url);
             }
         }
-       if ($AuthUser->is_admin == 1) {
-            $ldapHelper = new ldapHelperMethods();
-            $ldapHelper->l_get_all_user();
-            $ldapHelper->get_all_disabled_user();
-            $ldapHelper->get_all_groups();
-        }        
-
-
-
 
         //If the User is user and has permission to access the system
         if($AuthUser->is_admin == 0 && (count($permissions) > 0) ){

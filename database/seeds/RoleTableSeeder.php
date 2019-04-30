@@ -13,19 +13,16 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        /*$ldapHelper = new ldapHelperMethods();
+
+        $ldapHelper = new ldapHelperMethods();
         $ldapHelper->l_get_all_user();
         $ldapHelper->get_all_disabled_user();
-        $ldapHelper->get_all_groups();*/
+        $ldapHelper->get_all_groups();
 
-        foreach (Group::all() as $group) {
-          DB::table('roles')->insert([
-              'name' => $group->name.' Role',
-              'description' => 'This is Group: '.$group->name.' Role',
-              'group_id' => $group->id,
-              'resort_id' => $group->resort_id
-          ]);
-        }
+        DB::table('roles')->insert([
+            'name' => "Admin",
+            'group_id' => 1,
+            'resort_id' => 1
+        ]);
     }
 }

@@ -1000,11 +1000,15 @@ class ldapUsers {
         } else {
         	$add["cn"][0]=$attributes["display_name"];
         }
-		dd($this->user_info("usne"));
+
 		$add["givenname"][0] = $attributes["first_name"];
 		$add["sn"][0] = $attributes["last_name"];
 		$add["userprincipalname"][0] = $attributes["user_name"]."@regenbogen.ag";
         $add["samaccountname"][0]=$attributes["user_name"];
+
+		if (isset($add["initials"][0])) {
+			$add["initials"][0] = $attributes["initials"];
+		}
         $add["objectclass"][0]="top";
         $add["objectclass"][1]="person";
         $add["objectclass"][2]="organizationalPerson";
@@ -1021,17 +1025,8 @@ class ldapUsers {
         $container=$attributes["container"];
 
         // Add the entry
-
 		$sd = "CN=".$add["cn"][0].",".$container[0].",".$this->_base_dn;
-
 		$result=@ldap_add($this->_conn,$sd, $add);
-
-		if ($result) {
-			$add["homeDrive"][0]="Z:";
-			$add["homeDirectory"][0]= '\\\\10fps1\\Homes\\'.$attributes["user_name"];
-
-			$result2 = $this->user_modify($attributes["user_name"], $add);
-		}
 
 		if ($result!=true){ return (false); }
 

@@ -9,48 +9,80 @@
         @csrf
         {{ method_field('PUT') }}
 
-
         <br>
-        <div class="form-row">
-
-            <div class="form-group col-md-6">
-
-                <label for="firstName"> First Name </label>
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+                <h5> First Name : </h5>
+            </div>
+            <div class="col-sm-4 align-self-center">
                 <input required type="text"
                         class="form-control"
                         id="firstName"
+                        disabled
                         name="first_name"
                         value = "{{$user->first_name}}"
                         placeholder="John">
             </div>
 
-
-            <div class="form-group col-md-6">
-
-                <label for="lastName">Last Name </label>
+            <div class="col-sm-2 align-self-center">
+                <h5>Last Name : </h5>
+            </div>
+            <div class="col-sm-4 align-self-center">
                 <input required  type="text"
                         class="form-control"
                         id="lastName"
+                        disabled
                         name="last_name"
                         value = "{{$user->last_name}}"
                         placeholder="Doe">
             </div>
-
-            <div class="form-group col-md-12">
-                <label for="manager">User Name </label>
-                <input required type="text"
-                        class="form-control"
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-2">
+                <h5>User Name : </h5>
+            </div>
+            <div class="col-sm-10">
+                <input disabled required type="text"
+                        class="form-control col-md-12"
                         id="email"
-                        disabled
                         value = "{{$user->user_name}}"
                         placeholder="Doe">
             </div>
 
-
-            <div class="form-group col-md-3">
-                <label for="resort">Select Resort</label>
+        </div><!-- end row-->
+        <br>
+        @if($authUserID->is_admin == 1)
+        <div class="row">
+                <div class="col-sm-2">
+                    <h5>Admin : </h5>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" value="1"
+                            name="is_admin">Ja
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input checked type="radio" class="form-check-input" value="0"
+                            name="is_admin">Nein
+                        </label>
+                    </div>
+                </div>
+        </div><!-- end row-->
+        @endif
+        <br>
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+                <h5>Select Resort </h5>
+            </div>
+            <div class="col-sm-2">
                 <select required name="resort_id" class="form-control" id="resort">
-                    <option value=""> Select Resort</option>
+                    <option value=""> Select Resort : </option>
                     @foreach($resorts as $resort)
                         <option
                         value="{{ $resort->id }}"> {{ $resort->name }} </option>
@@ -58,20 +90,28 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-3">
-                <label  for="Select1">Select Group</label>
+            <div class="col-sm-2 align-self-center">
+                <h5>Select Group : </h5>
+            </div>
+            <div class="col-sm-2">
                 <select required name ="group_id" class="form-control" id="group">
                     <option value="">Select Group</option>
                 </select>
             </div>
 
-            <div class="form-group col-md-3">
-                <label for="Select1">Select Role</label>
+            <div class="col-sm-2 align-self-center">
+                <h5>Select Role: </h5>
+            </div>
+            <div class="col-sm-2">
                 <select required name ="role_id" class="form-control" id="role">
-                    <option value="">Select Group</option>
+                    <option value="">Select Role</option>
                 </select>
             </div>
 
+
+        </div><!-- end row-->
+        <br>
+        <div class="row">
             <div class="col-sm-6">
                 <button type="submit" class="btn btn-primary mb-2 col-md-12">Update User</button>
             </div>

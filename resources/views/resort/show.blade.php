@@ -8,7 +8,7 @@
     <ul class="breadcrumb">
 
         <li> {{$resort->name}} </li>
-        <li><a href="{{ url()->previous() }}"> Back </a></li>
+        
     </ul>
 
 <br>
@@ -36,12 +36,34 @@
                     <th> {{ $user->group->name }} </th>
                     <th>
                         <ul style="list-style:none;">
-                            <li style="margin-right:15px;">
+                            <li style="margin-right:15px;margin-bottom:10px;">
                                     <a href="{{ route('user.edit', $user->user_id ) }}">
                                         <button class="btn-primary" type="submit">
                                         Edit
                                         </button>
                                     </a>
+                            </li>
+
+                            @if($user->user->status == 'Enabled')
+                            <li>
+                                <form method="POST" action="{{ route('user.changeStatus', $user->user->user_id) }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{$user->user->user_id}}">
+
+                                    <button style="float:left;" class="btn-danger" type="submit">
+                                        Disable
+                                    </button>
+
+                                    @else
+                                    <form method="POST" action="{{ route('user.changeStatus', $user->user->user_id) }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{$user->user->user_id}}">
+
+                                        <button style="float:left;" class="btn-primary" type="submit">
+                                            Enable
+                                        </button>
+                                    </form>
+                                    @endif
                             </li>
                         </ul>
                     </th>

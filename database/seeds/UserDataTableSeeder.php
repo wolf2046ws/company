@@ -13,29 +13,13 @@ class UserDataTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        foreach (Role::all() as $role) {
-          DB::table('users_data')->insert([
-              'user_id' => 6,
-              'group_id' => $role->group_id,
-              'resort_id' => $role->resort_id,
-              'role_id' => $role->id,
-              'is_approved' => 1
-          ]);
-          /*DB::table('users_data')->insert([
-              'user_id' => 159,
-              'group_id' => $role->group_id,
-              'resort_id' => $role->resort_id,
-              'role_id' => $role->id,
-              'is_approved' => 1
-          ]);
-          DB::table('users_data')->insert([
-              'user_id' => 161,
-              'group_id' => $role->group_id,
-              'resort_id' => $role->resort_id,
-              'role_id' => $role->id,
-              'is_approved' => 1
-          ]);*/
-        }
+        DB::table('users_data')->insert([
+            'user_id' => 5,
+            'resort_id' => 1,
+            'group_id' => 1,
+            'role_id' => 1,
+            'is_approved' => 1
+        ]);
+
     }
 }
